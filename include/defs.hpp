@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <algorithm>
+#include <format>
 #include <fstream>
 #include <glm/ext.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -19,6 +20,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+
 
 #define DEBUG_LOG(message) std::cout << "[" << __func__ << "] " << message << "\n"
 
@@ -71,6 +73,7 @@ class Camera
     void updateMatrixUniforms();
     void respondToKeyboardInput(double deltaTime);
     void respondToMouseInput();
+    glm::vec3 position = glm::vec3(0, 0, 0);
 
   private:
     glm::mat4 projectionMatrix;
@@ -80,7 +83,6 @@ class Camera
     glm::vec3 direction;
     glm::vec3 up;
     glm::vec3 front;
-    glm::vec3 position = glm::vec3(0, 0, 0);
     unsigned int shaderProgram;
     float speed;
     float pitch = 0;
@@ -109,7 +111,8 @@ enum Key
     S = GLFW_KEY_S,
     D = GLFW_KEY_D,
     Q = GLFW_KEY_Q,
-    E = GLFW_KEY_E
+    E = GLFW_KEY_E,
+    ESCAPE = GLFW_KEY_ESCAPE
 };
 
 bool isKeyDown(GLFWwindow *window, Key key);

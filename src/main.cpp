@@ -10,8 +10,6 @@ int main()
         return 1;
     }
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     render::loadShaderFromFile("assets/shaders/vertex.glsl", render::ShaderType::VERTEX);
     render::loadShaderFromFile("assets/shaders/fragment.glsl", render::ShaderType::FRAGMENT);
     auto shaderProgram = render::createShaderProgram();

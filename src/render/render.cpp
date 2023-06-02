@@ -1,6 +1,5 @@
 #include "defs.hpp"
-#include <GLFW/glfw3.h>
-#include <memory>
+#include <imgui.h>
 
 using glm::vec2;
 
@@ -12,6 +11,8 @@ float lastFrame = 0.0f;
 Camera camera{};
 const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
 std::unique_ptr<Cube> cube;
+bool isCursorEnabled = false;
+bool isWireframeDrawEnabled = false;
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -70,9 +71,23 @@ void updateDeltaTime()
 
 void updateUI()
 {
+    // TODO: Increase font size
+    if (input::isKeyDown(window, input::ESCAPE))
+    {
+        isCursorEnabled = !isCursorEnabled;
+    }
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    auto cameraPosition = camera.position;
+    ImGui::Text("%s", std::format("Camera position: {}, {}, {} ", cameraPosition.x, cameraPosition.y, cameraPosition.z).c_str());
+
+    if (ImGui::Button("Toggle wireframe"))
+    {
+        setWireframeDrawEnabled(!isWireframeDrawEnabled);
+    }
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -86,7 +101,8 @@ void initScene(unsigned int shaderId)
 void drawFrame()
 {
     updateDeltaTime();
-    updateUI();
+
+    glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
     camera.respondToMouseInput();
     camera.respondToKeyboardInput(deltaTime);
@@ -96,14 +112,17 @@ void drawFrame()
     cube->render();
     cube->rotation.z = glfwGetTime() * 20;
 
+    updateUI();
+
     glfwSwapBuffers(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glfwPollEvents();
 }
 
-void setWireframeDrawEnabled(bool enabled)
+void setWireframeDrawEnabled(bool isEnabled)
 {
-    glPolygonMode(GL_FRONT_AND_BACK, enabled ? GL_LINE : GL_FILL);
+    isWireframeDrawEnabled = isEnabled;
+    glPolygonMode(GL_FRONT_AND_BACK, isEnabled ? GL_LINE : GL_FILL);
 }
 
 void setVsyncEnabled(bool enabled)
