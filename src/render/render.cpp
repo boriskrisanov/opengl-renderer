@@ -1,8 +1,8 @@
 #include "defs.hpp"
+#include <GLFW/glfw3.h>
 #include <memory>
 
 using glm::vec2;
-using std::vector;
 
 namespace render
 {
@@ -53,8 +53,6 @@ GLFWwindow *initAndCreateWindow()
 
     glEnable(GL_DEPTH_TEST);
 
-    cube.reset(new Cube{});
-
     return window;
 }
 
@@ -80,6 +78,11 @@ void updateUI()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void initScene(unsigned int shaderId)
+{
+    cube.reset(new Cube{{0, 0, 0}, {0, 0, 0}, shaderId});
+}
+
 void drawFrame()
 {
     updateDeltaTime();
@@ -91,6 +94,7 @@ void drawFrame()
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     cube->render();
+    cube->rotation.z = glfwGetTime() * 20;
 
     glfwSwapBuffers(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

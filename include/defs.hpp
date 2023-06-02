@@ -5,13 +5,16 @@
 #include <algorithm>
 #include <fstream>
 #include <glm/ext.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <stb_image.h>
 #include <string>
 #include <thread>
@@ -50,8 +53,13 @@ class Cube
       2, 6, 3, 7, 6, 3
     };
     // clang-format on
+
+    unsigned int shaderId;
+
   public:
-    Cube();
+    Cube(glm::vec3 position, glm::vec3 rotation, unsigned int shaderId);
+    glm::vec3 position;
+    glm::vec3 rotation;
     void render() const;
 };
 
@@ -89,6 +97,7 @@ unsigned int createShaderProgram();
 void setWireframeDrawEnabled(bool enabled);
 void initCamera(unsigned int shaderProgram);
 void setVsyncEnabled(bool enabled);
+void initScene(unsigned int shaderId);
 } // namespace render
 
 namespace input

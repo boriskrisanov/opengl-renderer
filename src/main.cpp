@@ -1,4 +1,5 @@
 #include "defs.hpp"
+#include <GLFW/glfw3.h>
 
 int main()
 {
@@ -9,6 +10,8 @@ int main()
         return 1;
     }
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     render::loadShaderFromFile("assets/shaders/vertex.glsl", render::ShaderType::VERTEX);
     render::loadShaderFromFile("assets/shaders/fragment.glsl", render::ShaderType::FRAGMENT);
     auto shaderProgram = render::createShaderProgram();
@@ -16,6 +19,7 @@ int main()
     render::setVsyncEnabled(true);
 
     render::initCamera(shaderProgram);
+    render::initScene(shaderProgram);
 
     // render::setWireframeDrawEnabled(true);
 
