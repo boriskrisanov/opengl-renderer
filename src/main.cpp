@@ -4,6 +4,11 @@ int main()
 {
     auto window = render::initAndCreateWindow();
 
+    if (!window)
+    {
+        return 1;
+    }
+
     render::loadShaderFromFile("assets/shaders/vertex.glsl", render::ShaderType::VERTEX);
     render::loadShaderFromFile("assets/shaders/fragment.glsl", render::ShaderType::FRAGMENT);
     auto shaderProgram = render::createShaderProgram();

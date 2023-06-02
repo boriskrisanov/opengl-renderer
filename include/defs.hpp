@@ -11,6 +11,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
+#include <memory>
 #include <stb_image.h>
 #include <string>
 #include <thread>
@@ -24,6 +25,34 @@ enum class ShaderType
 {
     VERTEX = GL_VERTEX_SHADER,
     FRAGMENT = GL_FRAGMENT_SHADER
+};
+
+class Cube
+{
+  private:
+    // clang-format off
+    static constexpr float triangleVertices[] = {
+      -0.5, -0.5, 0.5,     0, 1, 0,    // 0
+      0.5, -0.5, 0.5,      0, 0, 1,    // 1
+      -0.5, 0.5, 0.5,      0, 1, 0,    // 2
+      0.5, 0.5, 0.5,       0, 0, 1,    // 3
+      -0.5, -0.5, -0.5,    0, 1, 0,    // 4
+      0.5, -0.5, -0.5,     0, 0, 1,    // 5
+      -0.5, 0.5, -0.5,     0, 1, 0,    // 6
+      0.5, 0.5, -0.5 ,     0, 0, 1     // 7
+    };
+    static constexpr unsigned int indexes[] = {
+      0, 1, 3, 0, 2, 3,
+      5, 1, 3, 5, 7, 3,
+      5, 4, 6, 5, 7, 6,
+      4, 6, 2, 4, 0, 2,
+      0, 4, 1, 5, 4, 1,
+      2, 6, 3, 7, 6, 3
+    };
+    // clang-format on
+  public:
+    Cube();
+    void render() const;
 };
 
 class Camera
@@ -51,48 +80,6 @@ class Camera
     glm::vec2 lastMousePosition = glm::vec2(0, 0);
     glm::vec2 mouseOffset = glm::vec2(0, 0);
     GLFWwindow *window;
-};
-
-class Texture
-{
-  public:
-    Texture(std::string sourcePath);
-    ~Texture();
-    const unsigned char *textureData;
-    int width;
-    int height;
-};
-
-struct Vertex
-{
-    int positionX, positionY, positionZ;
-    int textureCoordinateX, textureCoordinateY;
-};
-
-class VertexBuffer
-{
-  public:
-    VertexBuffer(std::vector<Vertex>);
-    ~VertexBuffer();
-    void select();
-
-    unsigned int id;
-
-  private:
-    std::vector<Vertex> data;
-};
-
-class Mesh
-{
-  public:
-    Mesh(std::vector<float> vertexes);
-    Mesh() {}
-    ~Mesh();
-    void draw();
-
-  private:
-    std::vector<float> vertexes;
-    unsigned int vertexBufferId;
 };
 
 GLFWwindow *initAndCreateWindow();

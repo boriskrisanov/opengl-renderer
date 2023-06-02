@@ -1,4 +1,5 @@
 #include "defs.hpp"
+#include <memory>
 
 using glm::vec2;
 using std::vector;
@@ -10,7 +11,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 Camera camera{};
 const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
-Mesh triangle;
+std::unique_ptr<Cube> cube;
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -36,7 +37,7 @@ GLFWwindow *initAndCreateWindow()
         return nullptr;
     }
 
-    triangle = Mesh{vector{-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f}};
+    DEBUG_LOG("Window init");
 
     // imgui setup
 
@@ -51,6 +52,8 @@ GLFWwindow *initAndCreateWindow()
     ImGui_ImplOpenGL3_Init("#version 330");
 
     glEnable(GL_DEPTH_TEST);
+
+    cube.reset(new Cube{});
 
     return window;
 }
@@ -87,8 +90,7 @@ void drawFrame()
     camera.updateMatrixUniforms();
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    triangle.draw();
+    cube->render();
 
     glfwSwapBuffers(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
