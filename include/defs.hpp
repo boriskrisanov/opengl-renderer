@@ -74,7 +74,7 @@ class Camera
     Camera(GLFWwindow *window, glm::vec2 windowSize, unsigned int shaderProgram, float speed);
     Camera() {}
     void updateMatrixUniforms();
-    void respondToKeyboardInput(double deltaTime);
+    void respondToKeyboardInput();
     void respondToMouseInput();
     glm::vec3 position = glm::vec3(0, 0, 0);
 

@@ -15,7 +15,6 @@ Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, 
     vec3 position = vec3(0, 0, 0);
     vec3 target = vec3(0.0f, 0.0f, 0.0f);
     vec3 direction = normalize(position - target);
-    vec3 right = normalize(cross(vec3(0.0f, 1.0f, 0.0f), direction));
     vec3 up = vec3(0, 1, 0); // cross(direction, right);
     vec3 front = vec3(0.0f, 0.0f, -1.0f);
     mat4 viewMatrix{};
@@ -46,7 +45,7 @@ void Camera::updateMatrixUniforms() {
     glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 }
 
-void Camera::respondToKeyboardInput(double deltaTime) {
+void Camera::respondToKeyboardInput() {
     if (input::isKeyDown(window, input::W)) {
         position += speed * front;
     }

@@ -109,7 +109,7 @@ void drawFrame()
     glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
     camera.respondToMouseInput();
-    camera.respondToKeyboardInput(deltaTime);
+    camera.respondToKeyboardInput();
     camera.updateMatrixUniforms();
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
