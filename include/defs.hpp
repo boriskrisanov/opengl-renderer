@@ -37,14 +37,14 @@ class Cube
   private:
     // clang-format off
     static constexpr float triangleVertices[] = {
-      -0.5, -0.5, 0.5,     0, 1, 0,    // 0
-      0.5, -0.5, 0.5,      0, 0, 1,    // 1
-      -0.5, 0.5, 0.5,      0, 1, 0,    // 2
-      0.5, 0.5, 0.5,       0, 0, 1,    // 3
-      -0.5, -0.5, -0.5,    0, 1, 0,    // 4
-      0.5, -0.5, -0.5,     0, 0, 1,    // 5
-      -0.5, 0.5, -0.5,     0, 1, 0,    // 6
-      0.5, 0.5, -0.5 ,     0, 0, 1     // 7
+      -0.5, -0.5, 0.5,     1, 1,   // 0
+      0.5, -0.5, 0.5,      1, 0,   // 1
+      -0.5, 0.5, 0.5,      0, 0,   // 2
+      0.5, 0.5, 0.5,       0, 1,   // 3
+      -0.5, -0.5, -0.5,    1, 1,   // 4
+      0.5, -0.5, -0.5,     1, 0,   // 5
+      -0.5, 0.5, -0.5,     0, 0,   // 6
+      0.5, 0.5, -0.5 ,     0, 1    // 7
     };
     static constexpr unsigned int indexes[] = {
       0, 1, 3, 0, 2, 3,
@@ -57,6 +57,9 @@ class Cube
     // clang-format on
 
     unsigned int shaderId;
+    unsigned int textureId;
+    unsigned int vertexBuffer;
+    unsigned int indexBuffer;
 
   public:
     Cube(glm::vec3 position, glm::vec3 rotation, unsigned int shaderId);
