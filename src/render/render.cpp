@@ -1,5 +1,4 @@
 #include "defs.hpp"
-#include <imgui.h>
 
 using glm::vec2;
 
@@ -13,6 +12,7 @@ const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
 std::unique_ptr<Cube> cube;
 bool isCursorEnabled = false;
 bool isWireframeDrawEnabled = false;
+double frameTimeInMilliseconds = 0;
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -81,8 +81,11 @@ void updateUI()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
+    // TODO: Add delay between updates
+    // TODO: FPS counter
     auto cameraPosition = camera.position;
     ImGui::Text("%s", std::format("Camera position: {}, {}, {} ", cameraPosition.x, cameraPosition.y, cameraPosition.z).c_str());
+    ImGui::Text("%s", std::format("Frame time: {}ms", frameTimeInMilliseconds).c_str());
 
     if (ImGui::Button("Toggle wireframe"))
     {
@@ -101,6 +104,7 @@ void initScene(unsigned int shaderId)
 void drawFrame()
 {
     updateDeltaTime();
+    double startTime = glfwGetTime();
 
     glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
@@ -113,6 +117,10 @@ void drawFrame()
     cube->rotation.z = glfwGetTime() * 20;
 
     updateUI();
+
+    double endTime = glfwGetTime();
+
+    frameTimeInMilliseconds = (endTime - startTime) * 1000;
 
     glfwSwapBuffers(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
