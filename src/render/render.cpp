@@ -108,9 +108,7 @@ void drawFrame()
 
     glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
-    camera.respondToMouseInput();
-    camera.respondToKeyboardInput();
-    camera.updateMatrixUniforms();
+    camera.update();
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     cube->render();

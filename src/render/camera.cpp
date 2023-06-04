@@ -8,8 +8,10 @@ using glm::radians;
 using glm::vec2;
 using glm::vec3;
 
-namespace render {
-Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, float speed) {
+namespace render
+{
+Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, float speed)
+{
     mat4 projectionMatrix = perspective(radians(45.0f), (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
     mat4 modelMatrix = rotate(mat4(1.0f), 0.0f, vec3(1.0f, 0.0f, 0.0f));
     vec3 position = vec3(0, 0, 0);
@@ -32,7 +34,8 @@ Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, 
     this->window = window;
 }
 
-void Camera::updateMatrixUniforms() {
+void Camera::updateMatrixUniforms()
+{
     viewMatrix = glm::lookAt(position, position + front, up);
 
     int modelMatrixLocation = glGetUniformLocation(shaderProgram, "modelMatrix");
@@ -45,28 +48,36 @@ void Camera::updateMatrixUniforms() {
     glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 }
 
-void Camera::respondToKeyboardInput() {
-    if (input::isKeyDown(window, input::W)) {
+void Camera::respondToKeyboardInput()
+{
+    if (input::isKeyDown(window, input::W))
+    {
         position += speed * front;
     }
-    if (input::isKeyDown(window, input::S)) {
+    if (input::isKeyDown(window, input::S))
+    {
         position -= speed * front;
     }
-    if (input::isKeyDown(window, input::A)) {
+    if (input::isKeyDown(window, input::A))
+    {
         position -= speed * normalize(cross(front, up));
     }
-    if (input::isKeyDown(window, input::D)) {
+    if (input::isKeyDown(window, input::D))
+    {
         position += speed * normalize(cross(front, up));
     }
-    if (input::isKeyDown(window, input::Q)) {
+    if (input::isKeyDown(window, input::Q))
+    {
         position -= speed * up;
     }
-    if (input::isKeyDown(window, input::E)) {
+    if (input::isKeyDown(window, input::E))
+    {
         position += speed * up;
     }
 }
 
-void Camera::respondToMouseInput() {
+void Camera::respondToMouseInput()
+{
     auto mousePosition = input::getMousePosition(window);
     const double sensitivity = 0.07;
 
@@ -96,5 +107,12 @@ void Camera::respondToMouseInput() {
         sin(radians(yaw)) * cos(radians(pitch)));
 
     front = normalize(direction);
+}
+
+void Camera::update()
+{
+    this->respondToMouseInput();
+    this->respondToKeyboardInput();
+    this->updateMatrixUniforms();
 }
 } // namespace render

@@ -21,7 +21,6 @@
 #include <thread>
 #include <vector>
 
-
 #define DEBUG_LOG(message) std::cout << "[" << __func__ << "] " << message << "\n"
 
 namespace render
@@ -98,12 +97,13 @@ class Camera
   public:
     Camera(GLFWwindow *window, glm::vec2 windowSize, unsigned int shaderProgram, float speed);
     Camera() {}
+    glm::vec3 position = glm::vec3(0, 0, 0);
+    void update();
+
+  private:
     void updateMatrixUniforms();
     void respondToKeyboardInput();
     void respondToMouseInput();
-    glm::vec3 position = glm::vec3(0, 0, 0);
-
-  private:
     glm::mat4 projectionMatrix;
     glm::mat4 modelMatrix;
     glm::mat4 viewMatrix;
