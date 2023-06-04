@@ -1,6 +1,6 @@
 #include "defs.hpp"
 
-using glm::vec2;
+using glm::vec2, std::string;
 
 namespace render
 {
@@ -13,6 +13,8 @@ std::unique_ptr<Cube> cube;
 bool isCursorEnabled = false;
 bool isWireframeDrawEnabled = false;
 double frameTimeInMilliseconds = 0;
+string openGlVersion;
+string rendererInfo;
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -39,6 +41,9 @@ GLFWwindow *initAndCreateWindow()
     }
 
     DEBUG_LOG("Window init");
+
+    openGlVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+    rendererInfo = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
 
     // imgui setup
 
@@ -86,6 +91,8 @@ void updateUI()
     auto cameraPosition = camera.position;
     ImGui::Text("%s", std::format("Camera position: {}, {}, {} ", cameraPosition.x, cameraPosition.y, cameraPosition.z).c_str());
     ImGui::Text("%s", std::format("Frame time: {}ms", frameTimeInMilliseconds).c_str());
+    ImGui::Text("%s", std::format("OpenGL version: {}", openGlVersion).c_str());
+    ImGui::Text("%s", std::format("Renderer: {}", rendererInfo).c_str());
 
     if (ImGui::Button("Toggle wireframe"))
     {
