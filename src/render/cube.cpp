@@ -4,10 +4,8 @@ using namespace render;
 using glm::mat4, glm::vec3, glm::radians;
 
 // Rotation is in degrees
-Cube::Cube(vec3 position, vec3 rotation, unsigned int shaderId) : shaderId(shaderId), position{position}, rotation{rotation}
+Cube::Cube(vec3 position, vec3 rotation, unsigned int shaderId, Texture texture) : shaderId(shaderId), texture(texture), position{position}, rotation{rotation}
 {
-    DEBUG_LOG("Cube init");
-
     glGenVertexArrays(1, &this->vertexArray);
     glBindVertexArray(this->vertexArray);
 
@@ -24,29 +22,6 @@ Cube::Cube(vec3 position, vec3 rotation, unsigned int shaderId) : shaderId(shade
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexes), vertexes, GL_STATIC_DRAW);
-
-    // Load texture
-    int width, height, channels;
-    unsigned char *textureData = stbi_load("assets/textures/container.jpg", &width, &height, &channels, 0);
-
-    if (!textureData)
-    {
-        DEBUG_LOG("Texture loading failed");
-        return;
-    }
-
-    glGenTextures(1, &this->textureId);
-    glBindTexture(GL_TEXTURE_2D, this->textureId);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(textureData);
 }
 
 void Cube::render() const
@@ -62,7 +37,7 @@ void Cube::render() const
     glUniformMatrix4fv(transformLocation, 1, false, glm::value_ptr(transform));
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBindTexture(GL_TEXTURE_2D, this->textureId);
+    this->texture.select();
 
     glUseProgram(this->shaderId);
     glBindVertexArray(this->vertexArray);

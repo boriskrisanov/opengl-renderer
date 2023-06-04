@@ -22,7 +22,6 @@
 #include <thread>
 #include <vector>
 
-
 #define DEBUG_LOG(message) std::cout << "[" << __func__ << "] " << message << "\n"
 
 namespace render
@@ -31,6 +30,15 @@ enum class ShaderType
 {
     VERTEX = GL_VERTEX_SHADER,
     FRAGMENT = GL_FRAGMENT_SHADER
+};
+
+class Texture
+{
+  public:
+    void select() const;
+    Texture(std::string path);
+  private:
+    unsigned int id;
 };
 
 class Cube
@@ -79,16 +87,16 @@ class Cube
      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
     -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
     -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-};
+    };
     // clang-format on
 
     unsigned int shaderId;
-    unsigned int textureId;
     unsigned int vertexBuffer;
     unsigned int vertexArray;
+    Texture texture;
 
   public:
-    Cube(glm::vec3 position, glm::vec3 rotation, unsigned int shaderId);
+    Cube(glm::vec3 position, glm::vec3 rotation, unsigned int shaderId, Texture texture);
     glm::vec3 position;
     glm::vec3 rotation;
     void render() const;
