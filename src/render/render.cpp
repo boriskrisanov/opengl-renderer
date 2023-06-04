@@ -109,11 +109,11 @@ void initScene(unsigned int shaderId)
     cubes.push_back(std::shared_ptr<Cube>(new Cube{{0, 0, 0}, {0, 0, 0}, shaderId, texture}));
     cubes.push_back(std::shared_ptr<Cube>(new Cube{{2, 0, 0}, {0, 0, 0}, shaderId, texture}));
 
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < 40; i++)
     {
-        for (int j = 0; j < 30; j++)
+        for (int j = 0; j < 40; j++)
         {
-            for (int k = 0; k < 2; k++)
+            for (int k = 0; k < 3; k++)
             {
                 cubes.push_back(std::shared_ptr<Cube>(new Cube{{i + 3, k, j + 3}, {0, 0, 0}, shaderId, texture}));
             }

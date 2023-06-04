@@ -108,7 +108,7 @@ class Camera
     Camera(GLFWwindow *window, glm::vec2 windowSize, unsigned int shaderProgram, float speed);
     Camera() {}
     glm::vec3 position = glm::vec3(0, 0, 0);
-    static constexpr float fov = 45;
+    static constexpr float fov = 80;
     void update();
 
   private:

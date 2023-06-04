@@ -38,9 +38,6 @@ void Camera::updateMatrixUniforms()
 {
     viewMatrix = glm::lookAt(position, position + front, up);
 
-    int modelMatrixLocation = glGetUniformLocation(shaderProgram, "modelMatrix");
-    glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
-
     int viewMatrixLocation = glGetUniformLocation(shaderProgram, "viewMatrix");
     glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
