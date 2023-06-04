@@ -36,30 +36,55 @@ class Cube
 {
   private:
     // clang-format off
-    static constexpr float triangleVertices[] = {
-      -0.5, -0.5, 0.5,     1, 1,   // 0
-      0.5, -0.5, 0.5,      1, 0,   // 1
-      -0.5, 0.5, 0.5,      0, 0,   // 2
-      0.5, 0.5, 0.5,       0, 1,   // 3
-      -0.5, -0.5, -0.5,    1, 1,   // 4
-      0.5, -0.5, -0.5,     1, 0,   // 5
-      -0.5, 0.5, -0.5,     0, 0,   // 6
-      0.5, 0.5, -0.5 ,     0, 1    // 7
-    };
-    static constexpr unsigned int indexes[] = {
-      0, 1, 3, 0, 2, 3,
-      5, 1, 3, 5, 7, 3,
-      5, 4, 6, 5, 7, 6,
-      4, 6, 2, 4, 0, 2,
-      0, 4, 1, 5, 4, 1,
-      2, 6, 3, 7, 6, 3
-    };
+    static constexpr float vertexes[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+};
     // clang-format on
 
     unsigned int shaderId;
     unsigned int textureId;
     unsigned int vertexBuffer;
-    unsigned int indexBuffer;
+    unsigned int vertexArray;
 
   public:
     Cube(glm::vec3 position, glm::vec3 rotation, unsigned int shaderId);
@@ -118,6 +143,6 @@ enum Key
     ESCAPE = GLFW_KEY_ESCAPE
 };
 
-bool isKeyDown(GLFWwindow *window, Key key);
-glm::vec2 getMousePosition(GLFWwindow *window);
+[[nodiscard]] bool isKeyDown(GLFWwindow *window, Key key);
+[[nodiscard]] glm::vec2 getMousePosition(GLFWwindow *window);
 } // namespace input

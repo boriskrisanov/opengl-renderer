@@ -8,20 +8,22 @@ Cube::Cube(vec3 position, vec3 rotation, unsigned int shaderId) : shaderId(shade
 {
     DEBUG_LOG("Cube init");
 
-    glGenBuffers(1, &vertexBuffer);
+    glGenVertexArrays(1, &this->vertexArray);
+    glBindVertexArray(this->vertexArray);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(this->triangleVertices), this->triangleVertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &this->vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertexes), this->vertexes, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(float) * 5, 0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(float) * 5, (const void *)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(float) * 5, (const void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    glGenBuffers(1, &indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexes), vertexes, GL_STATIC_DRAW);
 
     // Load texture
     int width, height, channels;
@@ -35,6 +37,11 @@ Cube::Cube(vec3 position, vec3 rotation, unsigned int shaderId) : shaderId(shade
 
     glGenTextures(1, &this->textureId);
     glBindTexture(GL_TEXTURE_2D, this->textureId);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -53,8 +60,11 @@ void Cube::render() const
     unsigned int transformLocation = glGetUniformLocation(this->shaderId, "transform");
     glUniformMatrix4fv(transformLocation, 1, false, glm::value_ptr(transform));
 
-    glBindBuffer(GL_INDEX_ARRAY, indexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBindTexture(GL_TEXTURE_2D, this->textureId);
 
-    glDrawElements(GL_TRIANGLES, sizeof(this->indexes) / sizeof(unsigned int), GL_UNSIGNED_INT, nullptr);
+    glUseProgram(this->shaderId);
+    glBindVertexArray(this->vertexArray);
+
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(this->vertexes) / sizeof(float) * 5);
 }
