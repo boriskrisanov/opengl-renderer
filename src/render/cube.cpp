@@ -51,6 +51,7 @@ Cube::Cube(vec3 position, vec3 rotation, unsigned int shaderId) : shaderId(shade
 
 void Cube::render() const
 {
+    // TODO: Improve efficiency. A lot of this can be done in the constructor and not on every frame.
     mat4 transform{1};
     transform = glm::translate(transform, this->position);
     transform = glm::rotate(transform, radians(this->rotation.x), vec3{1, 0, 0});

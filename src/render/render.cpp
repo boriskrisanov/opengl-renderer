@@ -1,4 +1,5 @@
 #include "defs.hpp"
+#include <GLFW/glfw3.h>
 
 using glm::vec2, std::string;
 
@@ -9,7 +10,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 Camera camera{};
 const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
-std::unique_ptr<Cube> cube;
+std::vector<std::shared_ptr<Cube>> cubes;
 bool isCursorEnabled = false;
 bool isWireframeDrawEnabled = false;
 double frameTimeInMilliseconds = 0;
@@ -103,7 +104,8 @@ void updateUI()
 
 void initScene(unsigned int shaderId)
 {
-    cube.reset(new Cube{{0, 0, 0}, {0, 0, 0}, shaderId});
+    cubes.push_back(std::shared_ptr<Cube>(new Cube{{0, 0, 0}, {0, 0, 0}, shaderId}));
+    cubes.push_back(std::shared_ptr<Cube>(new Cube{{2, 0, 0}, {0, 0, 0}, shaderId}));
 }
 
 void drawFrame()
@@ -115,8 +117,13 @@ void drawFrame()
 
     camera.update();
 
-    cube->render();
-    cube->rotation.z = glfwGetTime() * 20;
+    for (std::shared_ptr<Cube> cube : cubes)
+    {
+        cube->render();
+    }
+
+    cubes.at(0)->rotation.z = glfwGetTime() * 20;
+    cubes.at(1)->position.y = sin(glfwGetTime());
 
     updateUI();
 

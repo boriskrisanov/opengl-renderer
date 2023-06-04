@@ -14,12 +14,14 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
+#include <math.h>
 #include <memory>
 #include <optional>
 #include <stb_image.h>
 #include <string>
 #include <thread>
 #include <vector>
+
 
 #define DEBUG_LOG(message) std::cout << "[" << __func__ << "] " << message << "\n"
 
