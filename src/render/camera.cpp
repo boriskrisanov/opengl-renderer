@@ -12,7 +12,7 @@ namespace render
 {
 Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, float speed)
 {
-    mat4 projectionMatrix = perspective(radians(45.0f), (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
+    mat4 projectionMatrix = perspective(radians(this->fov), (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
     mat4 modelMatrix = rotate(mat4(1.0f), 0.0f, vec3(1.0f, 0.0f, 0.0f));
     vec3 position = vec3(0, 0, 0);
     vec3 target = vec3(0.0f, 0.0f, 0.0f);
