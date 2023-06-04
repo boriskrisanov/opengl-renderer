@@ -17,7 +17,7 @@ Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, 
     vec3 position = vec3(0, 0, 0);
     vec3 target = vec3(0.0f, 0.0f, 0.0f);
     vec3 direction = normalize(position - target);
-    vec3 up = vec3(0, 1, 0); // cross(direction, right);
+    vec3 up = vec3(0, 1, 0);
     vec3 front = vec3(0.0f, 0.0f, -1.0f);
     mat4 viewMatrix{};
 
@@ -90,16 +90,6 @@ void Camera::respondToMouseInput()
     pitch += mouseOffset.y;
 
     pitch = std::clamp(pitch, -89.0f, 89.0f);
-
-    /*
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front = glm::normalize(front);
-
-    vec3 right = glm::normalize(glm::cross(front, up));
-    up = glm::normalize(glm::cross(right, front));
-    */
 
     direction = vec3(
         cos(radians(yaw)) * cos(radians(pitch)),

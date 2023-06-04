@@ -110,7 +110,6 @@ void drawFrame()
 
     camera.update();
 
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
     cube->render();
     cube->rotation.z = glfwGetTime() * 20;
 
