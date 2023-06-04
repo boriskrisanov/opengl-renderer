@@ -24,7 +24,7 @@ GLFWwindow *initAndCreateWindow()
         return nullptr;
     }
 
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello World", nullptr, nullptr);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game", nullptr, nullptr);
 
     if (!window)
     {
