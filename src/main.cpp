@@ -22,7 +22,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        render::drawFrame();
+        render::drawFrame(shaderProgram);
     }
 
     glfwTerminate();

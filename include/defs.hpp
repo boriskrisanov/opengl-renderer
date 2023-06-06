@@ -24,6 +24,10 @@
 
 #define DEBUG_LOG(message) std::cout << "[" << __func__ << "] " << message << "\n"
 
+namespace world {
+  struct Chunk;
+}
+
 namespace render
 {
 enum class ShaderType
@@ -37,6 +41,7 @@ class Texture
   public:
     void select() const;
     Texture(std::string path);
+
   private:
     unsigned int id;
 };
@@ -90,16 +95,15 @@ class Cube
     };
     // clang-format on
 
-    unsigned int shaderId;
     unsigned int vertexBuffer;
     unsigned int vertexArray;
     Texture texture;
 
   public:
-    Cube(glm::vec3 position, glm::vec3 rotation, unsigned int shaderId, Texture texture);
+    Cube(glm::vec3 position, glm::vec3 rotation, Texture texture);
     glm::vec3 position;
     glm::vec3 rotation;
-    void render() const;
+    void render(unsigned int shaderId) const;
 };
 
 class Camera
@@ -132,13 +136,16 @@ class Camera
 };
 
 GLFWwindow *initAndCreateWindow();
-void drawFrame();
+void drawFrame(unsigned int shaderId);
 void loadShaderFromFile(std::string sourcePath, ShaderType type);
 unsigned int createShaderProgram();
 void setWireframeDrawEnabled(bool enabled);
 void initCamera(unsigned int shaderProgram);
 void setVsyncEnabled(bool enabled);
 void initScene(unsigned int shaderId);
+
+void drawChunk(world::Chunk chunk, unsigned int shader);
+
 } // namespace render
 
 namespace input
@@ -157,3 +164,14 @@ enum Key
 [[nodiscard]] bool isKeyDown(GLFWwindow *window, Key key);
 [[nodiscard]] glm::vec2 getMousePosition(GLFWwindow *window);
 } // namespace input
+
+namespace world
+{
+struct Chunk
+{
+    glm::vec2 position;
+    std::vector<render::Cube> blocks;
+};
+
+[[nodiscard]] Chunk generateChunk(glm::vec2 position);
+} // namespace world

@@ -10,12 +10,12 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 Camera camera{};
 const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
-std::vector<std::shared_ptr<Cube>> cubes;
 bool isCursorEnabled = false;
 bool isWireframeDrawEnabled = false;
 double frameTimeInMilliseconds = 0;
 string openGlVersion;
 string rendererInfo;
+std::vector<world::Chunk> chunks;
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -104,24 +104,10 @@ void updateUI()
 
 void initScene(unsigned int shaderId)
 {
-    Texture texture{"assets/textures/container.jpg"};
-
-    cubes.push_back(std::shared_ptr<Cube>(new Cube{{0, 0, 0}, {0, 0, 0}, shaderId, texture}));
-    cubes.push_back(std::shared_ptr<Cube>(new Cube{{2, 0, 0}, {0, 0, 0}, shaderId, texture}));
-
-    for (int i = 0; i < 40; i++)
-    {
-        for (int j = 0; j < 40; j++)
-        {
-            for (int k = 0; k < 3; k++)
-            {
-                cubes.push_back(std::shared_ptr<Cube>(new Cube{{i + 3, k, j + 3}, {0, 0, 0}, shaderId, texture}));
-            }
-        }
-    }
+    chunks.push_back(world::generateChunk({0, 0}));
 }
 
-void drawFrame()
+void drawFrame(unsigned int shaderId)
 {
     updateDeltaTime();
     double startTime = glfwGetTime();
@@ -130,13 +116,10 @@ void drawFrame()
 
     camera.update();
 
-    for (std::shared_ptr<Cube> cube : cubes)
+    for (auto chunk : chunks)
     {
-        cube->render();
+        render::drawChunk(chunk, shaderId);
     }
-
-    cubes.at(0)->rotation.z = glfwGetTime() * 20;
-    cubes.at(1)->position.y = sin(glfwGetTime());
 
     updateUI();
 
@@ -158,5 +141,13 @@ void setWireframeDrawEnabled(bool isEnabled)
 void setVsyncEnabled(bool enabled)
 {
     glfwSwapInterval((int)enabled);
+}
+
+void drawChunk(world::Chunk chunk, unsigned int shader)
+{
+    for (auto block : chunk.blocks)
+    {
+        block.render(shader);
+    }
 }
 } // namespace render
