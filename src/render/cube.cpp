@@ -24,6 +24,7 @@ Cube::Cube(vec3 position, vec3 rotation, Texture texture) : texture(texture), po
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexes), vertexes, GL_STATIC_DRAW);
+    this->texture.select();
 }
 
 void Cube::render(unsigned int shaderId) const
@@ -40,9 +41,9 @@ void Cube::render(unsigned int shaderId) const
     glUniformMatrix4fv(transformUniformLocation, 1, false, glm::value_ptr(transform));
 
     // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    this->texture.select();
+    // this->texture.select();
 
-    glUseProgram(shaderId);
+    // glUseProgram(shaderId);
     glBindVertexArray(this->vertexArray);
 
     glDrawArrays(GL_TRIANGLES, 0, sizeof(this->vertexes) / sizeof(float) * 5);

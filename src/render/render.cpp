@@ -1,5 +1,6 @@
 #include "defs.hpp"
 #include <GLFW/glfw3.h>
+#include <imgui.h>
 
 using glm::vec2, std::string;
 
@@ -134,7 +135,6 @@ void drawFrame(unsigned int shaderId)
 
     if (secondsUntilNextCounterUpdate <= 0)
     {
-        // DEBUG_LOG("Update");
         frameTimeInMilliseconds = frameTimeInSeconds * 1000;
         secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
     }
