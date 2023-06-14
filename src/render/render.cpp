@@ -16,6 +16,8 @@ double frameTimeInMilliseconds = 0;
 string openGlVersion;
 string rendererInfo;
 std::vector<world::Chunk> chunks;
+const double SECONDS_BETWEEN_COUNTER_UPDATES = 0.25;
+double secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -127,8 +129,15 @@ void drawFrame(unsigned int shaderId)
     updateUI();
 
     double endTime = glfwGetTime();
+    const double frameTimeInSeconds = endTime - startTime;
+    secondsUntilNextCounterUpdate -= frameTimeInSeconds;
 
-    frameTimeInMilliseconds = (endTime - startTime) * 1000;
+    if (secondsUntilNextCounterUpdate <= 0)
+    {
+        // DEBUG_LOG("Update");
+        frameTimeInMilliseconds = frameTimeInSeconds * 1000;
+        secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
+    }
 
     glfwSwapBuffers(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
