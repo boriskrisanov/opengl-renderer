@@ -105,6 +105,9 @@ void updateUI()
 void initScene(unsigned int shaderId)
 {
     chunks.push_back(world::generateChunk({0, 0}));
+    chunks.push_back(world::generateChunk({0, 1}));
+    chunks.push_back(world::generateChunk({1, 0}));
+    chunks.push_back(world::generateChunk({1, 1}));
 }
 
 void drawFrame(unsigned int shaderId)
@@ -147,7 +150,7 @@ void drawChunk(world::Chunk chunk, unsigned int shader)
 {
     for (auto block : chunk.blocks)
     {
-        block.render(shader);
+        block->render(shader);
     }
 }
 } // namespace render

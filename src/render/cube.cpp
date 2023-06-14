@@ -1,4 +1,6 @@
 #include "defs.hpp"
+#include <GLFW/glfw3.h>
+#include <glm/ext/matrix_transform.hpp>
 
 using namespace render;
 using glm::mat4, glm::vec3, glm::radians;
@@ -32,11 +34,12 @@ void Cube::render(unsigned int shaderId) const
     transform = glm::rotate(transform, radians(this->rotation.x), vec3{1, 0, 0});
     transform = glm::rotate(transform, radians(this->rotation.y), vec3{0, 0, 1});
     transform = glm::rotate(transform, radians(this->rotation.z), vec3{0, 1, 0});
+    transform = glm::scale(transform, {0.5, 0.5, 0.5}); // TODO: Add scale parameter
 
-    unsigned int transformLocation = glGetUniformLocation(shaderId, "transform");
-    glUniformMatrix4fv(transformLocation, 1, false, glm::value_ptr(transform));
+    auto transformUniformLocation = glGetUniformLocation(shaderId, "transform");
+    glUniformMatrix4fv(transformUniformLocation, 1, false, glm::value_ptr(transform));
 
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     this->texture.select();
 
     glUseProgram(shaderId);

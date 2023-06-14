@@ -21,8 +21,10 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <chrono>
+#include <ctime>    
 
-#define DEBUG_LOG(message) std::cout << "[" << __func__ << "] " << message << "\n"
+#define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
 
 namespace world {
   struct Chunk;
@@ -170,7 +172,7 @@ namespace world
 struct Chunk
 {
     glm::vec2 position;
-    std::vector<render::Cube> blocks;
+    std::vector<std::shared_ptr<render::Cube>> blocks;
 };
 
 [[nodiscard]] Chunk generateChunk(glm::vec2 position);
