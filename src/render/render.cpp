@@ -1,5 +1,4 @@
 #include "defs.hpp"
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 
 using glm::vec2, std::string;
@@ -19,6 +18,10 @@ string rendererInfo;
 std::vector<world::Chunk> chunks;
 const double SECONDS_BETWEEN_COUNTER_UPDATES = 0.25;
 double secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
+
+static std::random_device randomDevice;
+static std::mt19937 rng(randomDevice());
+static std::uniform_int_distribution<int> uniformIntDistribution((unsigned int)0, UINT_MAX);
 
 GLFWwindow *initAndCreateWindow()
 {
@@ -88,7 +91,6 @@ void updateUI()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    // TODO: Add delay between updates
     // TODO: FPS counter
     auto cameraPosition = camera.position;
     ImGui::Text("%s", std::format("Camera position: {}, {}, {} ", cameraPosition.x, cameraPosition.y, cameraPosition.z).c_str());
@@ -101,16 +103,23 @@ void updateUI()
         setWireframeDrawEnabled(!isWireframeDrawEnabled);
     }
 
+    ImGui::Begin("Terrain");
+
+    if (ImGui::Button("Regenerate terrain"))
+    {
+        chunks.clear();
+        chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
+    }
+
+    ImGui::End();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void initScene(unsigned int shaderId)
+void initScene()
 {
-    chunks.push_back(world::generateChunk({0, 0}));
-    chunks.push_back(world::generateChunk({0, 1}));
-    chunks.push_back(world::generateChunk({1, 0}));
-    chunks.push_back(world::generateChunk({1, 1}));
+    chunks = world::generateTerrain(123, {4, 4});
 }
 
 void drawFrame(unsigned int shaderId)
@@ -120,7 +129,10 @@ void drawFrame(unsigned int shaderId)
 
     glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
-    camera.update();
+    if (!isCursorEnabled) [[likely]]
+    {
+        camera.update();
+    }
 
     for (auto chunk : chunks)
     {

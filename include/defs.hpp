@@ -1,8 +1,11 @@
 #pragma once
 
+#include "PerlinNoise.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <algorithm>
+#include <chrono>
+#include <ctime>
 #include <format>
 #include <fstream>
 #include <glm/ext.hpp>
@@ -14,20 +17,21 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
+#include <limits>
 #include <math.h>
 #include <memory>
 #include <optional>
+#include <random>
 #include <stb_image.h>
 #include <string>
 #include <thread>
 #include <vector>
-#include <chrono>
-#include <ctime>    
 
 #define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
 
-namespace world {
-  struct Chunk;
+namespace world
+{
+struct Chunk;
 }
 
 namespace render
@@ -144,7 +148,7 @@ unsigned int createShaderProgram();
 void setWireframeDrawEnabled(bool enabled);
 void initCamera(unsigned int shaderProgram);
 void setVsyncEnabled(bool enabled);
-void initScene(unsigned int shaderId);
+void initScene();
 
 void drawChunk(world::Chunk chunk, unsigned int shader);
 
@@ -175,5 +179,6 @@ struct Chunk
     std::vector<std::shared_ptr<render::Cube>> blocks;
 };
 
-[[nodiscard]] Chunk generateChunk(glm::vec2 position);
+[[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);
+std::vector<world::Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize);
 } // namespace world

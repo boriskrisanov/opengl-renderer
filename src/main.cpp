@@ -16,7 +16,9 @@ int main()
     render::setVsyncEnabled(true);
 
     render::initCamera(shaderProgram);
-    render::initScene(shaderProgram);
+    render::initScene();
+
+    glClearColor(30.0 / 100.0, 193.0 / 100.0, 234.0 / 100.0, 1);
 
     // render::setWireframeDrawEnabled(true);
 
