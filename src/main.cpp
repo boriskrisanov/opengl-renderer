@@ -18,7 +18,8 @@ int main()
     render::initCamera(shaderProgram);
     render::initScene();
 
-    glClearColor(30.0 / 100.0, 193.0 / 100.0, 234.0 / 100.0, 1);
+    // glClearColor(30.0 / 100.0, 193.0 / 100.0, 234.0 / 100.0, 1);
+    glClearColor(1, 1, 1, 1);
 
     // render::setWireframeDrawEnabled(true);
 

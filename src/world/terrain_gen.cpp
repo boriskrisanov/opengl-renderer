@@ -32,7 +32,7 @@ world::Chunk world::generateChunk(unsigned int seed, glm::vec2 position)
     {
         for (float z = 16 * position.y; z < 16 + 16 * position.y; z += 0.5)
         {
-            const double yHeight = perlinNoise.octave2D(x * 0.1, z * 0.1, 16);
+            const double yHeight = perlinNoise.octave2D(x * 0.1, z * 0.1, 16) * 4;
             cubes.push_back(std::make_shared<Cube>(Cube{{x, round(yHeight) / 2, z}, {0, 0, 0}, texture}));
         }
     }

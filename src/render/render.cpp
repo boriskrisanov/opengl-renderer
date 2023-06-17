@@ -17,7 +17,9 @@ string openGlVersion;
 string rendererInfo;
 std::vector<world::Chunk> chunks;
 const double SECONDS_BETWEEN_COUNTER_UPDATES = 0.25;
+const double SECONDS_BETWEEN_CURSOR_STATE_UPDATES = 0.5;
 double secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
+double secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
 
 static std::random_device randomDevice;
 static std::mt19937 rng(randomDevice());
@@ -82,9 +84,10 @@ void updateDeltaTime()
 void updateUI()
 {
     // TODO: Increase font size
-    if (input::isKeyDown(window, input::ESCAPE))
+    if (input::isKeyDown(window, input::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0)
     {
         isCursorEnabled = !isCursorEnabled;
+        secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
     }
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -144,6 +147,7 @@ void drawFrame(unsigned int shaderId)
     double endTime = glfwGetTime();
     const double frameTimeInSeconds = endTime - startTime;
     secondsUntilNextCounterUpdate -= frameTimeInSeconds;
+    secondsUntilNextCursorStateUpdate -= frameTimeInSeconds;
 
     if (secondsUntilNextCounterUpdate <= 0)
     {
