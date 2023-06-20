@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PerlinNoise.hpp"
+#include "defs.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <algorithm>
@@ -51,6 +52,16 @@ class Texture
   private:
     unsigned int id;
 };
+
+namespace textureLoader
+{
+void loadTextures();
+enum class TextureName
+{
+    CONTAINER
+};
+const render::Texture *getTexture(TextureName name);
+} // namespace textureLoader
 
 class Cube
 {
@@ -103,10 +114,10 @@ class Cube
 
     unsigned int vertexBuffer;
     unsigned int vertexArray;
-    Texture texture;
+    const Texture *texture;
 
   public:
-    Cube(glm::vec3 position, glm::vec3 rotation, Texture texture);
+    Cube(glm::vec3 position, glm::vec3 rotation, const Texture *const texture);
     glm::vec3 position;
     glm::vec3 rotation;
     void render(unsigned int shaderId) const;
@@ -156,6 +167,7 @@ void drawChunk(world::Chunk chunk, unsigned int shader);
 
 namespace input
 {
+
 enum Key
 {
     W = GLFW_KEY_W,
@@ -173,12 +185,23 @@ enum Key
 
 namespace world
 {
+class Block : public render::Cube
+{
+  public:
+    glm::vec3 position;
+    Block(glm::vec3 position);
+};
+
+class GrassBlock : public Block
+{
+};
+
 struct Chunk
 {
     glm::vec2 position;
-    std::vector<std::shared_ptr<render::Cube>> blocks;
+    std::vector<std::shared_ptr<Block>> blocks;
 };
 
 [[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);
-std::vector<world::Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize);
+[[nodiscard]] std::vector<world::Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize);
 } // namespace world

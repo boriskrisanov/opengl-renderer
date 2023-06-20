@@ -6,7 +6,7 @@ using namespace render;
 using glm::mat4, glm::vec3, glm::radians;
 
 // Rotation is in degrees
-Cube::Cube(vec3 position, vec3 rotation, Texture texture) : texture(texture), position{position}, rotation{rotation}
+Cube::Cube(vec3 position, vec3 rotation, const Texture* const texture) : texture(texture), position{position}, rotation{rotation}
 {
     glGenVertexArrays(1, &this->vertexArray);
     glBindVertexArray(this->vertexArray);
@@ -24,7 +24,7 @@ Cube::Cube(vec3 position, vec3 rotation, Texture texture) : texture(texture), po
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexes), vertexes, GL_STATIC_DRAW);
-    this->texture.select();
+    this->texture->select();
 }
 
 void Cube::render(unsigned int shaderId) const

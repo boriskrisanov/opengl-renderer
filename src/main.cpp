@@ -15,6 +15,8 @@ int main()
 
     render::setVsyncEnabled(true);
 
+    render::textureLoader::loadTextures();
+
     render::initCamera(shaderProgram);
     render::initScene();
 

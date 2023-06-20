@@ -66,6 +66,8 @@ GLFWwindow *initAndCreateWindow()
 
     glEnable(GL_DEPTH_TEST);
 
+    DEBUG_LOG("Finished OpenGL init");
+
     return window;
 }
 
