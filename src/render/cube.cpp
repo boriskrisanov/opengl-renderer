@@ -1,6 +1,4 @@
 #include "defs.hpp"
-#include <GLFW/glfw3.h>
-#include <glm/ext/matrix_transform.hpp>
 
 using namespace render;
 using glm::mat4, glm::vec3, glm::radians;
@@ -27,7 +25,7 @@ Cube::Cube(vec3 position, vec3 rotation, const Texture* const texture) : texture
     this->texture->select();
 }
 
-void Cube::render(unsigned int shaderId) const
+void Cube::render(render::Shader shader) const
 {
     // TODO: Improve efficiency. A lot of this can be done in the constructor and not on every frame.
     mat4 transform{1};
@@ -37,7 +35,7 @@ void Cube::render(unsigned int shaderId) const
     transform = glm::rotate(transform, radians(this->rotation.z), vec3{0, 1, 0});
     transform = glm::scale(transform, {0.5, 0.5, 0.5}); // TODO: Add scale parameter
 
-    auto transformUniformLocation = glGetUniformLocation(shaderId, "transform");
+    auto transformUniformLocation = glGetUniformLocation(shader.id, "transform");
     glUniformMatrix4fv(transformUniformLocation, 1, false, glm::value_ptr(transform));
 
     // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

@@ -9,15 +9,13 @@ int main()
         return 1;
     }
 
-    render::loadShaderFromFile("assets/shaders/vertex.glsl", render::ShaderType::VERTEX);
-    render::loadShaderFromFile("assets/shaders/fragment.glsl", render::ShaderType::FRAGMENT);
-    auto shaderProgram = render::createShaderProgram();
+    render::Shader shader{"default"};
 
     render::setVsyncEnabled(true);
 
     render::textureLoader::loadTextures();
 
-    render::initCamera(shaderProgram);
+    render::initCamera(shader);
     render::initScene();
 
     // glClearColor(30.0 / 100.0, 193.0 / 100.0, 234.0 / 100.0, 1);
@@ -27,7 +25,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        render::drawFrame(shaderProgram);
+        render::drawFrame(shader);
     }
 
     glfwTerminate();

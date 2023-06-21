@@ -18,6 +18,8 @@ include_directories(include)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
 
+# TODO: Delete assets directory first
+
 add_custom_command(TARGET game_engine PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:game_engine>/assets)

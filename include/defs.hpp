@@ -7,11 +7,13 @@
 #include <algorithm>
 #include <chrono>
 #include <ctime>
+#include <filesystem>
 #include <format>
 #include <fstream>
 #include <glm/ext.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/fwd.hpp>
+#include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -37,10 +39,16 @@ struct Chunk;
 
 namespace render
 {
-enum class ShaderType
+class Shader
 {
-    VERTEX = GL_VERTEX_SHADER,
-    FRAGMENT = GL_FRAGMENT_SHADER
+  public:
+    Shader(std::string name);
+    void select() const;
+    unsigned int id;
+
+  private:
+    unsigned int loadAndCompileShader(std::string sourcePath);
+    void createShaderProgram(std::vector<unsigned int> shaders);
 };
 
 class Texture
@@ -120,14 +128,13 @@ class Cube
     Cube(glm::vec3 position, glm::vec3 rotation, const Texture *const texture);
     glm::vec3 position;
     glm::vec3 rotation;
-    void render(unsigned int shaderId) const;
+    void render(render::Shader shader) const;
 };
 
 class Camera
 {
   public:
-    Camera(GLFWwindow *window, glm::vec2 windowSize, unsigned int shaderProgram, float speed);
-    Camera() {}
+    Camera(GLFWwindow *window, glm::vec2 windowSize, render::Shader shader, float speed);
     glm::vec3 position = glm::vec3(0, 0, 0);
     static constexpr float fov = 80;
     void update();
@@ -139,29 +146,86 @@ class Camera
     glm::mat4 projectionMatrix;
     glm::mat4 modelMatrix;
     glm::mat4 viewMatrix;
-    glm::vec3 target;
-    glm::vec3 direction;
-    glm::vec3 up;
-    glm::vec3 front;
-    unsigned int shaderProgram;
+    glm::vec3 target{0, 0, 0};
+    glm::vec3 direction{glm::normalize(position - target)};
+    glm::vec3 up{0, 1, 0};
+    glm::vec3 front{0, 0, -1};
     float speed;
     float pitch = 0;
     float yaw = -90;
     glm::vec2 lastMousePosition = glm::vec2(0, 0);
     glm::vec2 mouseOffset = glm::vec2(0, 0);
     GLFWwindow *window;
+    render::Shader shader;
 };
 
-GLFWwindow *initAndCreateWindow();
-void drawFrame(unsigned int shaderId);
-void loadShaderFromFile(std::string sourcePath, ShaderType type);
-unsigned int createShaderProgram();
+class Skybox
+{
+  public:
+    Skybox();
+    void draw() const;
+
+  private:
+    static constexpr float vertexes[] = {
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+
+        -1.0f, -1.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+
+        -1.0f, 1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f
+
+    };
+
+    render::Shader shader;
+    unsigned int cubemapTextureId;
+    unsigned int vertexBufferId;
+    unsigned int vertexArrayId;
+};
+
+GLFWwindow *
+initAndCreateWindow();
+void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);
-void initCamera(unsigned int shaderProgram);
+void initCamera(render::Shader shader);
 void setVsyncEnabled(bool enabled);
 void initScene();
 
-void drawChunk(world::Chunk chunk, unsigned int shader);
+void drawChunk(world::Chunk chunk, render::Shader shader);
 
 } // namespace render
 

@@ -10,28 +10,12 @@ using glm::vec3;
 
 namespace render
 {
-Camera::Camera(GLFWwindow *window, vec2 windowSize, unsigned int shaderProgram, float speed)
+Camera::Camera(GLFWwindow *window, vec2 windowSize, render::Shader shader, float speed) : projectionMatrix{perspective(radians(this->fov), (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f)},
+                                                                   modelMatrix{rotate(mat4(1.0f), 0.0f, vec3(1.0f, 0.0f, 0.0f))},
+                                                                   speed{speed},
+                                                                   window{window},
+                                                                   shader{shader}
 {
-    mat4 projectionMatrix = perspective(radians(this->fov), (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
-    mat4 modelMatrix = rotate(mat4(1.0f), 0.0f, vec3(1.0f, 0.0f, 0.0f));
-    vec3 position = vec3(0, 0, 0);
-    vec3 target = vec3(0.0f, 0.0f, 0.0f);
-    vec3 direction = normalize(position - target);
-    vec3 up = vec3(0, 1, 0);
-    vec3 front = vec3(0.0f, 0.0f, -1.0f);
-    mat4 viewMatrix{};
-
-    this->projectionMatrix = projectionMatrix;
-    this->modelMatrix = modelMatrix;
-    this->viewMatrix = viewMatrix;
-    this->position = position;
-    this->target = target;
-    this->direction = direction;
-    this->up = up;
-    this->front = front;
-    this->shaderProgram = shaderProgram;
-    this->speed = speed;
-    this->window = window;
 }
 
 void Camera::updateMatrixUniforms()
@@ -39,10 +23,10 @@ void Camera::updateMatrixUniforms()
     viewMatrix = glm::lookAt(position, position + front, up);
 
     // TODO: Move glGetUniformLocation calls to constructor
-    int viewMatrixLocation = glGetUniformLocation(shaderProgram, "viewMatrix");
+    int viewMatrixLocation = glGetUniformLocation(shader.id, "viewMatrix");
     glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
-    int projectionMatrixLocation = glGetUniformLocation(shaderProgram, "projectionMatrix");
+    int projectionMatrixLocation = glGetUniformLocation(shader.id, "projectionMatrix");
     glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 }
 

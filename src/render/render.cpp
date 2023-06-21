@@ -1,5 +1,4 @@
 #include "defs.hpp"
-#include <imgui.h>
 
 using glm::vec2, std::string;
 
@@ -8,7 +7,7 @@ namespace render
 GLFWwindow *window;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-Camera camera{};
+std::shared_ptr<Camera> camera;
 const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
 bool isCursorEnabled = false;
 bool isWireframeDrawEnabled = false;
@@ -20,7 +19,7 @@ const double SECONDS_BETWEEN_COUNTER_UPDATES = 0.25;
 const double SECONDS_BETWEEN_CURSOR_STATE_UPDATES = 0.5;
 double secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
 double secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
-
+std::shared_ptr<Skybox> skybox;
 static std::random_device randomDevice;
 static std::mt19937 rng(randomDevice());
 static std::uniform_int_distribution<int> uniformIntDistribution((unsigned int)0, UINT_MAX);
@@ -71,9 +70,9 @@ GLFWwindow *initAndCreateWindow()
     return window;
 }
 
-void initCamera(unsigned int shaderProgram)
+void initCamera(render::Shader shader)
 {
-    camera = Camera{window, vec2(WINDOW_WIDTH, WINDOW_HEIGHT), shaderProgram, 0.05f};
+    camera = std::make_shared<Camera>(Camera{window, vec2(WINDOW_WIDTH, WINDOW_HEIGHT), shader, 0.05f});
 }
 
 void updateDeltaTime()
@@ -97,7 +96,7 @@ void updateUI()
     ImGui::NewFrame();
 
     // TODO: FPS counter
-    auto cameraPosition = camera.position;
+    auto cameraPosition = camera->position;
     ImGui::Text("%s", std::format("Camera position: {}, {}, {} ", cameraPosition.x, cameraPosition.y, cameraPosition.z).c_str());
     ImGui::Text("%s", std::format("Frame time: {}ms", frameTimeInMilliseconds).c_str());
     ImGui::Text("%s", std::format("OpenGL version: {}", openGlVersion).c_str());
@@ -124,10 +123,11 @@ void updateUI()
 
 void initScene()
 {
-    chunks = world::generateTerrain(123, {4, 4});
+    chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
+    skybox = std::make_shared<Skybox>(Skybox{});
 }
 
-void drawFrame(unsigned int shaderId)
+void drawFrame(render::Shader shader)
 {
     updateDeltaTime();
     double startTime = glfwGetTime();
@@ -136,12 +136,15 @@ void drawFrame(unsigned int shaderId)
 
     if (!isCursorEnabled) [[likely]]
     {
-        camera.update();
+        camera->update();
     }
 
+    skybox->draw();
+
+    shader.select();
     for (auto chunk : chunks)
     {
-        render::drawChunk(chunk, shaderId);
+        render::drawChunk(chunk, shader);
     }
 
     updateUI();
@@ -173,7 +176,7 @@ void setVsyncEnabled(bool enabled)
     glfwSwapInterval((int)enabled);
 }
 
-void drawChunk(world::Chunk chunk, unsigned int shader)
+void drawChunk(world::Chunk chunk, render::Shader shader)
 {
     for (auto block : chunk.blocks)
     {

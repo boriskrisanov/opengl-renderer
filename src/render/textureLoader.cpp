@@ -4,6 +4,8 @@
 namespace render::textureLoader
 {
 
+// No need to free pointers because they're used until the end of the program
+
 render::Texture *container = nullptr;
 
 void loadTextures()
