@@ -18,6 +18,8 @@ include_directories(include)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
 
+add_compile_definitions(ENABLE_DEBUG_LOGGING)
+
 # TODO: Delete assets directory first
 
 add_custom_command(TARGET game_engine PRE_BUILD

@@ -5,7 +5,7 @@ using std::string, std::ifstream, std::vector;
 namespace render
 {
 
-Shader::Shader(std::string name)
+Shader::Shader(std::string name, vector<string> uniforms) : name{name}
 {
     DEBUG_LOG("Looking for files for shader " << name);
     std::vector<unsigned int> shaders;
@@ -28,13 +28,19 @@ Shader::Shader(std::string name)
     }
 
     this->createShaderProgram(shaders);
+
+    for (std::string uniform : uniforms)
+    {
+        const int location = glGetUniformLocation(this->id, uniform.c_str());
+        this->uniformLocations[uniform] = location;
+    }
 }
 
 unsigned int Shader::loadAndCompileShader(std::string sourcePath)
 {
     DEBUG_LOG("Loading shader: " << sourcePath);
 
-    int shaderType = sourcePath.ends_with(".vert") ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
+    const int shaderType = sourcePath.ends_with(".vert") ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
 
     ifstream sourceFile{sourcePath};
     string currentLine;

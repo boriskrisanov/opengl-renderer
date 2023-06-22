@@ -9,7 +9,7 @@ int main()
         return 1;
     }
 
-    render::Shader shader{"default"};
+    render::Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
 
     render::setVsyncEnabled(true);
 

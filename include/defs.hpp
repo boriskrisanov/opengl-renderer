@@ -21,6 +21,7 @@
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <math.h>
 #include <memory>
 #include <optional>
@@ -28,6 +29,7 @@
 #include <stb_image.h>
 #include <string>
 #include <thread>
+#include <type_traits>
 #include <vector>
 
 #define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
@@ -42,11 +44,34 @@ namespace render
 class Shader
 {
   public:
-    Shader(std::string name);
+    Shader(std::string name, std::vector<std::string> uniforms = {});
     void select() const;
+
+    template <typename T>
+    void setUniform(std::string name, T value) const
+    {
+        #ifdef ENABLE_DEBUG_LOGGING
+        if (!this->uniformLocations.contains(name)) [[unlikely]]
+        {
+            DEBUG_LOG("warning: attempted to set uniform " << name << " which does not exist on shader " << this->name);
+            return;
+        }
+        #endif
+
+        int location = location = this->uniformLocations.at(name);
+        auto valuePointer = glm::value_ptr(value);
+
+        if (typeid(value) == typeid(glm::mat4))
+        {
+            glUniformMatrix4fv(location, 1, false, valuePointer);
+        }
+    }
+
     unsigned int id;
+    const std::string name;
 
   private:
+    std::map<std::string, int> uniformLocations;
     unsigned int loadAndCompileShader(std::string sourcePath);
     void createShaderProgram(std::vector<unsigned int> shaders);
 };
