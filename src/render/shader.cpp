@@ -36,7 +36,7 @@ Shader::Shader(std::string name, vector<string> uniforms) : name{name}
     }
 }
 
-unsigned int Shader::loadAndCompileShader(std::string sourcePath)
+unsigned int Shader::loadAndCompileShader(std::string sourcePath) const
 {
     DEBUG_LOG("Loading shader: " << sourcePath);
 

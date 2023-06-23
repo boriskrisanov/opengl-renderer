@@ -74,7 +74,7 @@ class Shader
 
   private:
     std::map<std::string, int> uniformLocations;
-    unsigned int loadAndCompileShader(std::string sourcePath);
+    unsigned int loadAndCompileShader(std::string sourcePath) const;
     void createShaderProgram(std::vector<unsigned int> shaders);
 };
 
