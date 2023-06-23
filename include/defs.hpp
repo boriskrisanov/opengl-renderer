@@ -50,20 +50,22 @@ class Shader
     template <typename T>
     void setUniform(std::string name, T value) const
     {
-        #ifdef ENABLE_DEBUG_LOGGING
+#ifdef ENABLE_DEBUG_LOGGING
         if (!this->uniformLocations.contains(name)) [[unlikely]]
         {
-            DEBUG_LOG("warning: attempted to set uniform " << name << " which does not exist on shader " << this->name);
+            DEBUG_LOG("warning: attempted to set uniform " << name << " which does not exist on shader " << this->name << ". Uniform names must be specified in the Shader constructor.");
             return;
         }
-        #endif
+#endif
 
         int location = location = this->uniformLocations.at(name);
         auto valuePointer = glm::value_ptr(value);
 
-        if (typeid(value) == typeid(glm::mat4))
+        if constexpr (std::is_same<T, glm::mat4>::value)
         {
             glUniformMatrix4fv(location, 1, false, valuePointer);
+        } else {
+          DEBUG_LOG("Invalid shader uniform type");
         }
     }
 
@@ -162,15 +164,14 @@ class Camera
     Camera(GLFWwindow *window, glm::vec2 windowSize, render::Shader shader, float speed);
     glm::vec3 position = glm::vec3(0, 0, 0);
     static constexpr float fov = 80;
+    glm::mat4 projectionMatrix;
+    glm::mat4 viewMatrix;
     void update();
 
   private:
     void updateMatrixUniforms();
     void respondToKeyboardInput();
     void respondToMouseInput();
-    glm::mat4 projectionMatrix;
-    glm::mat4 modelMatrix;
-    glm::mat4 viewMatrix;
     glm::vec3 target{0, 0, 0};
     glm::vec3 direction{glm::normalize(position - target)};
     glm::vec3 up{0, 1, 0};
@@ -187,7 +188,7 @@ class Camera
 class Skybox
 {
   public:
-    Skybox();
+    Skybox(const std::shared_ptr<const Camera> camera);
     void draw() const;
 
   private:
@@ -240,6 +241,7 @@ class Skybox
     unsigned int cubemapTextureId;
     unsigned int vertexBufferId;
     unsigned int vertexArrayId;
+    const std::shared_ptr<const Camera> camera;
 };
 
 GLFWwindow *

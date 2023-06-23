@@ -4,7 +4,7 @@ using std::string;
 
 namespace render
 {
-Skybox::Skybox() : shader{"skybox"}
+Skybox::Skybox(const std::shared_ptr<const Camera> camera) : shader{"skybox", {"viewMatrix", "projectionMatrix"}}, camera{camera}
 {
     glGenTextures(1, &this->cubemapTextureId);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->cubemapTextureId);
@@ -12,7 +12,7 @@ Skybox::Skybox() : shader{"skybox"}
     int width, height, channels;
     unsigned char *textureData;
 
-    const string textureFileNames[] = {"back", "bottom", "front", "left", "right", "top"};
+    const string textureFileNames[] = {"right", "left", "top", "bottom", "front", "back"};
 
     for (int i = 0; i < 6; i++)
     {
@@ -55,6 +55,12 @@ void Skybox::draw() const {
   glDepthMask(false);
 
   this->shader.select();
+
+  const glm::mat4 viewMatrixWithoutTranslation = glm::mat3(this->camera->viewMatrix);
+
+  this->shader.setUniform("viewMatrix", viewMatrixWithoutTranslation);
+  this->shader.setUniform("projectionMatrix", this->camera->projectionMatrix);
+
   glBindVertexArray(this->vertexArrayId);
   glBindTexture(GL_TEXTURE_CUBE_MAP, this->cubemapTextureId);
   glDrawArrays(GL_TRIANGLES, 0, 36);

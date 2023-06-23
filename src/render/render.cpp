@@ -124,7 +124,7 @@ void updateUI()
 void initScene()
 {
     chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
-    skybox = std::make_shared<Skybox>(Skybox{});
+    skybox = std::make_shared<Skybox>(Skybox{camera});
 }
 
 void drawFrame(render::Shader shader)

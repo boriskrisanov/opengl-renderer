@@ -11,10 +11,9 @@ using glm::vec3;
 namespace render
 {
 Camera::Camera(GLFWwindow *window, vec2 windowSize, render::Shader shader, float speed) : projectionMatrix{perspective(radians(this->fov), (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f)},
-                                                                   modelMatrix{rotate(mat4(1.0f), 0.0f, vec3(1.0f, 0.0f, 0.0f))},
-                                                                   speed{speed},
-                                                                   window{window},
-                                                                   shader{shader}
+                                                                                          speed{speed},
+                                                                                          window{window},
+                                                                                          shader{shader}
 {
 }
 
