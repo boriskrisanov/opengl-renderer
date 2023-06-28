@@ -42,17 +42,7 @@ unsigned int Shader::loadAndCompileShader(std::string sourcePath) const
 
     const int shaderType = sourcePath.ends_with(".vert") ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
 
-    ifstream sourceFile{sourcePath};
-    string currentLine;
-    string shaderSource;
-
-    while (getline(sourceFile, currentLine))
-    {
-        currentLine += "\n";
-        shaderSource += currentLine;
-    }
-
-    sourceFile.close();
+    const string shaderSource = utils::loadFile(sourcePath);
 
     auto shaderSourceCString = shaderSource.c_str();
 

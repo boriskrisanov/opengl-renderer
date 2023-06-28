@@ -64,8 +64,10 @@ class Shader
         if constexpr (std::is_same<T, glm::mat4>::value)
         {
             glUniformMatrix4fv(location, 1, false, valuePointer);
-        } else {
-          DEBUG_LOG("Invalid shader uniform type");
+        }
+        else
+        {
+            DEBUG_LOG("Invalid shader uniform type");
         }
     }
 
@@ -244,8 +246,7 @@ class Skybox
     const std::shared_ptr<const Camera> camera;
 };
 
-GLFWwindow *
-initAndCreateWindow();
+GLFWwindow *initAndCreateWindow();
 void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);
 void initCamera(render::Shader shader);
@@ -296,3 +297,14 @@ struct Chunk
 [[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);
 [[nodiscard]] std::vector<world::Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize);
 } // namespace world
+
+namespace utils
+{
+std::string loadFile(std::string path);
+}
+
+class ObjModel
+{
+  public:
+    ObjModel(std::string path);
+};
