@@ -301,10 +301,24 @@ struct Chunk
 namespace utils
 {
 std::string loadFile(std::string path);
-}
+std::vector<std::string> splitString(std::string str, std::string delimiter);
+} // namespace utils
+
+struct ObjFace
+{
+    glm::vec3 vertex;
+    glm::vec3 normal;
+    glm::vec2 textureCoordinate;
+};
 
 class ObjModel
 {
   public:
     ObjModel(std::string path);
+
+  private:
+    std::vector<glm::vec3> objVertexes;
+    std::vector<glm::vec3> objNormals;
+    std::vector<glm::vec2> objTextureCoordinates;
+    std::vector<ObjFace> objFaces;
 };

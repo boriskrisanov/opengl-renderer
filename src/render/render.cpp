@@ -21,8 +21,8 @@ double secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
 double secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
 std::shared_ptr<Skybox> skybox;
 static std::random_device randomDevice;
-static std::mt19937 rng(randomDevice());
-static std::uniform_int_distribution<int> uniformIntDistribution((unsigned int)0, UINT_MAX);
+static std::mt19937 rng{randomDevice()};
+static std::uniform_int_distribution<int> uniformIntDistribution{0, INT_MAX};
 
 GLFWwindow *initAndCreateWindow()
 {

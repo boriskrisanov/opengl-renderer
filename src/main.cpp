@@ -23,6 +23,8 @@ int main()
 
     // render::setWireframeDrawEnabled(true);
 
+    ObjModel model{"assets/cube.obj"};
+
     while (!glfwWindowShouldClose(window))
     {
         render::drawFrame(shader);
