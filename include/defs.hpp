@@ -41,6 +41,26 @@ struct Chunk;
 
 namespace render
 {
+
+struct Vertex
+{
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 textureCoordinate;
+};
+
+class ObjModel
+{
+  public:
+    ObjModel(std::string path);
+    std::vector<Vertex> vertexes;
+
+  private:
+    std::vector<glm::vec3> objVertexes;
+    std::vector<glm::vec3> objNormals;
+    std::vector<glm::vec2> objTextureCoordinates;
+};
+
 class Shader
 {
   public:
@@ -246,6 +266,22 @@ class Skybox
     const std::shared_ptr<const Camera> camera;
 };
 
+class GameObject
+{
+  public:
+    GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, std::shared_ptr<Texture> texture);
+    const std::shared_ptr<ObjModel> model;
+    const std::shared_ptr<Texture> texture;
+    glm::vec3 position;
+    glm::vec3 rotation;
+    void render(render::Shader shader) const;
+
+  private:
+    const unsigned long long numberOfVertexes;
+    unsigned int vertexBuffer;
+    unsigned int vertexArray;
+};
+
 GLFWwindow *initAndCreateWindow();
 void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);
@@ -302,23 +338,9 @@ namespace utils
 {
 std::string loadFile(std::string path);
 std::vector<std::string> splitString(std::string str, std::string delimiter);
+template <typename T>
+long long sizeOfVectorInBytes(std::vector<T> vector)
+{
+    return vector.size() * sizeof(T);
+}
 } // namespace utils
-
-struct ObjFace
-{
-    glm::vec3 vertex;
-    glm::vec3 normal;
-    glm::vec2 textureCoordinate;
-};
-
-class ObjModel
-{
-  public:
-    ObjModel(std::string path);
-
-  private:
-    std::vector<glm::vec3> objVertexes;
-    std::vector<glm::vec3> objNormals;
-    std::vector<glm::vec2> objTextureCoordinates;
-    std::vector<ObjFace> objFaces;
-};

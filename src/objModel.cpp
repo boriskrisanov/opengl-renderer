@@ -1,7 +1,9 @@
 #include "defs.hpp"
-#include <string>
 
 using std::string, std::ifstream, std::vector;
+
+namespace render
+{
 
 ObjModel::ObjModel(string path)
 {
@@ -14,7 +16,7 @@ ObjModel::ObjModel(string path)
         const vector<string> splitLine = utils::splitString(line, " ");
         const string firstToken = splitLine[0];
 
-        if (line.starts_with("#"))
+        if (line.starts_with("#")) [[unlikely]]
         {
             // Comment
             continue;
@@ -65,8 +67,8 @@ ObjModel::ObjModel(string path)
                 const long textureCoordinateIndex = std::stol(splitDefinition[1]) - 1;
                 const long normalIndex = std::stol(splitDefinition[2]) - 1;
 
-                objFaces.push_back(ObjFace{
-                    .vertex = this->objVertexes[vertexIndex],
+                vertexes.push_back(Vertex{
+                    .position = this->objVertexes[vertexIndex],
                     .normal = this->objNormals[normalIndex],
                     .textureCoordinate = this->objTextureCoordinates[textureCoordinateIndex],
                 });
@@ -74,3 +76,4 @@ ObjModel::ObjModel(string path)
         }
     }
 }
+} // namespace render

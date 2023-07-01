@@ -23,6 +23,7 @@ std::shared_ptr<Skybox> skybox;
 static std::random_device randomDevice;
 static std::mt19937 rng{randomDevice()};
 static std::uniform_int_distribution<int> uniformIntDistribution{0, INT_MAX};
+std::vector<GameObject> gameObjects;
 
 GLFWwindow *initAndCreateWindow()
 {
