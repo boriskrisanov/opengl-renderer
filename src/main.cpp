@@ -12,7 +12,7 @@ int main()
     render::Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
 
     render::setVsyncEnabled(true);
-
+    
     render::assetLoader::loadAssets();
 
     render::initCamera(shader);

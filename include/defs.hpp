@@ -115,7 +115,8 @@ namespace assetLoader
 void loadAssets();
 enum class TextureName
 {
-    CONTAINER
+    CONTAINER,
+    UV_GRID_256
 };
 enum class ModelName
 {
@@ -275,8 +276,8 @@ class Skybox
 class GameObject
 {
   public:
-    GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, const Texture *const texture);
-    const std::shared_ptr<ObjModel> model;
+    GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture);
+    const ObjModel *const model;
     const Texture *const texture;
     glm::vec3 position;
     glm::vec3 rotation;

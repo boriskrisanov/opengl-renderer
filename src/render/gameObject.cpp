@@ -5,15 +5,15 @@ using glm::mat4, glm::vec3, glm::radians;
 namespace render
 {
 
-GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, const Texture* const texture)
-    : model{model}, texture{texture}, position{position}, rotation{rotation}, numberOfVertexes{model->vertexes.size()}
+GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture)
+    : model{assetLoader::getModel(model)}, texture{assetLoader::getTexture(texture)}, position{position}, rotation{rotation}, numberOfVertexes{assetLoader::getModel(model)->vertexes.size()}
 {
     // Convert render::Vertex vector to float array
     // TODO: Add normal information
 
     std::vector<float> vertexBufferData;
 
-    for (Vertex vertex : model->vertexes)
+    for (Vertex vertex : this->model->vertexes)
     {
         vertexBufferData.push_back(vertex.position.x);
         vertexBufferData.push_back(vertex.position.y);

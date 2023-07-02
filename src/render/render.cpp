@@ -1,4 +1,5 @@
 #include "defs.hpp"
+#include <GLFW/glfw3.h>
 
 using glm::vec2, std::string;
 
@@ -66,6 +67,10 @@ GLFWwindow *initAndCreateWindow()
 
     glEnable(GL_DEPTH_TEST);
 
+    glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+    });
+
     DEBUG_LOG("Finished OpenGL init");
 
     return window;
@@ -127,10 +132,8 @@ void initScene()
     chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
     skybox = std::make_shared<Skybox>(Skybox{camera});
 
-    std::shared_ptr model = std::make_shared<ObjModel>(ObjModel{"assets/sphere.obj"});
-    auto texture = render::assetLoader::getTexture(render::assetLoader::TextureName::CONTAINER);
-
-    gameObjects.push_back(GameObject{{5, 5, 5}, {0, 0, 0}, model, texture});
+    gameObjects.push_back(GameObject{{5, 5, 5}, {0, 0, 0}, render::assetLoader::ModelName::SPHERE, render::assetLoader::TextureName::CONTAINER});
+    gameObjects.push_back(GameObject{{8, 5, 8}, {0, 0, 0}, render::assetLoader::ModelName::CUBE, render::assetLoader::TextureName::UV_GRID_256});
 }
 
 void drawFrame(render::Shader shader)
