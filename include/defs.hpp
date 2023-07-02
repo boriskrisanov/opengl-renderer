@@ -110,15 +110,21 @@ class Texture
     unsigned int id;
 };
 
-namespace textureLoader
+namespace assetLoader
 {
-void loadTextures();
+void loadAssets();
 enum class TextureName
 {
     CONTAINER
 };
+enum class ModelName
+{
+    CUBE,
+    SPHERE
+};
 const render::Texture *getTexture(TextureName name);
-} // namespace textureLoader
+const render::ObjModel *getModel(ModelName name);
+} // namespace assetLoader
 
 class Cube
 {
@@ -269,9 +275,9 @@ class Skybox
 class GameObject
 {
   public:
-    GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, std::shared_ptr<Texture> texture);
+    GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, const Texture *const texture);
     const std::shared_ptr<ObjModel> model;
-    const std::shared_ptr<Texture> texture;
+    const Texture *const texture;
     glm::vec3 position;
     glm::vec3 rotation;
     void render(render::Shader shader) const;

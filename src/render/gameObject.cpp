@@ -5,7 +5,7 @@ using glm::mat4, glm::vec3, glm::radians;
 namespace render
 {
 
-GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, std::shared_ptr<Texture> texture)
+GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, std::shared_ptr<ObjModel> model, const Texture* const texture)
     : model{model}, texture{texture}, position{position}, rotation{rotation}, numberOfVertexes{model->vertexes.size()}
 {
     // Convert render::Vertex vector to float array
@@ -54,9 +54,8 @@ void GameObject::render(render::Shader shader) const
     transform = glm::rotate(transform, radians(this->rotation.y), vec3{0, 0, 1});
     transform = glm::rotate(transform, radians(this->rotation.z), vec3{0, 1, 0});
     // transform = glm::scale(transform, {0.5, 0.5, 0.5}); // TODO: Add scale parameter
-
-    auto transformUniformLocation = glGetUniformLocation(shader.id, "transform");
-    glUniformMatrix4fv(transformUniformLocation, 1, false, glm::value_ptr(transform));
+    
+    shader.setUniform("transform", transform);
 
     glBindVertexArray(this->vertexArray);
 

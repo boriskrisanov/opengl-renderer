@@ -126,6 +126,11 @@ void initScene()
 {
     chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
     skybox = std::make_shared<Skybox>(Skybox{camera});
+
+    std::shared_ptr model = std::make_shared<ObjModel>(ObjModel{"assets/sphere.obj"});
+    auto texture = render::assetLoader::getTexture(render::assetLoader::TextureName::CONTAINER);
+
+    gameObjects.push_back(GameObject{{5, 5, 5}, {0, 0, 0}, model, texture});
 }
 
 void drawFrame(render::Shader shader)
@@ -146,6 +151,11 @@ void drawFrame(render::Shader shader)
     for (auto chunk : chunks)
     {
         render::drawChunk(chunk, shader);
+    }
+
+    for (auto gameObject : gameObjects)
+    {
+        gameObject.render(shader);
     }
 
     updateUI();

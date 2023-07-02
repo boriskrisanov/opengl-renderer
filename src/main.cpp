@@ -13,7 +13,7 @@ int main()
 
     render::setVsyncEnabled(true);
 
-    render::textureLoader::loadTextures();
+    render::assetLoader::loadAssets();
 
     render::initCamera(shader);
     render::initScene();
