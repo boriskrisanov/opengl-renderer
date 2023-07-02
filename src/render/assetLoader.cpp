@@ -10,6 +10,8 @@ render::Texture *container = nullptr;
 render::ObjModel *cube = nullptr;
 render::ObjModel *sphere = nullptr;
 
+bool assetsLoaded = false;
+
 void loadAssets()
 {
     DEBUG_LOG("Started asset loading");
@@ -19,11 +21,19 @@ void loadAssets()
     cube = new render::ObjModel{"assets/cube.obj"};
     sphere = new render::ObjModel{"assets/sphere.obj"};
 
+    assetsLoaded = true;
+
     DEBUG_LOG("Finished asset loading");
 }
 
 const Texture *getTexture(TextureName name)
 {
+    if (!assetsLoaded) [[unlikely]]
+    {
+        DEBUG_LOG("getTexture() called before loadAssets(), exiting");
+        exit(1);
+    }
+
     switch (name)
     {
     case TextureName::CONTAINER:
@@ -33,6 +43,12 @@ const Texture *getTexture(TextureName name)
 
 const render::ObjModel *getModel(ModelName name)
 {
+    if (!assetsLoaded) [[unlikely]]
+    {
+        DEBUG_LOG("getModel() called before loadAssets(), exiting");
+        exit(1);
+    }
+
     switch (name)
     {
     case ModelName::CUBE:
