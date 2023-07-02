@@ -16,12 +16,7 @@ ObjModel::ObjModel(string path)
         const vector<string> splitLine = utils::splitString(line, " ");
         const string firstToken = splitLine[0];
 
-        if (line.starts_with("#")) [[unlikely]]
-        {
-            // Comment
-            continue;
-        }
-        else if (firstToken == "v")
+        if (firstToken == "v")
         {
             // Vertex
             const double x = std::stod(splitLine[1]);
