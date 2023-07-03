@@ -68,6 +68,7 @@ GLFWwindow *initAndCreateWindow()
     glEnable(GL_DEPTH_TEST);
 
     glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+        (void) window; // Remove unused parameter warning
         glViewport(0, 0, width, height);
     });
 

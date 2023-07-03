@@ -96,7 +96,7 @@ class Shader
 
   private:
     std::map<std::string, int> uniformLocations;
-    unsigned int loadAndCompileShader(std::string sourcePath) const;
+    [[nodiscard]] unsigned int loadAndCompileShader(std::string sourcePath) const;
     void createShaderProgram(std::vector<unsigned int> shaders);
 };
 
@@ -123,8 +123,8 @@ enum class ModelName
     CUBE,
     SPHERE
 };
-const render::Texture *getTexture(TextureName name);
-const render::ObjModel *getModel(ModelName name);
+[[nodiscard]] const render::Texture *getTexture(TextureName name);
+[[nodiscard]] const render::ObjModel *getModel(ModelName name);
 } // namespace assetLoader
 
 class Cube
@@ -343,10 +343,10 @@ struct Chunk
 
 namespace utils
 {
-std::string loadFile(std::string path);
-std::vector<std::string> splitString(std::string str, std::string delimiter);
+[[nodiscard]] std::string loadFile(std::string path);
+[[nodiscard]] std::vector<std::string> splitString(std::string str, std::string delimiter);
 template <typename T>
-long long sizeOfVectorInBytes(std::vector<T> vector)
+[[nodiscard]] long long sizeOfVectorInBytes(std::vector<T> vector)
 {
     return vector.size() * sizeof(T);
 }
