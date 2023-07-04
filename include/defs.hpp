@@ -116,6 +116,8 @@ void loadAssets();
 enum class TextureName
 {
     CONTAINER,
+    GRASS,
+    DIRT,
     MISSING_TEXTURE,
     UV_GRID_256
 };
@@ -280,7 +282,7 @@ class Scale
     Scale(float scale) : x{scale}, y{scale}, z{scale} {}
     Scale(glm::vec3 scale) : x{scale.x}, y{scale.y}, z{scale.z} {}
     float x;
-    float y; 
+    float y;
     float z;
 };
 
@@ -336,11 +338,19 @@ class Block : public render::GameObject
 {
   public:
     glm::vec3 position;
-    Block(glm::vec3 position);
+    Block(glm::vec3 position, render::assetLoader::TextureName texture = render::assetLoader::TextureName::MISSING_TEXTURE);
 };
 
 class GrassBlock : public Block
 {
+  public:
+    GrassBlock(glm::vec3 position) : Block{position, render::assetLoader::TextureName::GRASS} {}
+};
+
+class DirtBlock : public Block
+{
+  public:
+    DirtBlock(glm::vec3 position) : Block{position, render::assetLoader::TextureName::DIRT} {}
 };
 
 struct Chunk
