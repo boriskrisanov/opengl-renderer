@@ -4,7 +4,10 @@ using glm::vec3;
 
 namespace world
 {
-Block::Block(vec3 position) : render::Cube({position.x / 2, position.y, position.z / 2}, {0, 0, 0}, render::assetLoader::getTexture(render::assetLoader::TextureName::CONTAINER))
+using enum render::assetLoader::ModelName;
+using enum render::assetLoader::TextureName;
+
+Block::Block(vec3 position) : render::GameObject({position.x / 2, position.y, position.z / 2}, {0, 0, 0}, CUBE, MISSING_TEXTURE, 0.25)
 {
 	this->position = position;
 }

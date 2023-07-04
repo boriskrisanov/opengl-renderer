@@ -4,8 +4,7 @@ using glm::mat4, glm::vec3, glm::radians;
 
 namespace render
 {
-
-GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture)
+GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture, render::Scale scale)
     : model{assetLoader::getModel(model)}, texture{assetLoader::getTexture(texture)}, position{position}, rotation{rotation}, numberOfVertexes{assetLoader::getModel(model)->vertexes.size()}
 {
     // Convert render::Vertex vector to float array
@@ -15,9 +14,9 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
 
     for (Vertex vertex : this->model->vertexes)
     {
-        vertexBufferData.push_back(vertex.position.x);
-        vertexBufferData.push_back(vertex.position.y);
-        vertexBufferData.push_back(vertex.position.z);
+        vertexBufferData.push_back(vertex.position.x * scale.x);
+        vertexBufferData.push_back(vertex.position.y * scale.y);
+        vertexBufferData.push_back(vertex.position.z * scale.z);
 
         vertexBufferData.push_back(vertex.textureCoordinate.x);
         vertexBufferData.push_back(vertex.textureCoordinate.y);
@@ -48,6 +47,8 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
 
 void GameObject::render(render::Shader shader) const
 {
+    this->texture->select();
+
     mat4 transform{1};
     transform = glm::translate(transform, this->position);
     transform = glm::rotate(transform, radians(this->rotation.x), vec3{1, 0, 0});

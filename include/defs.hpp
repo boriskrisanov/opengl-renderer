@@ -116,6 +116,7 @@ void loadAssets();
 enum class TextureName
 {
     CONTAINER,
+    MISSING_TEXTURE,
     UV_GRID_256
 };
 enum class ModelName
@@ -273,10 +274,20 @@ class Skybox
     const std::shared_ptr<const Camera> camera;
 };
 
+class Scale
+{
+  public:
+    Scale(float scale) : x{scale}, y{scale}, z{scale} {}
+    Scale(glm::vec3 scale) : x{scale.x}, y{scale.y}, z{scale.z} {}
+    float x;
+    float y; 
+    float z;
+};
+
 class GameObject
 {
   public:
-    GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture);
+    GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture = assetLoader::TextureName::UV_GRID_256, render::Scale scale = 1);
     const ObjModel *const model;
     const Texture *const texture;
     glm::vec3 position;
@@ -284,6 +295,7 @@ class GameObject
     void render(render::Shader shader) const;
 
   private:
+    void init();
     const unsigned long long numberOfVertexes;
     unsigned int vertexBuffer;
     unsigned int vertexArray;
@@ -320,7 +332,7 @@ enum Key
 
 namespace world
 {
-class Block : public render::Cube
+class Block : public render::GameObject
 {
   public:
     glm::vec3 position;

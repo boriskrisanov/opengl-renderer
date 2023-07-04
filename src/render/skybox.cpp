@@ -19,14 +19,15 @@ Skybox::Skybox(const std::shared_ptr<const Camera> camera) : shader{"skybox", {"
         const string texturePath = "assets/textures/skybox/" + textureFileNames[i] + ".jpg";
         textureData = stbi_load(texturePath.c_str(), &width, &height, &channels, 0);
 
-				if (!textureData) [[unlikely]] {
-					DEBUG_LOG("Cubemap texture loading failed: " << texturePath);
-					return;
-				}
+        if (!textureData) [[unlikely]]
+        {
+            DEBUG_LOG("Cubemap texture loading failed: " << texturePath);
+            return;
+        }
 
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
-				
-				stbi_image_free(textureData);
+
+        stbi_image_free(textureData);
     }
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -51,21 +52,22 @@ Skybox::Skybox(const std::shared_ptr<const Camera> camera) : shader{"skybox", {"
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexes), vertexes, GL_STATIC_DRAW);
 }
 
-void Skybox::draw() const {
-  glDepthMask(false);
+void Skybox::draw() const
+{
+    glDepthMask(false);
 
-  this->shader.select();
+    this->shader.select();
 
-  const glm::mat4 viewMatrixWithoutTranslation = glm::mat3(this->camera->viewMatrix);
+    const glm::mat4 viewMatrixWithoutTranslation = glm::mat3(this->camera->viewMatrix);
 
-  this->shader.setUniform("viewMatrix", viewMatrixWithoutTranslation);
-  this->shader.setUniform("projectionMatrix", this->camera->projectionMatrix);
+    this->shader.setUniform("viewMatrix", viewMatrixWithoutTranslation);
+    this->shader.setUniform("projectionMatrix", this->camera->projectionMatrix);
 
-  glBindVertexArray(this->vertexArrayId);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, this->cubemapTextureId);
-  glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(this->vertexArrayId);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->cubemapTextureId);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
-  glDepthMask(true);
+    glDepthMask(true);
 }
 
 } // namespace render

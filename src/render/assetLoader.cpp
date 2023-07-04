@@ -1,5 +1,12 @@
 #include "defs.hpp"
 
+#define EXIT_IF_ASSETS_NOT_LOADED()                                      \
+    if (!assetsLoaded) [[unlikely]]                                      \
+    {                                                                    \
+        DEBUG_LOG(__func__ << "() called before loadAssets(), exiting"); \
+        exit(1);                                                         \
+    }
+
 namespace render::assetLoader
 {
 
@@ -36,34 +43,31 @@ void loadAssets()
 
 const Texture *getTexture(TextureName name)
 {
-    if (!assetsLoaded) [[unlikely]]
-    {
-        DEBUG_LOG("getTexture() called before loadAssets(), exiting");
-        exit(1);
-    }
+    EXIT_IF_ASSETS_NOT_LOADED();
+
+    using enum TextureName;
 
     switch (name)
     {
-    case TextureName::CONTAINER:
+    case CONTAINER:
         return container;
-    case TextureName::UV_GRID_256:
+    case MISSING_TEXTURE:
+    case UV_GRID_256:
         return uvGrid256;
     }
 }
 
 const render::ObjModel *getModel(ModelName name)
 {
-    if (!assetsLoaded) [[unlikely]]
-    {
-        DEBUG_LOG("getModel() called before loadAssets(), exiting");
-        exit(1);
-    }
+    EXIT_IF_ASSETS_NOT_LOADED();
+
+    using enum ModelName;
 
     switch (name)
     {
-    case ModelName::CUBE:
+    case CUBE:
         return cube;
-    case ModelName::SPHERE:
+    case SPHERE:
         return sphere;
     }
 }
