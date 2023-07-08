@@ -33,31 +33,31 @@ void Camera::updateMatrixUniforms()
     shader.setUniform("projectionMatrix", projectionMatrix);
 }
 
-void Camera::respondToKeyboardInput()
+void Camera::respondToKeyboardInput(float deltaTime)
 {
     if (input::isKeyDown(window, input::W))
     {
-        position += speed * front;
+        position += speed * front * deltaTime;
     }
     if (input::isKeyDown(window, input::S))
     {
-        position -= speed * front;
+        position -= speed * front * deltaTime;
     }
     if (input::isKeyDown(window, input::A))
     {
-        position -= speed * normalize(cross(front, up));
+        position -= speed * normalize(cross(front, up)) * deltaTime;
     }
     if (input::isKeyDown(window, input::D))
     {
-        position += speed * normalize(cross(front, up));
+        position += speed * normalize(cross(front, up)) * deltaTime;
     }
     if (input::isKeyDown(window, input::Q))
     {
-        position -= speed * up;
+        position -= speed * up * deltaTime;
     }
     if (input::isKeyDown(window, input::E))
     {
-        position += speed * up;
+        position += speed * up * deltaTime;
     }
 }
 
@@ -84,10 +84,10 @@ void Camera::respondToMouseInput()
     front = normalize(direction);
 }
 
-void Camera::update()
+void Camera::update(float deltaTime)
 {
     this->respondToMouseInput();
-    this->respondToKeyboardInput();
+    this->respondToKeyboardInput(deltaTime);
     this->updateMatrixUniforms();
 }
 } // namespace render

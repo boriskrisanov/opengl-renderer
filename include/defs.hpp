@@ -199,11 +199,11 @@ class Camera
     static constexpr float fov = 80;
     glm::mat4 projectionMatrix;
     glm::mat4 viewMatrix;
-    void update();
+    void update(float deltaTime);
 
   private:
     void updateMatrixUniforms();
-    void respondToKeyboardInput();
+    void respondToKeyboardInput(float deltaTime);
     void respondToMouseInput();
     glm::vec3 target{0, 0, 0};
     glm::vec3 direction{glm::normalize(position - target)};

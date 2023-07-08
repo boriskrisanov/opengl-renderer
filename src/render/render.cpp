@@ -79,7 +79,7 @@ GLFWwindow *initAndCreateWindow()
 
 void initCamera(render::Shader shader)
 {
-    camera = std::make_shared<Camera>(Camera{window, vec2(WINDOW_WIDTH, WINDOW_HEIGHT), shader, 0.05f});
+    camera = std::make_shared<Camera>(Camera{window, vec2(WINDOW_WIDTH, WINDOW_HEIGHT), shader, 5});
 }
 
 void updateDeltaTime()
@@ -146,7 +146,7 @@ void drawFrame(render::Shader shader)
 
     if (!isCursorEnabled) [[likely]]
     {
-        camera->update();
+        camera->update(deltaTime);
     }
 
     skybox->draw();
