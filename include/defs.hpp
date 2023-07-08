@@ -21,6 +21,7 @@
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 #include <limits>
+#include <malloc.h>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -36,7 +37,7 @@
 
 namespace world
 {
-struct Chunk;
+class Chunk;
 }
 
 namespace render
@@ -310,8 +311,6 @@ void initCamera(render::Shader shader);
 void setVsyncEnabled(bool enabled);
 void initScene();
 
-void drawChunk(world::Chunk chunk, render::Shader shader);
-
 } // namespace render
 
 namespace input
@@ -353,10 +352,13 @@ class DirtBlock : public Block
     DirtBlock(glm::vec3 position) : Block{position, render::assetLoader::TextureName::DIRT} {}
 };
 
-struct Chunk
+class Chunk
 {
+  public:
+    Chunk(glm::vec2 position, std::vector<Block> blocks);
+    void draw(render::Shader shader);
     glm::vec2 position;
-    std::vector<std::shared_ptr<Block>> blocks;
+    std::vector<Block> blocks;
 };
 
 [[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);

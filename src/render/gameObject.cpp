@@ -42,7 +42,6 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, utils::sizeOfVectorInBytes(vertexBufferData), &vertexBufferData.front(), GL_STATIC_DRAW);
-    this->texture->select();
 }
 
 void GameObject::render(render::Shader shader) const
@@ -54,7 +53,6 @@ void GameObject::render(render::Shader shader) const
     transform = glm::rotate(transform, radians(this->rotation.x), vec3{1, 0, 0});
     transform = glm::rotate(transform, radians(this->rotation.y), vec3{0, 0, 1});
     transform = glm::rotate(transform, radians(this->rotation.z), vec3{0, 1, 0});
-    // transform = glm::scale(transform, {0.5, 0.5, 0.5}); // TODO: Add scale parameter
     
     shader.setUniform("transform", transform);
 

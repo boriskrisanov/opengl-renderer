@@ -22,7 +22,7 @@ std::vector<world::Chunk> world::generateTerrain(unsigned int seed, glm::vec2 wo
 
 world::Chunk world::generateChunk(unsigned int seed, glm::vec2 position)
 {
-    std::vector<std::shared_ptr<Block>> blocks;
+    std::vector<Block> blocks;
     const siv::PerlinNoise perlinNoise{seed};
 
     // Surface layer
@@ -32,19 +32,19 @@ world::Chunk world::generateChunk(unsigned int seed, glm::vec2 position)
         {
             const double yHeight = perlinNoise.octave2D(x * 0.1, z * 0.1, 16) * 4;
             const GrassBlock block{{x, round(yHeight) / 2, z}};
-            blocks.push_back(std::make_shared<Block>(block));
+            blocks.push_back(block);
         }
     }
 
-    std::vector<std::shared_ptr<Block>> blocks2;
+    std::vector<Block> blocks2;
 
     // Generate terrain in y direction
     for (auto block : blocks)
     {
-        for (float y = block->position.y; y > -5; y -= 0.5)
+        for (float y = block.position.y; y > -5; y -= 0.5)
         {
-            const DirtBlock newBlock{{block->position.x, y, block->position.z}};
-            blocks2.push_back(std::make_shared<Block>(newBlock));
+            const DirtBlock newBlock{{block.position.x, y, block.position.z}};
+            blocks2.push_back(newBlock);
         }
     }
 

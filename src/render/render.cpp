@@ -154,7 +154,7 @@ void drawFrame(render::Shader shader)
     shader.select();
     for (auto chunk : chunks)
     {
-        render::drawChunk(chunk, shader);
+        chunk.draw(shader);
     }
 
     for (auto gameObject : gameObjects)
@@ -189,13 +189,5 @@ void setWireframeDrawEnabled(bool isEnabled)
 void setVsyncEnabled(bool enabled)
 {
     glfwSwapInterval((int)enabled);
-}
-
-void drawChunk(world::Chunk chunk, render::Shader shader)
-{
-    for (auto block : chunk.blocks)
-    {
-        block->render(shader);
-    }
 }
 } // namespace render

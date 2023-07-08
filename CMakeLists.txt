@@ -16,7 +16,9 @@ target_link_libraries(game_engine PRIVATE imgui::imgui)
 
 include_directories(include)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
+endif()
 
 add_compile_definitions(ENABLE_DEBUG_LOGGING)
 
