@@ -27,12 +27,13 @@
 #include <memory>
 #include <optional>
 #include <random>
+#include <ranges>
 #include <stb_image.h>
 #include <string>
 #include <thread>
 #include <type_traits>
 #include <vector>
-#include <ranges>
+#include <functional>
 
 #define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
 
@@ -253,6 +254,12 @@ void setVsyncEnabled(bool enabled);
 void initScene();
 
 } // namespace render
+
+namespace ui
+{
+void init(GLFWwindow *window);
+void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()>& regenerateTerrainClicked);
+} // namespace ui
 
 namespace input
 {
