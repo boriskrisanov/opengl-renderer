@@ -32,6 +32,7 @@
 #include <thread>
 #include <type_traits>
 #include <vector>
+#include <ranges>
 
 #define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
 
@@ -79,8 +80,8 @@ class Shader
         }
 #endif
 
-        int location = location = this->uniformLocations.at(name);
-        auto valuePointer = glm::value_ptr(value);
+        const int location = this->uniformLocations.at(name);
+        const auto valuePointer = glm::value_ptr(value);
 
         if constexpr (std::is_same<T, glm::mat4>::value)
         {
@@ -222,14 +223,15 @@ class Scale
   public:
     Scale(float scale) : x{scale}, y{scale}, z{scale} {}
     Scale(glm::vec3 scale) : x{scale.x}, y{scale.y}, z{scale.z} {}
-    float x;
-    float y;
-    float z;
+    const float x;
+    const float y;
+    const float z;
 };
 
 class GameObject
 {
   public:
+    bool isVisible = true;
     GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture = assetLoader::TextureName::UV_GRID_256, render::Scale scale = 1);
     const ObjModel *const model;
     const Texture *const texture;
@@ -238,7 +240,6 @@ class GameObject
     void render(render::Shader shader) const;
 
   private:
-    void init();
     const unsigned long long numberOfVertexes;
     unsigned int vertexBuffer;
     unsigned int vertexArray;
@@ -295,10 +296,11 @@ class DirtBlock : public Block
 class Chunk
 {
   public:
-    Chunk(glm::vec2 position, std::vector<Block> blocks);
+    Chunk(glm::vec2 position, std::vector<std::shared_ptr<Block>> blocks);
     void draw(render::Shader shader);
+    void updateBlockVisibility();
     glm::vec2 position;
-    std::vector<Block> blocks;
+    std::vector<std::shared_ptr<Block>> blocks;
 };
 
 [[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);

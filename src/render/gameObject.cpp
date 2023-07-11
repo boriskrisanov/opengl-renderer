@@ -46,6 +46,12 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
 
 void GameObject::render(render::Shader shader) const
 {
+    // Likely because most GameObjects are blocks inside chunks which won't be visible to the player
+    if (!this->isVisible) [[likely]]
+    {
+        return;
+    }
+
     this->texture->select();
 
     mat4 transform{1};
