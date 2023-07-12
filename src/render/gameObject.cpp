@@ -41,7 +41,6 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, utils::sizeOfVectorInBytes(vertexBufferData), &vertexBufferData.front(), GL_STATIC_DRAW);
 }
 
 void GameObject::render(render::Shader shader) const

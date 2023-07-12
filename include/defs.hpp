@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <functional>
 #include <glm/ext.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/fwd.hpp>
@@ -33,7 +34,6 @@
 #include <thread>
 #include <type_traits>
 #include <vector>
-#include <functional>
 
 #define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
 
@@ -258,7 +258,7 @@ void initScene();
 namespace ui
 {
 void init(GLFWwindow *window);
-void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()>& regenerateTerrainClicked);
+void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()> &regenerateTerrainClicked);
 } // namespace ui
 
 namespace input
@@ -286,6 +286,9 @@ class Block : public render::GameObject
   public:
     glm::vec3 position;
     Block(glm::vec3 position, render::assetLoader::TextureName texture = render::assetLoader::TextureName::MISSING_TEXTURE);
+
+  private:
+    unsigned int vertexArray;
 };
 
 class GrassBlock : public Block

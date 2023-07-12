@@ -1,12 +1,6 @@
 #include "defs.hpp"
 
-using glm::cross;
-using glm::mat4;
-using glm::normalize;
-using glm::perspective;
-using glm::radians;
-using glm::vec2;
-using glm::vec3;
+using glm::cross, glm::mat4, glm::normalize, glm::perspective, glm::radians, glm::vec2, glm::vec3;
 
 namespace render
 {
