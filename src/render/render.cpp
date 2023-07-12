@@ -113,7 +113,7 @@ void drawFrame(render::Shader shader)
     }
 
     // TODO: Move parameters to ui::init()
-    ui::update(window, isCursorEnabled, secondsUntilNextCounterUpdate, SECONDS_BETWEEN_CURSOR_STATE_UPDATES, frameTimeInMilliseconds, camera,
+    ui::update(window, isCursorEnabled, secondsUntilNextCursorStateUpdate, SECONDS_BETWEEN_CURSOR_STATE_UPDATES, frameTimeInMilliseconds, camera,
                []
                {
                    chunks.clear();
