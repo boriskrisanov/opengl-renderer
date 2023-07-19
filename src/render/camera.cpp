@@ -17,15 +17,7 @@ void Camera::updateMatrixUniforms()
 {
     viewMatrix = glm::lookAt(position, position + front, up);
 
-    // TODO: Move glGetUniformLocation calls to constructor
-    // int viewMatrixLocation = glGetUniformLocation(shader.id, "viewMatrix");
-    // glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
-
     shader.setUniform("viewMatrix", viewMatrix);
-
-    // int projectionMatrixLocation = glGetUniformLocation(shader.id, "projectionMatrix");
-    // glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
-
     shader.setUniform("projectionMatrix", projectionMatrix);
 }
 
