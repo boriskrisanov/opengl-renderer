@@ -2,7 +2,6 @@
 #include "utils.hpp"
 #include <GL/glew.h>
 #include <filesystem>
-#include <stdlib.h>
 
 
 using std::string, std::ifstream, std::vector;
