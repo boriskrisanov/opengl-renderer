@@ -1,7 +1,8 @@
 #include "render.hpp"
 #include "utils.hpp"
-#include <filesystem>
 #include <GL/glew.h>
+#include <filesystem>
+
 
 using std::string, std::ifstream, std::vector;
 

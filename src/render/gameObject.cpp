@@ -59,7 +59,7 @@ void GameObject::render(render::Shader shader) const
     transform = glm::rotate(transform, radians(this->rotation.x), vec3{1, 0, 0});
     transform = glm::rotate(transform, radians(this->rotation.y), vec3{0, 0, 1});
     transform = glm::rotate(transform, radians(this->rotation.z), vec3{0, 1, 0});
-    
+
     shader.setUniform("transform", transform);
 
     glBindVertexArray(this->vertexArray);

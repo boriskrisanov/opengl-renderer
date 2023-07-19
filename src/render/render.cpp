@@ -3,7 +3,6 @@
 #include "world.hpp"
 #include <random>
 
-
 using glm::vec2, std::string;
 
 namespace render

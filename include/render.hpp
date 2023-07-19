@@ -1,17 +1,16 @@
 #pragma once
 
+#include "utils.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "utils.hpp"
-#include <glm/glm.hpp>
+#include <glm/common.hpp>
 #include <glm/ext.hpp>
 #include <glm/fwd.hpp>
-#include <glm/common.hpp>
+#include <glm/glm.hpp>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-
 
 namespace render
 {

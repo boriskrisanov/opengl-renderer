@@ -1,9 +1,10 @@
 #include "ui.hpp"
+#include "input.hpp"
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <string>
-#include "input.hpp"
+
 
 namespace ui
 {

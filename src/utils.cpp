@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 
-
 namespace utils
 {
 std::string loadFile(std::string path)
