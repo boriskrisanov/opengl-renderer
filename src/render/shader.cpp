@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 #include <filesystem>
 
-
 using std::string, std::ifstream, std::vector;
 
 namespace render
@@ -54,8 +53,7 @@ unsigned int Shader::loadAndCompileShader(std::string sourcePath) const
     glShaderSource(shader, 1, &shaderSourceCString, nullptr);
     glCompileShader(shader);
 
-    int success; 
-
+    int success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
     if (!success) [[unlikely]]
@@ -84,13 +82,17 @@ void Shader::createShaderProgram(std::vector<unsigned int> shaders)
     glLinkProgram(this->id);
 
     int success;
-    char errorMessage[4096];
     glGetProgramiv(this->id, GL_LINK_STATUS, &success);
-    if (!success)
+
+    if (!success) [[unlikely]]
     {
-        glGetProgramInfoLog(this->id, 512, NULL, errorMessage);
-        DEBUG_LOG("Shader linking failed: " << errorMessage);
-        return;
+        int errorMessageLength;
+        glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &errorMessageLength);
+        std::unique_ptr<char[]> errorMessage = std::make_unique<char[]>(errorMessageLength);
+
+        glGetProgramInfoLog(this->id, errorMessageLength, nullptr, errorMessage.get());
+        DEBUG_LOG("Failed to link shader " << name << ": " << errorMessage);
+        exit(1);
     }
 }
 
