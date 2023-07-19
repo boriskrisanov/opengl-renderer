@@ -54,11 +54,23 @@ class Shader
         const int location = this->uniformLocations.at(name);
         const auto valuePointer = glm::value_ptr(value);
 
-        static_assert(std::is_same<T, glm::mat4>::value, "Invalid shader uniform type");
+        static_assert(std::is_same<T, glm::mat4>::value || std::is_same<T, glm::vec3>::value || std::is_same<T, glm::vec2>::value, "Invalid shader uniform type");
 
         if constexpr (std::is_same<T, glm::mat4>::value)
         {
             glUniformMatrix4fv(location, 1, false, valuePointer);
+        }
+        else if constexpr (std::is_same<T, glm::vec3>::value)
+        {
+            glUniform3fv(location, 1, false, valuePointer);
+        }
+        else if constexpr (std::is_same<T, glm::vec2>::value)
+        {
+            glUniform2fv(location, 1, false, valuePointer);
+        }
+        else
+        {
+            DEBUG_LOG("Invalid shader uniform type");
         }
     }
 
