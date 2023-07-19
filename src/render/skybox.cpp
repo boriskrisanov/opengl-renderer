@@ -1,4 +1,5 @@
-#include "defs.hpp"
+#include "render.hpp"
+#include <stb_image.h>
 
 using std::string;
 

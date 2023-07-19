@@ -1,4 +1,5 @@
-#include "defs.hpp"
+#include "world.hpp"
+#include <PerlinNoise.hpp>
 
 // TODO: Fix memory leak after terrain regeneration
 std::vector<world::Chunk> world::generateTerrain(unsigned int seed, glm::vec2 worldSize)

@@ -1,4 +1,4 @@
-#include "defs.hpp"
+#include "input.hpp"
 #include <GLFW/glfw3.h>
 
 using glm::vec2;
@@ -7,7 +7,7 @@ namespace input
 {
 bool isKeyDown(GLFWwindow *window, Key key)
 {
-    int keyState = glfwGetKey(window, key);
+    const int keyState = glfwGetKey(window, key);
     return keyState == GLFW_PRESS;
 }
 

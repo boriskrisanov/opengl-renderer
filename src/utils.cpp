@@ -1,4 +1,7 @@
-#include "defs.hpp"
+#include "utils.hpp"
+#include <fstream>
+#include <string>
+
 
 namespace utils
 {
@@ -27,7 +30,7 @@ std::vector<std::string> splitString(std::string str, std::string delimiter)
 
     int pos = 0;
     std::string token;
-    while ((unsigned long long) (pos = str.find(delimiter)) != std::string::npos)
+    while ((unsigned long long)(pos = str.find(delimiter)) != std::string::npos)
     {
         token = str.substr(0, pos);
         result.push_back(token);

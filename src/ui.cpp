@@ -1,4 +1,9 @@
-#include "defs.hpp"
+#include "ui.hpp"
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <string>
+#include "input.hpp"
 
 namespace ui
 {
@@ -22,7 +27,7 @@ void init(GLFWwindow *window)
     rendererInfo = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
 }
 
-void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()>& regenerateTerrainClicked)
+void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()> &regenerateTerrainClicked)
 {
     // TODO: Increase font size
     if (input::isKeyDown(window, input::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0) [[unlikely]]

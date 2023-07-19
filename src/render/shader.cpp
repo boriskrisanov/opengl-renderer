@@ -1,4 +1,7 @@
-#include "defs.hpp"
+#include "render.hpp"
+#include "utils.hpp"
+#include <filesystem>
+#include <GL/glew.h>
 
 using std::string, std::ifstream, std::vector;
 

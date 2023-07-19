@@ -1,4 +1,5 @@
-#include "defs.hpp"
+#include "render.hpp"
+#include "input.hpp"
 
 using glm::cross, glm::mat4, glm::normalize, glm::perspective, glm::radians, glm::vec2, glm::vec3;
 

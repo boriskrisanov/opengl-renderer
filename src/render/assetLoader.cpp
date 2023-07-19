@@ -1,4 +1,4 @@
-#include "defs.hpp"
+#include "render.hpp"
 
 #define EXIT_IF_ASSETS_NOT_LOADED()                                      \
     if (!assetsLoaded) [[unlikely]]                                      \

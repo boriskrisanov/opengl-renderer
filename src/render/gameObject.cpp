@@ -1,4 +1,5 @@
-#include "defs.hpp"
+#include "render.hpp"
+#include "utils.hpp"
 
 using glm::mat4, glm::vec3, glm::radians;
 

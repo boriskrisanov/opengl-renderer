@@ -1,4 +1,5 @@
-#include "defs.hpp"
+#include "render.hpp"
+#include "utils.hpp"
 
 using std::string, std::ifstream, std::vector;
 

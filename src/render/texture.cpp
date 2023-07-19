@@ -1,7 +1,10 @@
-#include "defs.hpp"
+#include "render.hpp"
+#include <stb_image.h>
 
-using namespace render;
 using std::string;
+
+namespace render
+{
 
 Texture::Texture(string path)
 {
@@ -34,3 +37,4 @@ void Texture::select() const
 {
     glBindTexture(GL_TEXTURE_2D, this->id);
 }
+} // namespace render

@@ -1,46 +1,17 @@
 #pragma once
 
-#include "PerlinNoise.hpp"
-#include "defs.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <algorithm>
-#include <chrono>
-#include <ctime>
-#include <filesystem>
-#include <format>
-#include <fstream>
-#include <functional>
-#include <glm/ext.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/fwd.hpp>
-#include <glm/geometric.hpp>
+#include "utils.hpp"
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include <iostream>
-#include <limits>
-#include <malloc.h>
+#include <glm/ext.hpp>
+#include <glm/fwd.hpp>
+#include <glm/common.hpp>
 #include <map>
-#include <math.h>
-#include <memory>
-#include <optional>
-#include <random>
-#include <ranges>
-#include <stb_image.h>
 #include <string>
-#include <thread>
-#include <type_traits>
 #include <vector>
+#include <memory>
 
-#define DEBUG_LOG(message) std::cout << "[" << std::chrono::system_clock::now() << "][" << __func__ << "] " << message << "\n"
-
-namespace world
-{
-class Chunk;
-}
 
 namespace render
 {
@@ -254,76 +225,3 @@ void setVsyncEnabled(bool enabled);
 void initScene();
 
 } // namespace render
-
-namespace ui
-{
-void init(GLFWwindow *window);
-void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()> &regenerateTerrainClicked);
-} // namespace ui
-
-namespace input
-{
-
-enum Key
-{
-    W = GLFW_KEY_W,
-    A = GLFW_KEY_A,
-    S = GLFW_KEY_S,
-    D = GLFW_KEY_D,
-    Q = GLFW_KEY_Q,
-    E = GLFW_KEY_E,
-    ESCAPE = GLFW_KEY_ESCAPE
-};
-
-[[nodiscard]] bool isKeyDown(GLFWwindow *window, Key key);
-[[nodiscard]] glm::vec2 getMousePosition(GLFWwindow *window);
-} // namespace input
-
-namespace world
-{
-class Block : public render::GameObject
-{
-  public:
-    glm::vec3 position;
-    Block(glm::vec3 position, render::assetLoader::TextureName texture = render::assetLoader::TextureName::MISSING_TEXTURE);
-
-  private:
-    unsigned int vertexArray;
-};
-
-class GrassBlock : public Block
-{
-  public:
-    GrassBlock(glm::vec3 position) : Block{position, render::assetLoader::TextureName::GRASS} {}
-};
-
-class DirtBlock : public Block
-{
-  public:
-    DirtBlock(glm::vec3 position) : Block{position, render::assetLoader::TextureName::DIRT} {}
-};
-
-class Chunk
-{
-  public:
-    Chunk(glm::vec2 position, std::vector<std::shared_ptr<Block>> blocks);
-    void draw(render::Shader shader);
-    void updateBlockVisibility();
-    glm::vec2 position;
-    std::vector<std::shared_ptr<Block>> blocks;
-};
-
-[[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);
-[[nodiscard]] std::vector<world::Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize);
-} // namespace world
-
-namespace utils
-{
-[[nodiscard]] std::string loadFile(std::string path);
-[[nodiscard]] std::vector<std::string> splitString(std::string str, std::string delimiter);
-template <typename T>
-[[nodiscard]] long long sizeOfVectorInBytes(std::vector<T> vector)
-{
-    return vector.size() * sizeof(T);
-}
-} // namespace utils
