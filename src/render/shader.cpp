@@ -2,6 +2,7 @@
 #include "utils.hpp"
 #include <GL/glew.h>
 #include <filesystem>
+#include <stdlib.h>
 
 
 using std::string, std::ifstream, std::vector;
@@ -25,7 +26,7 @@ Shader::Shader(std::string name, vector<string> uniforms) : name{name}
         }
     }
 
-    if (shaders.empty())
+    if (shaders.empty()) [[unlikely]]
     {
         DEBUG_LOG("Shader loading failed: cannot find files for " << name);
         return;
@@ -50,19 +51,23 @@ unsigned int Shader::loadAndCompileShader(std::string sourcePath) const
 
     auto shaderSourceCString = shaderSource.c_str();
 
-    unsigned int shader = glCreateShader(shaderType);
+    const unsigned int shader = glCreateShader(shaderType);
     glShaderSource(shader, 1, &shaderSourceCString, nullptr);
     glCompileShader(shader);
 
-    int success;
-    char errorMessage[4096]; // TODO: Variable length error message
+    int success; 
+
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-    if (!success)
+    if (!success) [[unlikely]]
     {
-        glGetShaderInfoLog(shader, 4096, nullptr, errorMessage);
-        DEBUG_LOG("Shader compilation failed: " << errorMessage);
-        // TODO: Proper error handling
+        int errorMessageLength;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &errorMessageLength);
+        std::unique_ptr<char[]> errorMessage = std::make_unique<char[]>(errorMessageLength);
+
+        glGetShaderInfoLog(shader, errorMessageLength, nullptr, errorMessage.get());
+        DEBUG_LOG("Failed to compile shader " << name << ": " << errorMessage);
+        exit(1);
     }
 
     return shader;

@@ -51,11 +51,11 @@ void Camera::respondToKeyboardInput(float deltaTime)
 
 void Camera::respondToMouseInput()
 {
-    auto mousePosition = input::getMousePosition(window);
+    const vec2 currentMousePosition = input::getMousePosition(window);
     const double sensitivity = 0.07;
 
-    mouseOffset = vec2(mousePosition.x - lastMousePosition.x, lastMousePosition.y - mousePosition.y);
-    lastMousePosition = mousePosition;
+    mouseOffset = vec2{currentMousePosition.x - lastMousePosition.x, lastMousePosition.y - currentMousePosition.y};
+    lastMousePosition = currentMousePosition;
 
     mouseOffset *= sensitivity;
 

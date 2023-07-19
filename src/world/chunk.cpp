@@ -36,6 +36,7 @@ void Chunk::updateBlockVisibility()
     for (auto block : this->blocks)
     {
         block->isVisible = true;
+        continue;
 
         const glm::vec3 pos = block->position;
 
