@@ -1,70 +1,77 @@
+#include "glm/gtc/matrix_transform.hpp"
 #include "world.hpp"
 
 namespace world
 {
-Chunk::Chunk(glm::vec2 position, std::vector<std::shared_ptr<Block>> blocks)
+Chunk::Chunk(glm::vec2 position, std::array<std::array<std::array<Block *, 16>, 16>, 16> blocks)
     : position{position}, blocks{blocks}
 {
     this->updateBlockVisibility();
+    glGenVertexArrays(1, &this->vertexArray);
 }
 
 void Chunk::draw(render::Shader shader)
 {
-    for (auto block : this->blocks)
-    {
-        block->render(shader);
-    }
-}
+    glBindVertexArray(this->vertexArray);
+    unsigned long nextStartingIndex = 0;
 
-bool doesBlockWithPositionExist(std::vector<std::shared_ptr<Block>> blocks, glm::vec3 position)
-{
-    for (auto block : blocks)
+    for (int x = 0; x < 16; x++)
     {
-        if (block->position == position)
+        for (int y = 0; y < 16; y++)
         {
-            return true;
+            for (int z = 0; z < 16; z++)
+            {
+                const auto block = blocks[x][y][z];
+
+                if (block == nullptr)
+                {
+                    continue;
+                }
+
+                block->texture->select();
+
+                glm::mat4 transform{1};
+                transform = glm::translate(transform, block->position);
+                shader.setUniform("transform", transform);
+
+                // It might be possible to use vertex buffers directly without index buffers
+                glDrawArrays(GL_TRIANGLES, nextStartingIndex, block->vertexCount);
+                nextStartingIndex += block->vertexCount;
+            }
         }
     }
-
-    return false;
 }
 
 void Chunk::updateBlockVisibility()
 {
-    DEBUG_LOG("Started for chunk " << this->position.x << ", " << this->position.y);
-
-    for (auto block : this->blocks)
+    for (int x = 0; x < 16; x++)
     {
-        block->isVisible = true;
-        continue;
-
-        const glm::vec3 pos = block->position;
-
-        // Find the position of the adjacent block in each direction
-        const auto positiveX = glm::vec3{pos.x + 1, pos.y, pos.z};
-        const auto negativeX = glm::vec3{pos.x - 1, pos.y, pos.z};
-
-        const auto positiveY = glm::vec3{pos.x, pos.y + 1, pos.z};
-        const auto negativeY = glm::vec3{pos.x, pos.y - 1, pos.z};
-
-        const auto positiveZ = glm::vec3{pos.x, pos.y, pos.z + 1};
-        const auto negativeZ = glm::vec3{pos.x, pos.y, pos.z - 1};
-
-        const bool hasAdjacentBlockInEachDirection = doesBlockWithPositionExist(blocks, positiveX) &&
-                                                     doesBlockWithPositionExist(blocks, negativeX) &&
-                                                     doesBlockWithPositionExist(blocks, positiveY) &&
-                                                     doesBlockWithPositionExist(blocks, negativeY) &&
-                                                     doesBlockWithPositionExist(blocks, positiveZ) &&
-                                                     doesBlockWithPositionExist(blocks, negativeZ);
-
-        // TODO: Handle chunk borders
-        // Likely because most blocks are inside chunks
-        if (hasAdjacentBlockInEachDirection) [[likely]]
+        for (int y = 0; y < 16; y++)
         {
-            block->isVisible = false;
+            for (int z = 0; z < 16; z++)
+            {
+                if (blocks[x][y][z] == nullptr)
+                {
+                    continue;
+                }
+
+                const bool hasAdjacentBlockInPositiveX = x != 15 && blocks[x + 1][y][z] != nullptr;
+                const bool hasAdjacentBlockInNegativeX = x != 0 && blocks[x - 1][y][z] != nullptr;
+                const bool hasAdjacentBlockInPositiveY = y != 15 && blocks[x][y + 1][z] != nullptr;
+                const bool hasAdjacentBlockInNegativeY = y != 0 && blocks[x][y - 1][z] != nullptr;
+                const bool hasAdjacentBlockInPositiveZ = z != 15 && blocks[x][y][z + 1] != nullptr;
+                const bool hasAdjacentBlockInNegativeZ = z != 0 && blocks[x][y][z - 1] != nullptr;
+
+                // blocks[x][y][z]->positiveXFaceVisible = !hasAdjacentBlockInPositiveX;
+                // blocks[x][y][z]->negativeXFaceVisible = !hasAdjacentBlockInNegativeX;
+                // blocks[x][y][z]->positiveYFaceVisible = !hasAdjacentBlockInPositiveY;
+                // blocks[x][y][z]->negativeYFaceVisible = !hasAdjacentBlockInNegativeY;
+                // blocks[x][y][z]->positiveZFaceVisible = !hasAdjacentBlockInPositiveZ;
+                // blocks[x][y][z]->negativeZFaceVisible = !hasAdjacentBlockInNegativeZ;
+
+                blocks[x][y][z]->initVertexBuffer();
+            }
         }
     }
-
-    DEBUG_LOG("Finished for chunk " << this->position.x << ", " << this->position.y);
 }
 } // namespace world

@@ -2,17 +2,90 @@
 
 #include "glm/glm.hpp"
 #include "render.hpp"
+#include <algorithm>
+#include <array>
 
 namespace world
 {
-class Block : public render::GameObject
+class Block
 {
   public:
-    glm::vec3 position;
-    Block(glm::vec3 position, render::assetLoader::TextureName texture = render::assetLoader::TextureName::MISSING_TEXTURE);
+  // clang-format off
+    static constexpr float positiveXFaceVertexes[] = {
+      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+       0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f
 
-  private:
-    unsigned int vertexArray;
+    };
+    static constexpr float negativeXFaceVertexes[] = {
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f
+
+    };
+    static constexpr float positiveYFaceVertexes[] = {
+      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f
+
+    };
+    static constexpr float negativeYFaceVertexes[] = {
+      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+      0.5f,  0.5f,  0.5f,  1.0f, 0.0f
+
+    };
+    static constexpr float positiveZFaceVertexes[] = {
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f
+
+    };
+    static constexpr float negativeZFaceVertexes[] = {
+      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+    // clang-format on
+
+    glm::vec3 position;
+    bool positiveXFaceVisible = true;
+    bool negativeXFaceVisible = true;
+    bool positiveYFaceVisible = true;
+    bool negativeYFaceVisible = true;
+    bool positiveZFaceVisible = true;
+    bool negativeZFaceVisible = true;
+    unsigned int vertexCount = 0;
+    const render::Texture *texture;
+    unsigned int vertexBuffer;
+
+    // TODO: Move block constructor to block.cpp
+    // For some reason, doing so causes strange errors so it will be defined in the header for now
+    inline Block(glm::vec3 position, render::assetLoader::TextureName texture = render::assetLoader::TextureName::MISSING_TEXTURE)
+        : position{position}, texture{render::assetLoader::getTexture(texture)}
+    {
+      glGenBuffers(1, &this->vertexBuffer);
+    }
+
+    void initVertexBuffer();
 };
 
 class GrassBlock : public Block
@@ -30,11 +103,12 @@ class DirtBlock : public Block
 class Chunk
 {
   public:
-    Chunk(glm::vec2 position, std::vector<std::shared_ptr<Block>> blocks);
+    Chunk(glm::vec2 position, std::array<std::array<std::array<Block *, 16>, 16>, 16>);
     void draw(render::Shader shader);
     void updateBlockVisibility();
     glm::vec2 position;
-    std::vector<std::shared_ptr<Block>> blocks;
+    std::array<std::array<std::array<Block *, 16>, 16>, 16> blocks;
+    unsigned int vertexArray;
 };
 
 [[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);

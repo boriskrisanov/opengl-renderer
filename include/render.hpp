@@ -226,6 +226,7 @@ class GameObject
     unsigned int vertexArray;
 };
 
+
 GLFWwindow *initAndCreateWindow();
 void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);

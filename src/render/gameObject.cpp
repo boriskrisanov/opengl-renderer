@@ -40,8 +40,6 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
     // Texture coordinate
     glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(float) * 5, (const void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 }
 
 void GameObject::render(render::Shader shader) const
