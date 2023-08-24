@@ -18,21 +18,12 @@ template <typename T>
     return vector.size() * sizeof(T);
 }
 
-// Returns the number of elements in the array
-template <typename T>
-[[nodiscard]] constexpr unsigned long sizeOfArray(const T *const array)
+template <typename T, size_t S>
+void pushBackArrayToVector(std::vector<T> &vector, std::array<T, S> array)
 {
-    return sizeof(*array) / sizeof(T);
-}
+    vector.reserve(vector.size() + array.size());
 
-template <typename T>
-void pushBackArrayToVector(std::vector<T> &vector, const T *const array)
-{
-    const unsigned long sizeOfArray = utils::sizeOfArray(array);
-
-    vector.reserve(vector.size() + sizeOfArray);
-
-    for (int i = 0; i < sizeOfArray; i++)
+    for (size_t i = 0; i < array.size(); i++)
     {
         vector.push_back(array[i]);
     }

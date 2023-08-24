@@ -40,8 +40,6 @@ void Block::initVertexBuffer()
 				vertexCount += 6;
     }
 
-    DEBUG_LOG(vertexBufferData.size()); // Should not be 6
-
     // Set up OpenGL buffers
     glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
 

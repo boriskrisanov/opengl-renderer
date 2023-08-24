@@ -11,16 +11,15 @@ class Block
 {
   public:
   // clang-format off
-    static constexpr float positiveXFaceVertexes[] = {
+    const std::array<float, 5 * 6> positiveXFaceVertexes = {
       -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
       -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
       -0.5f, -0.5f, -0.5f,  0.0f, 0.0f
-
     };
-    static constexpr float negativeXFaceVertexes[] = {
+    const std::array<float, 5 * 6> negativeXFaceVertexes = {
       -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
@@ -29,7 +28,7 @@ class Block
       -0.5f, -0.5f,  0.5f,  0.0f, 0.0f
 
     };
-    static constexpr float positiveYFaceVertexes[] = {
+    const std::array<float, 5 * 6> positiveYFaceVertexes = {
       -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
       -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
@@ -38,7 +37,7 @@ class Block
       -0.5f,  0.5f,  0.5f,  1.0f, 0.0f
 
     };
-    static constexpr float negativeYFaceVertexes[] = {
+    const std::array<float, 5 * 6> negativeYFaceVertexes = {
       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
       0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
@@ -47,7 +46,7 @@ class Block
       0.5f,  0.5f,  0.5f,  1.0f, 0.0f
 
     };
-    static constexpr float positiveZFaceVertexes[] = {
+    const std::array<float, 5 * 6> positiveZFaceVertexes = {
       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
       0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
@@ -56,7 +55,7 @@ class Block
       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f
 
     };
-    static constexpr float negativeZFaceVertexes[] = {
+    const std::array<float, 5 * 6> negativeZFaceVertexes = {
       -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
