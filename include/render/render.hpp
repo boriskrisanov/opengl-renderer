@@ -6,7 +6,7 @@
 
 namespace render
 {
-RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void()> onUpdate);
+[[nodiscard]] RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void(float deltaTime)> onUpdate);
 void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);
 void setVsyncEnabled(bool enabled);

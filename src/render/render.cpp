@@ -5,7 +5,6 @@
 #include "render/shader.hpp"
 #include "render/skybox.hpp"
 #include "ui.hpp"
-#include "world.hpp"
 #include <memory>
 #include <random>
 
@@ -13,7 +12,7 @@ using glm::vec2, std::string;
 
 namespace render
 {
-RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void()> onUpdate)
+RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void(float deltaTime)> onUpdate)
 {
     if (!glfwInit())
     {
@@ -67,8 +66,8 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
         .gameObjects = {},
         .shader = shader,
         .camera = camera,
-        .initScene = onStart,
-        .updateScene = onUpdate};
+        .onStart = onStart,
+        .onUpdate = onUpdate};
 }
 
 void drawFrame(RenderContext &context)
@@ -85,7 +84,7 @@ void drawFrame(RenderContext &context)
 
     context.shader.select();
 
-    context.updateScene();
+    context.onUpdate(context.deltaTime);
 
     for (auto gameObject : context.gameObjects)
     {
@@ -95,7 +94,7 @@ void drawFrame(RenderContext &context)
     const double endTime = glfwGetTime();
     const double frameTimeInSeconds = endTime - startTime;
 
-    ui::update(context.window, context.isWireframeDrawEnabled, context.isCursorEnabled, frameTimeInSeconds, [] {});
+    ui::update(context.window, context.isWireframeDrawEnabled, context.isCursorEnabled, frameTimeInSeconds);
 
     glfwSwapBuffers(context.window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

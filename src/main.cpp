@@ -1,15 +1,15 @@
+#include "game/game.hpp"
 #include "render/assets.hpp"
+#include "render/context.hpp"
 #include "render/render.hpp"
 #include "utils.hpp"
 #include <iostream>
-#include "render/context.hpp"
 
 int main()
 {
     try
     {
-        render::RenderContext context = render::initAndCreateWindow(
-            {1920, 1080}, [] {}, [] {});
+        render::RenderContext context = render::initAndCreateWindow({1920, 1080}, game::onStart, game::onUpdate);
 
         render::setVsyncEnabled(true);
 

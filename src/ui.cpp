@@ -18,6 +18,8 @@ float secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
 
 float frameTimeInMilliseconds = 0;
 
+std::vector<std::function<void()>> widgets;
+
 std::shared_ptr<const render::Camera> _camera;
 
 void init(GLFWwindow *window, std::shared_ptr<const render::Camera> camera)
@@ -36,7 +38,7 @@ void init(GLFWwindow *window, std::shared_ptr<const render::Camera> camera)
     _camera = camera;
 }
 
-void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnabled, float frameTimeInSeconds, const std::function<void()> &regenerateTerrainClicked)
+void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnabled, float frameTimeInSeconds)
 {
     // TODO: Don't do this every frame
     glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
@@ -49,8 +51,6 @@ void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnab
         frameTimeInMilliseconds = frameTimeInSeconds * 1000;
         secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
     }
-
-    DEBUG_LOG(secondsUntilNextCursorStateUpdate);
 
     if (input::isKeyDown(window, input::Key::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0) [[unlikely]]
     {
@@ -77,18 +77,20 @@ void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnab
         render::setWireframeDrawEnabled(!isWireframeDrawEnabled);
     }
 
-    ImGui::Begin("Terrain");
-
-    ImGui::SetWindowFontScale(2);
-
-    if (ImGui::Button("Regenerate terrain"))
+    // Draw externally defined widgets
+    for (std::function<void()> drawCallback : widgets)
     {
-        regenerateTerrainClicked();
+        drawCallback();
     }
 
     ImGui::End();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void addWidget(std::function<void()> drawCallback)
+{
+    widgets.push_back(drawCallback);
 }
 } // namespace ui

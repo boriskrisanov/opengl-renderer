@@ -24,8 +24,8 @@ struct RenderContext
     std::vector<GameObject> gameObjects;
     Shader shader;
     std::shared_ptr<Camera> camera;
-    std::function<void()> initScene;
-    std::function<void()> updateScene;
+    std::function<void()> onStart;
+    std::function<void(float deltaTime)> onUpdate;
 
     inline void updateDeltaTime()
     {
