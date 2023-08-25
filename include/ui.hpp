@@ -1,8 +1,9 @@
 #pragma once
 
-#include "render.hpp"
+#include "render/render.hpp"
 #include <functional>
 #include <memory>
+#include "render/camera.hpp"
 
 
 namespace ui

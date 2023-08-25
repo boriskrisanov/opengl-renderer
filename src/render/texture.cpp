@@ -1,4 +1,5 @@
-#include "render.hpp"
+#include "render/render.hpp"
+#include "render/texture.hpp"
 #include <stb_image.h>
 
 using std::string;

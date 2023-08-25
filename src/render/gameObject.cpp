@@ -1,4 +1,5 @@
-#include "render.hpp"
+#include "render/gameObject.hpp"
+#include <glm/glm.hpp>
 #include "utils.hpp"
 
 using glm::mat4, glm::vec3, glm::radians;

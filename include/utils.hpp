@@ -21,7 +21,7 @@ template <typename T>
 template <typename T, size_t S>
 void pushBackArrayToVector(std::vector<T> &vector, std::array<T, S> array)
 {
-    vector.reserve(vector.size() + array.size());
+    // vector.reserve(vector.size() + array.size());
 
     for (size_t i = 0; i < array.size(); i++)
     {

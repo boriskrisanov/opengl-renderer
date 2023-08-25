@@ -1,5 +1,6 @@
-#include "render.hpp"
+#include "render/render.hpp"
 #include <stb_image.h>
+#include "render/skybox.hpp"
 
 using std::string;
 

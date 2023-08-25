@@ -1,4 +1,5 @@
-#include "render.hpp"
+#include "render/render.hpp"
+#include "render/assets.hpp"
 
 int main()
 {

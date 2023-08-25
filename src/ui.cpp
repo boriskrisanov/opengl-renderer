@@ -5,7 +5,6 @@
 #include <imgui_impl_opengl3.h>
 #include <string>
 
-
 namespace ui
 {
 
@@ -30,7 +29,6 @@ void init(GLFWwindow *window)
 
 void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()> &regenerateTerrainClicked)
 {
-    // TODO: Increase font size
     if (input::isKeyDown(window, input::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0) [[unlikely]]
     {
         // Toggle cursor state
@@ -41,6 +39,8 @@ void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextC
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    ImGui::SetWindowFontScale(2);
 
     // TODO: FPS counter
     auto cameraPosition = camera->position;
@@ -55,6 +55,8 @@ void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextC
     }
 
     ImGui::Begin("Terrain");
+
+    ImGui::SetWindowFontScale(2);
 
     if (ImGui::Button("Regenerate terrain"))
     {

@@ -1,7 +1,10 @@
-#include "render.hpp"
+#include "render/render.hpp"
+#include "render/gameObject.hpp"
 #include "ui.hpp"
 #include "world.hpp"
 #include <random>
+#include "render/camera.hpp"
+#include "render/skybox.hpp"
 
 using glm::vec2, std::string;
 
