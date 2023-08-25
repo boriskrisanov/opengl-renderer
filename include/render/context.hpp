@@ -5,6 +5,7 @@
 #include <vector>
 #include "gameObject.hpp"
 #include "skybox.hpp"
+#include "utils.hpp"
 #include <GLFW/glfw3.h>
 #include <functional>
 

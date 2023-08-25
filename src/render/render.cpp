@@ -33,7 +33,7 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
 
     if (glewInit() != GLEW_OK)
     {
-        throw std::exception("Failed initialize GLEW");
+        throw std::exception("Failed to initialize GLEW");
     }
 
     DEBUG_LOG("Window init");
@@ -50,7 +50,7 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
 
     render::Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
 
-    std::shared_ptr<Camera> camera = std::make_shared<Camera>(window, windowSize, shader, 0.05);
+    std::shared_ptr<Camera> camera = std::make_shared<Camera>(window, windowSize, shader, 10);
     const std::shared_ptr<Skybox> skybox = std::make_shared<Skybox>(camera);
 
     ui::init(window, camera);
@@ -73,7 +73,7 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
         .updateScene = onUpdate};
 }
 
-void drawFrame(RenderContext context)
+void drawFrame(RenderContext& context)
 {
     context.updateDeltaTime();
     double startTime = glfwGetTime();
