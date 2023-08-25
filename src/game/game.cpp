@@ -26,6 +26,7 @@ void onStart()
 
 void onUpdate(float deltaTime)
 {
-    
+		// TODO: Make deltaTime optional in onUpdate
+    (void) deltaTime;
 }
 } // namespace game
