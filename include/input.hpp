@@ -6,7 +6,7 @@
 namespace input
 {
 
-enum Key
+enum class Key : int
 {
     W = GLFW_KEY_W,
     A = GLFW_KEY_A,

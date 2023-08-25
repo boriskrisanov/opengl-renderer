@@ -9,7 +9,6 @@
 #include <memory>
 #include <random>
 
-
 using glm::vec2, std::string;
 
 namespace render
@@ -37,7 +36,6 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
     }
 
     DEBUG_LOG("Window init");
-
 
     glEnable(GL_DEPTH_TEST);
 
@@ -73,10 +71,10 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
         .updateScene = onUpdate};
 }
 
-void drawFrame(RenderContext& context)
+void drawFrame(RenderContext &context)
 {
     context.updateDeltaTime();
-    double startTime = glfwGetTime();
+    const double startTime = glfwGetTime();
 
     if (!context.isCursorEnabled) [[likely]]
     {
@@ -94,7 +92,7 @@ void drawFrame(RenderContext& context)
         gameObject.render(context.shader);
     }
 
-    double endTime = glfwGetTime();
+    const double endTime = glfwGetTime();
     const double frameTimeInSeconds = endTime - startTime;
 
     ui::update(context.window, context.isWireframeDrawEnabled, context.isCursorEnabled, frameTimeInSeconds, [] {});

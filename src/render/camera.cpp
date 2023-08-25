@@ -23,27 +23,27 @@ void Camera::updateMatrixUniforms()
 
 void Camera::respondToKeyboardInput(float deltaTime)
 {
-    if (input::isKeyDown(window, input::W))
+    if (input::isKeyDown(window, input::Key::W))
     {
         position += speed * front * deltaTime;
     }
-    if (input::isKeyDown(window, input::S))
+    if (input::isKeyDown(window, input::Key::S))
     {
         position -= speed * front * deltaTime;
     }
-    if (input::isKeyDown(window, input::A))
+    if (input::isKeyDown(window, input::Key::A))
     {
         position -= speed * normalize(cross(front, up)) * deltaTime;
     }
-    if (input::isKeyDown(window, input::D))
+    if (input::isKeyDown(window, input::Key::D))
     {
         position += speed * normalize(cross(front, up)) * deltaTime;
     }
-    if (input::isKeyDown(window, input::Q))
+    if (input::isKeyDown(window, input::Key::Q))
     {
         position -= speed * up * deltaTime;
     }
-    if (input::isKeyDown(window, input::E))
+    if (input::isKeyDown(window, input::Key::E))
     {
         position += speed * up * deltaTime;
     }

@@ -14,9 +14,9 @@ const float SECONDS_BETWEEN_COUNTER_UPDATES = 1;
 float secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
 
 const float SECONDS_BETWEEN_CURSOR_STATE_UPDATES = 0.25;
-float secondsUntilNextCursorStateUpdate;
+float secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
 
-float frameTimeInMilliseconds;
+float frameTimeInMilliseconds = 0;
 
 std::shared_ptr<const render::Camera> _camera;
 
@@ -38,10 +38,11 @@ void init(GLFWwindow *window, std::shared_ptr<const render::Camera> camera)
 
 void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnabled, float frameTimeInSeconds, const std::function<void()> &regenerateTerrainClicked)
 {
+    // TODO: Don't do this every frame
     glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
-    secondsUntilNextCounterUpdate -= frameTimeInSeconds;
-    secondsUntilNextCursorStateUpdate -= frameTimeInSeconds;
+    secondsUntilNextCounterUpdate -= frameTimeInSeconds * 1000;
+    secondsUntilNextCursorStateUpdate -= frameTimeInSeconds * 1000;
 
     if (secondsUntilNextCounterUpdate <= 0)
     {
@@ -49,7 +50,9 @@ void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnab
         secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
     }
 
-    if (input::isKeyDown(window, input::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0) [[unlikely]]
+    DEBUG_LOG(secondsUntilNextCursorStateUpdate);
+
+    if (input::isKeyDown(window, input::Key::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0) [[unlikely]]
     {
         // Toggle cursor state
         isCursorEnabled = !isCursorEnabled;

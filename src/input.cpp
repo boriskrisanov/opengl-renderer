@@ -7,7 +7,7 @@ namespace input
 {
 bool isKeyDown(GLFWwindow *window, Key key)
 {
-    const int keyState = glfwGetKey(window, key);
+    const int keyState = glfwGetKey(window, (int) key);
     return keyState == GLFW_PRESS;
 }
 
