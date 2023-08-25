@@ -1,13 +1,21 @@
 #pragma once
 
+#include "render/camera.hpp"
 #include "render/render.hpp"
 #include <functional>
 #include <memory>
-#include "render/camera.hpp"
-
 
 namespace ui
 {
-void init(GLFWwindow *window);
-void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()> &regenerateTerrainClicked);
+struct UIContext
+{
+    GLFWwindow *window;
+    bool isCursorEnabled;
+    float secondsUntilNextCursorStateUpdate;
+    float secondsBetweenCursorStateUpdates;
+    std::shared_ptr<const render::Camera> camera;
+};
+
+void init(GLFWwindow *window, std::shared_ptr<const render::Camera> camera);
+void update(GLFWwindow *window, bool &isWireframeDrawEnabled, bool &isCursorEnabled, float frameTimeInSeconds, const std::function<void()> &regenerateTerrainClicked);
 } // namespace ui

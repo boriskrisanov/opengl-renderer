@@ -2,14 +2,13 @@
 
 #include "shader.hpp"
 #include "GLFW/glfw3.h"
+#include "context.hpp"
 
 namespace render
 {
-GLFWwindow *initAndCreateWindow();
+RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void()> onUpdate);
 void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);
-void initCamera(render::Shader shader);
 void setVsyncEnabled(bool enabled);
-void initScene();
-
+void runMainLoop(RenderContext context);
 } // namespace render

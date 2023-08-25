@@ -1,6 +1,8 @@
 #pragma once
 
-#include "render.hpp"
+#include <glm/glm.hpp>
+#include <vector>
+#include <string>
 
 namespace render
 {

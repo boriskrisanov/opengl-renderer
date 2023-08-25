@@ -1,6 +1,7 @@
 #include "render/texture.hpp"
 #include "render/model.hpp"
 #include "render/assets.hpp"
+#include "utils.hpp"
 
 #define EXIT_IF_ASSETS_NOT_LOADED()                                      \
     if (!assetsLoaded) [[unlikely]]                                      \

@@ -1,34 +1,32 @@
-#include "render/render.hpp"
 #include "render/assets.hpp"
+#include "render/render.hpp"
+#include "utils.hpp"
+#include <iostream>
+#include "render/context.hpp"
 
 int main()
 {
-    auto window = render::initAndCreateWindow();
-
-    if (!window)
+    try
     {
+        render::RenderContext context = render::initAndCreateWindow(
+            {1920, 1080}, [] {}, [] {});
+
+        render::setVsyncEnabled(true);
+
+        render::assetLoader::loadAssets();
+
+        glClearColor(1, 1, 1, 1);
+
+        context.gameObjects.push_back({{8, 5, 8}, {0, 0, 0}, render::assetLoader::ModelName::CUBE, render::assetLoader::TextureName::UV_GRID_256});
+
+        render::runMainLoop(context);
+
+        glfwTerminate();
+        return 0;
+    }
+    catch (std::exception e)
+    {
+        std::cerr << e.what() << std::endl;
         return 1;
     }
-
-    render::Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
-
-    render::setVsyncEnabled(true);
-
-    render::assetLoader::loadAssets();
-
-    render::initCamera(shader);
-    render::initScene();
-
-    // glClearColor(30.0 / 100.0, 193.0 / 100.0, 234.0 / 100.0, 1);
-    glClearColor(1, 1, 1, 1);
-
-    // render::setWireframeDrawEnabled(true);
-
-    while (!glfwWindowShouldClose(window))
-    {
-        render::drawFrame(shader);
-    }
-
-    glfwTerminate();
-    return 0;
 }

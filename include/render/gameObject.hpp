@@ -4,6 +4,7 @@
 #include "assets.hpp"
 #include <glm/vec3.hpp>
 #include "scale.hpp"
+#include "shader.hpp"
 
 namespace render
 {

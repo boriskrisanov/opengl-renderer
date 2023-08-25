@@ -1,61 +1,43 @@
 #include "render/render.hpp"
+#include "render/camera.hpp"
+#include "render/context.hpp"
 #include "render/gameObject.hpp"
+#include "render/shader.hpp"
+#include "render/skybox.hpp"
 #include "ui.hpp"
 #include "world.hpp"
+#include <memory>
 #include <random>
-#include "render/camera.hpp"
-#include "render/skybox.hpp"
+
 
 using glm::vec2, std::string;
 
 namespace render
 {
-GLFWwindow *window;
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-std::shared_ptr<Camera> camera;
-const float WINDOW_WIDTH = 1920, WINDOW_HEIGHT = 1080;
-bool isCursorEnabled = false;
-bool isWireframeDrawEnabled = false;
-double frameTimeInMilliseconds = 0;
-std::vector<world::Chunk> chunks;
-std::shared_ptr<Skybox> skybox;
-static std::random_device randomDevice;
-static std::mt19937 rng{randomDevice()};
-static std::uniform_int_distribution<int> uniformIntDistribution{0, INT_MAX};
-std::vector<GameObject> gameObjects;
-const double SECONDS_BETWEEN_COUNTER_UPDATES = 0.25;
-const double SECONDS_BETWEEN_CURSOR_STATE_UPDATES = 0.5;
-double secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
-double secondsUntilNextCursorStateUpdate = SECONDS_BETWEEN_CURSOR_STATE_UPDATES;
-
-GLFWwindow *initAndCreateWindow()
+RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void()> onUpdate)
 {
     if (!glfwInit())
     {
-        return nullptr;
+        throw std::exception("Failed to initialize GLFW");
     }
 
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(windowSize.x, windowSize.y, "Game", nullptr, nullptr);
 
     if (!window)
     {
         glfwTerminate();
-        DEBUG_LOG("Failed to create window");
-        return nullptr;
+        throw std::exception("Failed to create window");
     }
 
     glfwMakeContextCurrent(window);
 
     if (glewInit() != GLEW_OK)
     {
-        DEBUG_LOG("Failed initialize GLEW");
-        return nullptr;
+        throw std::exception("Failed initialize GLEW");
     }
 
     DEBUG_LOG("Window init");
 
-    ui::init(window);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -66,89 +48,77 @@ GLFWwindow *initAndCreateWindow()
 
     DEBUG_LOG("Finished OpenGL init");
 
-    return window;
+    render::Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
+
+    std::shared_ptr<Camera> camera = std::make_shared<Camera>(window, windowSize, shader, 0.05);
+    const std::shared_ptr<Skybox> skybox = std::make_shared<Skybox>(camera);
+
+    ui::init(window, camera);
+
+    onStart();
+
+    return RenderContext{
+        .window = window,
+        .deltaTime = 0,
+        .lastFrame = 0,
+        .windowSize = windowSize,
+        .isWireframeDrawEnabled = false,
+        .isCursorEnabled = false,
+        .frameTimeInMilliseconds = 0,
+        .skybox = skybox,
+        .gameObjects = {},
+        .shader = shader,
+        .camera = camera,
+        .initScene = onStart,
+        .updateScene = onUpdate};
 }
 
-void initCamera(render::Shader shader)
+void drawFrame(RenderContext context)
 {
-    camera = std::make_shared<Camera>(Camera{window, vec2(WINDOW_WIDTH, WINDOW_HEIGHT), shader, 5});
-}
-
-void updateDeltaTime()
-{
-    double currentFrame = glfwGetTime();
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-}
-
-void initScene()
-{
-    chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
-    skybox = std::make_shared<Skybox>(Skybox{camera});
-
-    gameObjects.push_back(GameObject{{5, 5, 5}, {0, 0, 0}, render::assetLoader::ModelName::SPHERE, render::assetLoader::TextureName::CONTAINER});
-    gameObjects.push_back(GameObject{{8, 5, 8}, {0, 0, 0}, render::assetLoader::ModelName::CUBE, render::assetLoader::TextureName::UV_GRID_256});
-}
-
-void drawFrame(render::Shader shader)
-{
-    updateDeltaTime();
+    context.updateDeltaTime();
     double startTime = glfwGetTime();
 
-    // TODO: Don't call this every frame
-    glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
-
-    if (!isCursorEnabled) [[likely]]
+    if (!context.isCursorEnabled) [[likely]]
     {
-        camera->update(deltaTime);
+        context.camera->update(context.deltaTime);
     }
 
-    skybox->draw();
+    context.skybox->draw();
 
-    shader.select();
+    context.shader.select();
 
-    for (auto chunk : chunks)
+    context.updateScene();
+
+    for (auto gameObject : context.gameObjects)
     {
-        chunk.draw(shader);
+        gameObject.render(context.shader);
     }
-
-    for (auto gameObject : gameObjects)
-    {
-        gameObject.render(shader);
-    }
-
-    // TODO: Move parameters to ui::init()
-    ui::update(window, isCursorEnabled, secondsUntilNextCursorStateUpdate, SECONDS_BETWEEN_CURSOR_STATE_UPDATES, frameTimeInMilliseconds, camera,
-               []
-               {
-                   chunks.clear();
-                   chunks = world::generateTerrain(uniformIntDistribution(rng), {4, 4});
-               });
 
     double endTime = glfwGetTime();
     const double frameTimeInSeconds = endTime - startTime;
-    secondsUntilNextCounterUpdate -= frameTimeInSeconds;
-    secondsUntilNextCursorStateUpdate -= frameTimeInSeconds;
 
-    if (secondsUntilNextCounterUpdate <= 0)
-    {
-        frameTimeInMilliseconds = frameTimeInSeconds * 1000;
-        secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
-    }
+    ui::update(context.window, context.isWireframeDrawEnabled, context.isCursorEnabled, frameTimeInSeconds, [] {});
 
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(context.window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glfwPollEvents();
 }
 
 void setWireframeDrawEnabled(bool isEnabled)
 {
-    isWireframeDrawEnabled = isEnabled;
     glPolygonMode(GL_FRONT_AND_BACK, isEnabled ? GL_LINE : GL_FILL);
 }
 
 void setVsyncEnabled(bool enabled)
 {
     glfwSwapInterval((int)enabled);
+}
+
+void runMainLoop(RenderContext context)
+{
+    while (!glfwWindowShouldClose(context.window))
+    {
+        render::drawFrame(context);
+    }
 }
 } // namespace render

@@ -7,13 +7,20 @@
 
 namespace ui
 {
-
 std::string openGlVersion;
 std::string rendererInfo;
 
-bool isWireframeDrawEnabled = false;
+const float SECONDS_BETWEEN_COUNTER_UPDATES = 1;
+float secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
 
-void init(GLFWwindow *window)
+const float SECONDS_BETWEEN_CURSOR_STATE_UPDATES = 0.25;
+float secondsUntilNextCursorStateUpdate;
+
+float frameTimeInMilliseconds;
+
+std::shared_ptr<const render::Camera> _camera;
+
+void init(GLFWwindow *window, std::shared_ptr<const render::Camera> camera)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -25,10 +32,23 @@ void init(GLFWwindow *window)
 
     openGlVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
     rendererInfo = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
+
+    _camera = camera;
 }
 
-void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextCursorStateUpdate, float SECONDS_BETWEEN_CURSOR_STATE_UPDATES, float frameTimeInMilliseconds, std::shared_ptr<const render::Camera> camera, const std::function<void()> &regenerateTerrainClicked)
+void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnabled, float frameTimeInSeconds, const std::function<void()> &regenerateTerrainClicked)
 {
+    glfwSetInputMode(window, GLFW_CURSOR, isCursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+
+    secondsUntilNextCounterUpdate -= frameTimeInSeconds;
+    secondsUntilNextCursorStateUpdate -= frameTimeInSeconds;
+
+    if (secondsUntilNextCounterUpdate <= 0)
+    {
+        frameTimeInMilliseconds = frameTimeInSeconds * 1000;
+        secondsUntilNextCounterUpdate = SECONDS_BETWEEN_COUNTER_UPDATES;
+    }
+
     if (input::isKeyDown(window, input::ESCAPE) && secondsUntilNextCursorStateUpdate <= 0) [[unlikely]]
     {
         // Toggle cursor state
@@ -43,7 +63,7 @@ void update(GLFWwindow *window, bool &isCursorEnabled, double &secondsUntilNextC
     ImGui::SetWindowFontScale(2);
 
     // TODO: FPS counter
-    auto cameraPosition = camera->position;
+    auto cameraPosition = _camera->position;
     ImGui::Text("%s", std::format("Camera position: {}, {}, {} ", cameraPosition.x, cameraPosition.y, cameraPosition.z).c_str());
     ImGui::Text("%s", std::format("Frame time: {}ms", frameTimeInMilliseconds).c_str());
     ImGui::Text("%s", std::format("OpenGL version: {}", openGlVersion).c_str());
