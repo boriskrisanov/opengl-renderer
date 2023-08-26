@@ -29,7 +29,7 @@ struct RenderContext
 
     inline void updateDeltaTime()
     {
-        double currentFrame = glfwGetTime();
+        const double currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
     }
