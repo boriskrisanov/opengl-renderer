@@ -5,6 +5,8 @@
 #include "render/shader.hpp"
 #include "render/skybox.hpp"
 #include "ui.hpp"
+#include "utils.hpp"
+#include <algorithm>
 #include <memory>
 #include <random>
 
@@ -12,6 +14,8 @@ using glm::vec2, std::string;
 
 namespace render
 {
+std::vector<GameObject> gameObjectAdditionQueue;
+
 RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void(float deltaTime)> onUpdate)
 {
     if (!glfwInit())
@@ -45,6 +49,8 @@ RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> on
 
     DEBUG_LOG("Finished OpenGL init");
 
+    render::assetLoader::loadAssets();
+
     render::Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
 
     std::shared_ptr<Camera> camera = std::make_shared<Camera>(window, windowSize, shader, 10);
@@ -74,6 +80,9 @@ void drawFrame(RenderContext &context)
 {
     context.updateDeltaTime();
     const double startTime = glfwGetTime();
+
+    utils::pushBackVectorToVector(context.gameObjects, gameObjectAdditionQueue);
+    gameObjectAdditionQueue.clear();
 
     if (!context.isCursorEnabled) [[likely]]
     {
@@ -117,5 +126,10 @@ void runMainLoop(RenderContext context)
     {
         render::drawFrame(context);
     }
+}
+
+void addGameObject(GameObject gameObject)
+{
+    gameObjectAdditionQueue.push_back(gameObject);
 }
 } // namespace render

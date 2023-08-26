@@ -21,11 +21,23 @@ template <typename T>
 template <typename T, size_t S>
 void pushBackArrayToVector(std::vector<T> &vector, std::array<T, S> array)
 {
-    // vector.reserve(vector.size() + array.size());
+    vector.reserve(vector.size() + array.size());
 
     for (size_t i = 0; i < array.size(); i++)
     {
         vector.push_back(array[i]);
+    }
+}
+
+// Copies each element in vector2 to vector1
+template <typename T>
+void pushBackVectorToVector(std::vector<T> &vector1, std::vector<T> vector2)
+{
+    vector1.reserve(vector1.size() + vector2.size());
+
+    for (T object : vector2)
+    {
+        vector1.push_back(object);
     }
 }
 } // namespace utils

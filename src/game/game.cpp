@@ -1,7 +1,7 @@
 #include "game/game.hpp"
+#include "render/render.hpp"
 #include "ui.hpp"
 #include <imgui.h>
-
 
 namespace game
 {
@@ -22,6 +22,8 @@ void onStart()
 			terrainGenerationCallback();
     }
 	});
+
+	render::addGameObject({{8, 5, 8}, {0, 0, 0}, render::assetLoader::ModelName::CUBE, render::assetLoader::TextureName::UV_GRID_256});
 }
 
 void onUpdate(float deltaTime)

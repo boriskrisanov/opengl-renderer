@@ -11,4 +11,5 @@ void drawFrame(render::Shader shader);
 void setWireframeDrawEnabled(bool enabled);
 void setVsyncEnabled(bool enabled);
 void runMainLoop(RenderContext context);
+void addGameObject(GameObject gameObject);
 } // namespace render
