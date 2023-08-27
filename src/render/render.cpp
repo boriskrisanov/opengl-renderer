@@ -9,12 +9,13 @@
 #include <algorithm>
 #include <memory>
 #include <random>
+#include <type_traits>
 
 using glm::vec2, std::string;
 
 namespace render
 {
-std::vector<GameObject> gameObjectAdditionQueue;
+std::vector<std::shared_ptr<GameObject>> gameObjectAdditionQueue;
 
 RenderContext initAndCreateWindow(glm::vec2 windowSize, std::function<void()> onStart, std::function<void(float deltaTime)> onUpdate)
 {
@@ -97,7 +98,7 @@ void drawFrame(RenderContext &context)
 
     for (auto gameObject : context.gameObjects)
     {
-        gameObject.render(context.shader);
+        gameObject->draw(context.shader);
     }
 
     const double endTime = glfwGetTime();
@@ -128,7 +129,7 @@ void runMainLoop(RenderContext context)
     }
 }
 
-void addGameObject(GameObject gameObject)
+void _addGameObject(std::shared_ptr<GameObject> gameObject)
 {
     gameObjectAdditionQueue.push_back(gameObject);
 }

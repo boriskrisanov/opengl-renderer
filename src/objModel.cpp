@@ -6,10 +6,9 @@ using std::string, std::ifstream, std::vector;
 
 namespace render
 {
-
 ObjModel::ObjModel(string path)
 {
-    DEBUG_LOG("Loading OBJ model " << path);
+    DEBUG_LOG("Loading OBJ mesh " << path);
 
     const string modelSource = utils::loadFile(path);
 
@@ -72,5 +71,8 @@ ObjModel::ObjModel(string path)
             }
         }
     }
+
+    this->vertexCount = this->vertexes.size();
+    DEBUG_LOG("Loaded OBJ mesh " << path << ", vertex count: " << this->vertexCount);
 }
 } // namespace render

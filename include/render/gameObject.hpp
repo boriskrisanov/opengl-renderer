@@ -1,27 +1,37 @@
 #pragma once
 
-#include "render/model.hpp"
+#include "Transform.hpp"
 #include "assets.hpp"
-#include <glm/vec3.hpp>
-#include "scale.hpp"
+#include "render/model.hpp"
+#include "Scale.hpp"
 #include "shader.hpp"
+#include <glm/glm.hpp>
+
+
+using glm::vec3;
 
 namespace render
 {
 class GameObject
 {
   public:
-    bool isVisible = true;
-    GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture = assetLoader::TextureName::UV_GRID_256, render::Scale scale = 1);
-    const ObjModel *const model;
-    const Texture *const texture;
-    glm::vec3 position;
-    glm::vec3 rotation;
-    void render(render::Shader shader) const;
+    GameObject(Transform transform = {
+                   .position = {0, 0, 0},
+                   .rotation = {0, 0, 0},
+                   .scale = 1});
 
+    virtual void onStart() = 0;
+    virtual void onUpdate() = 0;
+
+    void draw(render::Shader shader) const;
+
+    Transform transform;
+
+  protected:
+  // TODO: Make const and move to constructor
+    Model model;
   private:
-    const unsigned long long numberOfVertexes;
-    unsigned int vertexBuffer;
-    unsigned int vertexArray;
+    unsigned int vertexBufferId;
+    unsigned int vertexArrayId;
 };
 } // namespace render

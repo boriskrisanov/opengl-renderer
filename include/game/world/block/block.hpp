@@ -1,14 +1,12 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "render/render.hpp"
-#include "render/assets.hpp"
-#include <algorithm>
 #include <array>
+#include <glm/glm.hpp>
+#include "render/assets.hpp"
 
 namespace world
 {
-class Block
+	class Block
 {
   public:
     // clang-format off
@@ -141,18 +139,4 @@ class DirtBlock : public Block
   public:
     DirtBlock(glm::vec3 position) : Block{position, render::assetLoader::TextureName::DIRT} {}
 };
-
-class Chunk
-{
-  public:
-    Chunk(glm::vec2 position, std::array<std::array<std::array<Block *, 16>, 16>, 16>);
-    void draw(render::Shader shader);
-    void updateBlockVisibility();
-    glm::vec2 position;
-    std::array<std::array<std::array<Block *, 16>, 16>, 16> blocks;
-    unsigned int vertexArray;
-};
-
-[[nodiscard]] Chunk generateChunk(unsigned int seed, glm::vec2 position);
-[[nodiscard]] std::vector<world::Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize);
-} // namespace world
+}

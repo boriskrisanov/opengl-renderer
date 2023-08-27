@@ -21,7 +21,7 @@ struct RenderContext
     bool isCursorEnabled = false;
     double frameTimeInMilliseconds = 0;
     std::shared_ptr<Skybox> skybox;
-    std::vector<GameObject> gameObjects;
+    std::vector<std::shared_ptr<GameObject>> gameObjects;
     Shader shader;
     std::shared_ptr<Camera> camera;
     std::function<void()> onStart;

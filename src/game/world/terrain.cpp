@@ -1,30 +1,34 @@
+#include "game/world/terrain.hpp"
+#include "game/world/chunk.hpp"
 #include "utils.hpp"
-#include "world.hpp"
 #include <PerlinNoise.hpp>
 
+
+namespace world
+{
 // TODO: Fix memory leak after terrain regeneration
-std::vector<world::Chunk> world::generateTerrain(unsigned int seed, glm::vec2 worldSize)
+std::vector<Chunk> generateTerrain(unsigned int seed, glm::vec2 worldSize)
 {
     DEBUG_LOG("Started terrain generation with seed " << seed);
 
-    std::vector<world::Chunk> chunks;
+    std::vector<Chunk> chunks;
 
     // for (int x = 0; x < worldSize.x; x++)
     // {
     //     for (int y = 0; y < worldSize.y; y++)
     //     {
-    //         chunks.push_back(world::generateChunk(seed, {x, y}));
+    //         chunks.push_back(generateChunk(seed, {x, y}));
     //     }
     // }
 
-    chunks.push_back(world::generateChunk(seed, {0, 0}));
+    chunks.push_back(generateChunk(seed, {0, 0}));
 
     DEBUG_LOG("Finished terrain generation");
 
     return chunks;
 }
 
-world::Chunk world::generateChunk(unsigned int seed, glm::vec2 position)
+Chunk generateChunk(unsigned int seed, glm::vec2 position)
 {
     std::array<std::array<std::array<Block *, 16>, 16>, 16> blocks;
 
@@ -72,3 +76,4 @@ world::Chunk world::generateChunk(unsigned int seed, glm::vec2 position)
 
     return Chunk{position, blocks};
 }
+} // namespace world

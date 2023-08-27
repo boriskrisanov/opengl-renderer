@@ -1,36 +1,41 @@
 #include "render/gameObject.hpp"
-#include <glm/glm.hpp>
 #include "utils.hpp"
+#include <glm/glm.hpp>
 
 using glm::mat4, glm::vec3, glm::radians;
 
 namespace render
 {
-GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoader::ModelName model, render::assetLoader::TextureName texture, render::Scale scale)
-    : model{assetLoader::getModel(model)}, texture{assetLoader::getTexture(texture)}, position{position}, rotation{rotation}, numberOfVertexes{assetLoader::getModel(model)->vertexes.size()}
+GameObject::GameObject(Transform transform) : transform{transform}
 {
     // Convert render::Vertex vector to float array
     // TODO: Add normal information
 
     std::vector<float> vertexBufferData;
 
-    for (Vertex vertex : this->model->vertexes)
+    for (Vertex vertex : this->model.mesh.vertexes)
     {
-        vertexBufferData.push_back(vertex.position.x * scale.x);
-        vertexBufferData.push_back(vertex.position.y * scale.y);
-        vertexBufferData.push_back(vertex.position.z * scale.z);
+        vertexBufferData.push_back(vertex.position.x * transform.scale.x);
+        vertexBufferData.push_back(vertex.position.y * transform.scale.y);
+        vertexBufferData.push_back(vertex.position.z * transform.scale.z);
 
         vertexBufferData.push_back(vertex.textureCoordinate.x);
         vertexBufferData.push_back(vertex.textureCoordinate.y);
     }
 
+    if (vertexBufferData.empty()) [[unlikely]]
+    {
+        DEBUG_LOG("warning: GameObject constructor called with empty vertex buffer");
+        return;
+    }
+
     // Set up OpenGL buffers
 
-    glGenVertexArrays(1, &this->vertexArray);
-    glBindVertexArray(this->vertexArray);
+    glGenVertexArrays(1, &this->vertexArrayId);
+    glBindVertexArray(this->vertexArrayId);
 
-    glGenBuffers(1, &this->vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
+    glGenBuffers(1, &this->vertexBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBufferId);
 
     glBufferData(GL_ARRAY_BUFFER, utils::sizeOfVectorInBytes(vertexBufferData), &vertexBufferData.front(), GL_STATIC_DRAW);
 
@@ -43,26 +48,22 @@ GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, render::assetLoad
     glEnableVertexAttribArray(1);
 }
 
-void GameObject::render(render::Shader shader) const
+void GameObject::draw(render::Shader shader) const
 {
-    // Likely because most GameObjects are blocks inside chunks which won't be visible to the player
-    if (!this->isVisible) [[likely]]
-    {
-        return;
-    }
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexArrayId);
 
-    this->texture->select();
+    this->model.texture.select();
 
     mat4 transform{1};
-    transform = glm::translate(transform, this->position);
-    transform = glm::rotate(transform, radians(this->rotation.x), vec3{1, 0, 0});
-    transform = glm::rotate(transform, radians(this->rotation.y), vec3{0, 0, 1});
-    transform = glm::rotate(transform, radians(this->rotation.z), vec3{0, 1, 0});
+    transform = glm::translate(transform, this->transform.position);
+    transform = glm::rotate(transform, radians(this->transform.rotation.x), vec3{1, 0, 0});
+    transform = glm::rotate(transform, radians(this->transform.rotation.y), vec3{0, 0, 1});
+    transform = glm::rotate(transform, radians(this->transform.rotation.z), vec3{0, 1, 0});
 
     shader.setUniform("transform", transform);
 
-    glBindVertexArray(this->vertexArray);
+    glBindVertexArray(this->vertexArrayId);
 
-    glDrawArrays(GL_TRIANGLES, 0, numberOfVertexes);
+    glDrawArrays(GL_TRIANGLES, 0, model.mesh.vertexCount);
 }
 } // namespace render

@@ -1,5 +1,5 @@
 #include "glm/gtc/matrix_transform.hpp"
-#include "world.hpp"
+#include "game/world/chunk.hpp"
 
 namespace world
 {

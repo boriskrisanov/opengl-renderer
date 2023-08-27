@@ -63,6 +63,8 @@ void update(GLFWwindow *window, bool& isWireframeDrawEnabled, bool &isCursorEnab
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
+    ImGui::Begin("Render");
+
     ImGui::SetWindowFontScale(2);
 
     // TODO: FPS counter
