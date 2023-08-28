@@ -6,7 +6,7 @@ using glm::mat4, glm::vec3, glm::radians;
 
 namespace render
 {
-GameObject::GameObject(Transform transform) : transform{transform}
+GameObject::GameObject(Model model, Transform transform) : transform{transform}, model{model}
 {
     // Convert render::Vertex vector to float array
     // TODO: Add normal information
@@ -28,6 +28,8 @@ GameObject::GameObject(Transform transform) : transform{transform}
         DEBUG_LOG("warning: GameObject constructor called with empty vertex buffer");
         return;
     }
+
+    DEBUG_LOG("Creating GameObject, vertex buffer length: " << vertexBufferData.size() << ", vertex count: " << model.mesh.vertexCount);
 
     // Set up OpenGL buffers
 

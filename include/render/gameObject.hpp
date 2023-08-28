@@ -15,7 +15,7 @@ namespace render
 class GameObject
 {
   public:
-    GameObject(Transform transform = {
+    GameObject(Model model, Transform transform = {
                    .position = {0, 0, 0},
                    .rotation = {0, 0, 0},
                    .scale = 1});
@@ -28,8 +28,7 @@ class GameObject
     Transform transform;
 
   protected:
-  // TODO: Make const and move to constructor
-    Model model;
+    const Model model;
   private:
     unsigned int vertexBufferId;
     unsigned int vertexArrayId;
