@@ -98,6 +98,7 @@ void drawFrame(RenderContext &context)
 
     for (auto gameObject : context.gameObjects)
     {
+        gameObject->onUpdate();
         gameObject->draw(context.shader);
     }
 
