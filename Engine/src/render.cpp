@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <memory>
 #include <type_traits>
+#include "ui.hpp"
 
 using glm::vec2, std::string;
 
@@ -54,18 +55,21 @@ Renderer::Renderer(WindowSize windowSize, std::function<void()> onStart, std::fu
 
     DEBUG_LOG("Finished OpenGL init");
 
+    glClearColor(1, 1, 1, 1);
+
     shader = std::make_shared<Shader>("default", std::vector<string>{ "viewMatrix", "projectionMatrix", "transform" });
 
     // TODO: implement better asset management
     // render::assetLoader::loadAssets();
 
-    // this->camera = std::make_shared<Camera>(new Camera{ window, windowSize, *shader, 10 });
     camera = std::make_shared<Camera>(window, windowSize, *shader, 10.0f);
 
     // TODO: Initialize skybox in scene
     const std::shared_ptr<Skybox> skybox = std::make_shared<Skybox>(*camera.get());
 
     currentScene = std::make_shared<Scene>(*skybox.get());
+
+    ui::init(window, camera);
 
     onStart();
 }
@@ -110,14 +114,18 @@ void Renderer::drawFrame()
 
     const double startTime = glfwGetTime();
 
-    shader->select();
+    if (isCursorEnabled)
+    {
+        camera->update((float) deltaTime);
+    }
 
-    currentScene->draw(*shader);
+    currentScene->draw(shader);
 
-    camera->update((float) deltaTime);
 
     const double endTime = glfwGetTime();
     const double frameTimeInSeconds = endTime - startTime;
+
+    ui::update(window, wireframeDrawEnabled, isCursorEnabled, frameTimeInSeconds);
 
     glfwSwapBuffers(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -127,7 +135,7 @@ void Renderer::drawFrame()
 void Renderer::updateDeltaTime() noexcept
 {
     const double currentTime = glfwGetTime();
-    this->deltaTime = currentTime - this->lastTime;
-    this->lastTime = currentTime;
+    deltaTime = currentTime - this->lastTime;
+    lastTime = currentTime;
 }
 } // namespace render

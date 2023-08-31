@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ui.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\assetLoader.cpp" />
     <ClCompile Include="src\camera.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="include\skybox.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\Transform.hpp" />
+    <ClInclude Include="include\ui.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="include\WindowSize.hpp" />
   </ItemGroup>

@@ -74,8 +74,8 @@ void Camera::respondToMouseInput()
 
 void Camera::update(float deltaTime)
 {
-    this->respondToMouseInput();
-    this->respondToKeyboardInput(deltaTime);
-    this->updateMatrixUniforms();
+    respondToMouseInput();
+    respondToKeyboardInput(deltaTime);
+    updateMatrixUniforms();
 }
 } // namespace render

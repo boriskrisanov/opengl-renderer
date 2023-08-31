@@ -11,7 +11,7 @@ namespace render
 	public:
 		Scene(Skybox skybox);
 
-		void draw(Shader shader);
+		void draw(std::shared_ptr<Shader> shader);
 
 		Skybox skybox;
 

@@ -23,6 +23,8 @@ public:
 
 	bool vsyncEnabled = true;
 	bool wireframeDrawEnabled = false;
+	bool enableDebugUI = true;
+	bool isCursorEnabled = false;
 
 private:
 	void drawFrame();

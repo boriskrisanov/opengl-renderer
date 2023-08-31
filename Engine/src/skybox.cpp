@@ -6,7 +6,7 @@ using std::string;
 
 namespace render
 {
-    Skybox::Skybox(Camera camera) : shader{ std::make_shared<Shader>("skybox", std::vector<std::string>{"viewMatrix", "projectionMatrix"}) }, camera{ camera }
+Skybox::Skybox(Camera camera) : shader{ std::make_shared<Shader>("skybox", std::vector<std::string>{"viewMatrix", "projectionMatrix"}) }, camera{ camera }
 {
     glGenTextures(1, &this->cubemapTextureId);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->cubemapTextureId);
