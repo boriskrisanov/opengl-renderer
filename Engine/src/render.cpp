@@ -3,18 +3,18 @@
 #include "gameObject.hpp"
 #include "shader.hpp"
 #include "skybox.hpp"
+#include "ui.hpp"
 #include "utils.hpp"
 #include <algorithm>
 #include <memory>
 #include <type_traits>
-#include "ui.hpp"
 
 using glm::vec2, std::string;
 
 namespace render
 {
 Renderer::Renderer(WindowSize windowSize, std::function<void()> onStart, std::function<void(float deltaTime)> onUpdate)
-{   
+{
     DEBUG_LOG("Creating new renderer");
 
     const bool glfwInitSuccessful = glfwInit();
@@ -46,18 +46,16 @@ Renderer::Renderer(WindowSize windowSize, std::function<void()> onStart, std::fu
 
     glEnable(GL_DEPTH_TEST);
 
-    glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height)
-        {
-            (void)window; // Remove unused parameter warning
-            glViewport(0, 0, width, height); 
-        }
-    );
+    glfwSetWindowSizeCallback(window, [](GLFWwindow *window, int width, int height)
+                              {
+							(void)window; // Remove unused parameter warning
+							glViewport(0, 0, width, height); });
 
     DEBUG_LOG("Finished OpenGL init");
 
     glClearColor(1, 1, 1, 1);
 
-    shader = std::make_shared<Shader>("default", std::vector<string>{ "viewMatrix", "projectionMatrix", "transform" });
+    shader = std::make_shared<Shader>("default", std::vector<string>{"viewMatrix", "projectionMatrix", "transform"});
 
     // TODO: implement better asset management
     // render::assetLoader::loadAssets();
@@ -116,11 +114,10 @@ void Renderer::drawFrame()
 
     if (isCursorEnabled)
     {
-        camera->update((float) deltaTime);
+        camera->update((float)deltaTime);
     }
 
     currentScene->draw(shader);
-
 
     const double endTime = glfwGetTime();
     const double frameTimeInSeconds = endTime - startTime;
