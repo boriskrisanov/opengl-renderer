@@ -3,8 +3,10 @@
 
 #include "EcsRegistry.hpp"
 #include "GameObject.hpp"
-#include "components/MeshComponent.hpp"
+#include "Texture.hpp"
 #include "components/CameraComponent.hpp"
+#include "components/MeshComponent.hpp"
+#include "components/MaterialComponent.hpp"
 #include "systems/cameraMovementSystem.hpp"
 #include "systems/renderSystem.hpp"
 
@@ -27,6 +29,11 @@ int main()
     auto camera = new GameObject{};
     camera->addComponent(new CameraComponent{renderer.getWindowSize()});
     registry.addGameObject(camera);
+
+    // TODO: Asset loading / cache
+    auto defaultTexture = Texture{"assets/textures/uv_grid_256.jpg"};
+    auto materialComponent = new MaterialComponent{defaultTexture};
+    cube->addComponent(materialComponent);
 
     while (!renderer.isWindowClosed())
     {

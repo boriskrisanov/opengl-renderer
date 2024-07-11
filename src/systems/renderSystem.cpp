@@ -1,6 +1,7 @@
 #include "renderSystem.hpp"
 #include "../Shader.hpp"
 #include "../components/CameraComponent.hpp"
+#include "../components/MaterialComponent.hpp"
 #include "../components/MeshComponent.hpp"
 #include <GL/glew.h>
 #include <glm/ext.hpp>
@@ -10,7 +11,7 @@ using glm::mat4;
 
 void updateRenderSystem(const EcsRegistry &ecsRegistry)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     bool updatedCamera = false;
     for (GameObject* gameObject : ecsRegistry.getGameObjects())
@@ -19,6 +20,13 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
         {
             auto meshComponent = gameObject->getComponent<MeshComponent>();
             glBindVertexArray(meshComponent->getVertexArray());
+
+            if (auto material = gameObject->getComponent<MaterialComponent>())
+            {
+                // TODO: Batch materials for performance?
+                material->texture.select();
+            }
+
             glDrawArrays(GL_TRIANGLES, 0, meshComponent->mesh.vertexCount);
         }
         else if (gameObject->hasComponent<CameraComponent>())

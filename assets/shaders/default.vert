@@ -1,9 +1,9 @@
-#version 330 core
+#version 460 core
 
 layout(location = 0) in vec4 position;
-// layout(location = 1) in vec2 _textureCoordinate;
+layout(location = 1) in vec2 _textureCoordinate;
 
-// out vec2 textureCoordinate;
+out vec2 textureCoordinate;
 
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
@@ -13,5 +13,5 @@ void main()
 {
   gl_Position = projectionMatrix * viewMatrix * transform * position;
   // gl_Position = position;
-  // textureCoordinate = _textureCoordinate;
+  textureCoordinate = _textureCoordinate;
 }

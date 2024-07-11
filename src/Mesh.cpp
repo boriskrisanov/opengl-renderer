@@ -1,6 +1,7 @@
 #include "Mesh.hpp"
 
-Mesh::Mesh(string source) : source{source}
+Mesh::Mesh(string source)
+    : source{source}
 {
     DEBUG_LOG("Loading OBJ mesh " << source);
 
@@ -69,7 +70,8 @@ Mesh::Mesh(string source) : source{source}
     this->vertexCount = this->vertexes.size();
     DEBUG_LOG("Loaded OBJ mesh " << source << ", vertex count: " << this->vertexCount);
 }
-Mesh::Mesh(const vector<Vertex>& vertexes) : vertexes{vertexes}, vertexCount{(unsigned int) vertexes.size()}
-{
 
+Mesh::Mesh(const vector<Vertex> &vertexes)
+    : vertexes{vertexes}, vertexCount{(unsigned int)vertexes.size()}
+{
 }

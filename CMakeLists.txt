@@ -31,6 +31,10 @@ add_executable(game_engine src/main.cpp
         src/input.cpp
         src/systems/cameraMovementSystem.cpp
         src/systems/cameraMovementSystem.hpp
+        src/stb_impl.cpp
+        src/components/MaterialComponent.hpp
+        src/Texture.cpp
+        src/Texture.hpp
 )
 
 target_link_libraries(game_engine PRIVATE glfw)

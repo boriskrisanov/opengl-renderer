@@ -9,6 +9,9 @@ Renderer::Renderer(Vector2<int> windowSize) : windowSize{windowSize}
     {
         throw std::exception{"Failed to initialise GLFW"};
     }
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     window = glfwCreateWindow(windowSize.x, windowSize.y, "Hello World", nullptr, nullptr);
     if (!window)
@@ -23,6 +26,8 @@ Renderer::Renderer(Vector2<int> windowSize) : windowSize{windowSize}
     {
         throw std::exception{"Failed to initialise GLEW"};
     }
+
+    glEnable(GL_DEPTH_TEST);
 
     DEBUG_LOG("OpenGL version: " << glGetString(GL_VERSION));
     DEBUG_LOG("OpenGL renderer: " << glGetString(GL_RENDERER));
