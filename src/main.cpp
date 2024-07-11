@@ -25,21 +25,8 @@ int main()
     registry.addGameObject(cube);
 
     auto camera = new GameObject{};
-    camera->addComponent(new CameraComponent{});
+    camera->addComponent(new CameraComponent{renderer.getWindowSize()});
     registry.addGameObject(camera);
-
-    //    GameObject triangle;
-    //    vector<Vertex> vertexes = {
-    //        {{-0.5, -0.5, 0}},
-    //        {{0.5, -0.5, 0}},
-    //        {{0, 0.5, 0}}
-    //    };
-    /*    auto mesh = new MeshComponent{
-            *(new Mesh{vertexes}),
-            shader
-        };
-        triangle.addComponent(mesh);
-        registry.addGameObject(triangle);*/
 
     while (!renderer.isWindowClosed())
     {
