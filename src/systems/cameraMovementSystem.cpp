@@ -24,7 +24,8 @@ void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
         camera->mouseOffset *= camera->sensitivity;
 
         camera->yaw += camera->mouseOffset.x;
-        camera->pitch += camera->mouseOffset.y;
+        // Not sure why this needs to be -= because in the old code it was positive. Might be a bug in Vector2?
+        camera->pitch -= camera->mouseOffset.y;
 
         camera->pitch = std::clamp(camera->pitch, -89.0, 89.0);
 

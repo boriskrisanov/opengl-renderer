@@ -17,11 +17,13 @@ inline double radians(double degrees)
 //  will be stored in an array. I haven't done this yet because I don't know if the compiler will optimise the arrays
 //  when they only have a few components, but I will look into it once there is more code using these classes.
 
-template <typename T = double> class Vector3
+template <typename T = double>
+class Vector3
 {
   public:
     T x = 0, y = 0, z = 0;
-    Vector3(T x, T y, T z) : x{x}, y{y}, z{z}
+    Vector3(T x, T y, T z)
+        : x{x}, y{y}, z{z}
     {
     }
     Vector3() = default;
@@ -88,17 +90,20 @@ template <typename T = double> class Vector3
     }
 };
 
-template <typename T = double> Vector3<T> operator*(T scalar, const Vector3<T> &vector)
+template <typename T = double>
+Vector3<T> operator*(T scalar, const Vector3<T> &vector)
 {
     return {vector.x * scalar, vector.y * scalar, vector.z * scalar};
 }
 
-template <typename T = double> Vector3<T> operator*(const Vector3<T> &vector, T scalar)
+template <typename T = double>
+Vector3<T> operator*(const Vector3<T> &vector, T scalar)
 {
     return scalar * vector;
 }
 
-template <typename T = double> Vector3<T> cross(Vector3<T> a, Vector3<T> b)
+template <typename T = double>
+Vector3<T> cross(Vector3<T> a, Vector3<T> b)
 {
     /*
      * |  i   j   k  |
@@ -108,7 +113,8 @@ template <typename T = double> Vector3<T> cross(Vector3<T> a, Vector3<T> b)
     return {a.y * b.z - a.z * b.y, -(a.x * b.z - a.z * b.x), a.x * b.y - a.y * b.x};
 }
 
-template <typename T = double> class Vector2
+template <typename T = double>
+class Vector2
 {
   public:
     T x = 0, y = 0;
@@ -128,7 +134,8 @@ template <typename T = double> class Vector2
 // M rows, N columns
 // i = row index, j = column index
 // TODO (currently using glm for matrices)
-template <int M, int N, typename T> class Matrix
+template <int M, int N, typename T>
+class Matrix
 {
   public:
     const Vector2<unsigned int> dim{N, M};
@@ -138,7 +145,8 @@ template <int M, int N, typename T> class Matrix
         return 0;
     }
 
-    template <int N2> Matrix operator*(Matrix<M, N2, T> rhs) const
+    template <int N2>
+    Matrix operator*(Matrix<M, N2, T> rhs) const
     {
         // https://en.wikipedia.org/wiki/Matrix_multiplication_algorithm#Iterative_algorithm
         Matrix<N, N2, T> result;
