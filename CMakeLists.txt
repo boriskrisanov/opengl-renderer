@@ -35,6 +35,8 @@ add_executable(game_engine src/main.cpp
         src/components/MaterialComponent.hpp
         src/Texture.cpp
         src/Texture.hpp
+        src/Skybox.cpp
+        src/Skybox.hpp
 )
 
 target_link_libraries(game_engine PRIVATE glfw)

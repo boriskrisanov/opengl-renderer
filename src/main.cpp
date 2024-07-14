@@ -17,7 +17,8 @@ int main()
     Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
     shader.select();
 
-    EcsRegistry registry{renderer, shader};
+    auto skybox = new Skybox{};
+    EcsRegistry registry{renderer, shader, skybox};
 
     registry.addSystem(updateRenderSystem);
     registry.addSystem(updateCameraMovementSystem);
