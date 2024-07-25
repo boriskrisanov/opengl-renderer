@@ -71,7 +71,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
                 material->texture.select();
             }
 
-            glDrawArrays(GL_TRIANGLES, 0, meshComponent->mesh.vertexCount);
+            glDrawArrays(GL_TRIANGLES, 0, (int) meshComponent->mesh.vertexCount);
         }
     }
 
