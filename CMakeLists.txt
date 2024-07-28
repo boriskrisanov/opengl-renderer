@@ -20,7 +20,6 @@ add_executable(game_engine src/main.cpp
         src/EcsRegistry.hpp
         src/EcsRegistry.cpp
         src/systems/renderSystem.cpp
-        src/systems/renderSystem.hpp
         src/components/MeshComponent.hpp
         src/Mesh.cpp
         src/Mesh.hpp
@@ -30,13 +29,15 @@ add_executable(game_engine src/main.cpp
         src/input.hpp
         src/input.cpp
         src/systems/cameraMovementSystem.cpp
-        src/systems/cameraMovementSystem.hpp
         src/stb_impl.cpp
         src/components/MaterialComponent.hpp
         src/Texture.cpp
         src/Texture.hpp
         src/Skybox.cpp
         src/Skybox.hpp
+        src/Scene.cpp
+        src/Scene.hpp
+        src/systems/systems.hpp
 )
 
 target_link_libraries(game_engine PRIVATE glfw)

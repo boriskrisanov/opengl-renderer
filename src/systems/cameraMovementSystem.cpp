@@ -1,10 +1,12 @@
-#include "cameraMovementSystem.hpp"
+#include "systems.hpp"
 #include "../components/CameraComponent.hpp"
 #include "../input.hpp"
 #include <algorithm>
 
 void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
 {
+    const Renderer& renderer = ecsRegistry.getScene().getRenderer();
+
     for (GameObject* gameObject : ecsRegistry.getGameObjects())
     {
         auto camera = gameObject->getComponent<CameraComponent>();
@@ -16,7 +18,7 @@ void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
         double deltaTime = 1;
 
         // Respond to mouse input
-        Vector2 currentMousePosition = input::getMousePosition(ecsRegistry.renderer.window);
+        Vector2 currentMousePosition = input::getMousePosition(renderer.window);
 
         camera->mouseOffset = currentMousePosition - camera->lastMousePosition;
         camera->lastMousePosition = currentMousePosition;
@@ -41,27 +43,27 @@ void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
 
         // Respond to keyboard input
 
-        if (input::isKeyDown(ecsRegistry.renderer.window, input::Key::W))
+        if (input::isKeyDown(renderer.window, input::Key::W))
         {
             gameObject->position += camera->speed * camera->front * deltaTime;
         }
-        if (input::isKeyDown(ecsRegistry.renderer.window, input::Key::S))
+        if (input::isKeyDown(renderer.window, input::Key::S))
         {
             gameObject->position -= camera->speed * camera->front * deltaTime;
         }
-        if (input::isKeyDown(ecsRegistry.renderer.window, input::Key::A))
+        if (input::isKeyDown(renderer.window, input::Key::A))
         {
             gameObject->position -= camera->speed * cross(camera->front, camera->up).normalised() * deltaTime;
         }
-        if (input::isKeyDown(ecsRegistry.renderer.window, input::Key::D))
+        if (input::isKeyDown(renderer.window, input::Key::D))
         {
             gameObject->position += camera->speed * cross(camera->front, camera->up).normalised() * deltaTime;
         }
-        if (input::isKeyDown(ecsRegistry.renderer.window, input::Key::Q))
+        if (input::isKeyDown(renderer.window, input::Key::Q))
         {
             gameObject->position -= camera->speed * camera->up * deltaTime;
         }
-        if (input::isKeyDown(ecsRegistry.renderer.window, input::Key::E))
+        if (input::isKeyDown(renderer.window, input::Key::E))
         {
             gameObject->position += camera->speed * camera->up * deltaTime;
         }

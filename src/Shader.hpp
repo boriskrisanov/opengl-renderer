@@ -12,6 +12,7 @@ class Shader
     [[nodiscard]] unsigned int getId() const;
     [[nodiscard]] int getUniformLocation(const string &uniform) const;
     void select() const;
+    ~Shader();
 
   private:
     unsigned int id;

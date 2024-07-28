@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Shader.hpp"
+#include "math.hpp"
 #include "utils.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "math.hpp"
 
 class Renderer
 {
@@ -12,6 +13,7 @@ class Renderer
     ~Renderer();
     [[nodiscard]] bool isWindowClosed() const;
     [[nodiscard]] Vector2<int> getWindowSize() const;
+    unique_ptr<Shader> shader;
     GLFWwindow *window;
 
   private:

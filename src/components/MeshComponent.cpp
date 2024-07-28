@@ -4,7 +4,6 @@
 MeshComponent::MeshComponent(Mesh &mesh, Shader &shader) : mesh{mesh}, shader{shader}
 {
     // TODO: Use index buffer
-
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
 

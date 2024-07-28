@@ -108,3 +108,9 @@ int Shader::getUniformLocation(const string &uniform) const
 {
     return uniformLocations.at(uniform);
 }
+
+Shader::~Shader()
+{
+    DEBUG_LOG("Shader " << name << " destroyed");
+    // TODO: Free opengl resources
+}

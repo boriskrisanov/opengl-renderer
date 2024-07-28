@@ -1,13 +1,12 @@
 #include <GL/glew.h>
 #include "Renderer.hpp"
-#include <exception>
 #include "utils.hpp"
 
 Renderer::Renderer(Vector2<int> windowSize) : windowSize{windowSize}
 {
     if (!glfwInit())
     {
-        throw std::exception{"Failed to initialise GLFW"};
+        throw std::runtime_error{"Failed to initialise GLFW"};
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -17,20 +16,23 @@ Renderer::Renderer(Vector2<int> windowSize) : windowSize{windowSize}
     if (!window)
     {
         glfwTerminate();
-        throw std::exception{"Failed to create window"};
+        throw std::runtime_error{"Failed to create window"};
     }
 
     glfwMakeContextCurrent(window);
 
     if (glewInit() != GLEW_OK)
     {
-        throw std::exception{"Failed to initialise GLEW"};
+        throw std::runtime_error{"Failed to initialise GLEW"};
     }
 
     glEnable(GL_DEPTH_TEST);
 
     DEBUG_LOG("OpenGL version: " << glGetString(GL_VERSION));
     DEBUG_LOG("OpenGL renderer: " << glGetString(GL_RENDERER));
+
+    shader = make_unique<Shader>("default", vector<string>{"viewMatrix", "projectionMatrix", "transform"});
+    shader->select();
 }
 
 Renderer::~Renderer()
@@ -42,6 +44,7 @@ bool Renderer::isWindowClosed() const
 {
     return glfwWindowShouldClose(window);
 }
+
 Vector2<int> Renderer::getWindowSize() const
 {
     return windowSize;

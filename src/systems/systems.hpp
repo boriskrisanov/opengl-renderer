@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../EcsRegistry.hpp"
+#include "../Scene.hpp"
+
+void updateRenderSystem(const EcsRegistry &ecsRegistry);
 
 /**
  * Responds to keyboard and mouse movement and updates the relevant matrices. This system is not responsible for

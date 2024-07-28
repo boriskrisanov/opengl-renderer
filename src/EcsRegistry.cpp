@@ -1,23 +1,35 @@
 #include "EcsRegistry.hpp"
 
-void EcsRegistry::addSystem(const std::function<void(const EcsRegistry &)>& updateHandler)
+EcsRegistry::EcsRegistry(Scene &scene)
+    : scene{scene}
+{
+}
+
+void EcsRegistry::addSystem(const std::function<void(EcsRegistry &ecsRegistry)> &updateHandler)
 {
     systemHandlers.push_back(updateHandler);
 }
 
 void EcsRegistry::update()
 {
-    for (const auto &handler : systemHandlers) {
+    for (const auto &handler : systemHandlers)
+    {
         handler(*this);
     }
 }
 
-vector<GameObject*> EcsRegistry::getGameObjects() const
+vector<GameObject *> EcsRegistry::getGameObjects() const
 {
     return gameObjects;
 }
-void EcsRegistry::addGameObject(GameObject* gameObject)
+
+void EcsRegistry::addGameObject(GameObject *gameObject)
 {
     // TODO: Memory management
     gameObjects.push_back(gameObject);
+}
+
+Scene &EcsRegistry::getScene() const
+{
+    return scene;
 }

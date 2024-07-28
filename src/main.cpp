@@ -1,30 +1,29 @@
-#include "Renderer.hpp"
-#include "Shader.hpp"
-
 #include "EcsRegistry.hpp"
 #include "GameObject.hpp"
+#include "Renderer.hpp"
+#include "Scene.hpp"
+#include "Shader.hpp"
 #include "Texture.hpp"
 #include "components/CameraComponent.hpp"
-#include "components/MeshComponent.hpp"
 #include "components/MaterialComponent.hpp"
-#include "systems/cameraMovementSystem.hpp"
-#include "systems/renderSystem.hpp"
+#include "components/MeshComponent.hpp"
+#include "systems/systems.hpp"
 
 int main()
 {
     Renderer renderer{{1920, 1080}};
 
-    Shader shader{"default", {"viewMatrix", "projectionMatrix", "transform"}};
-    shader.select();
+//    auto skybox = new Skybox{};
 
-    auto skybox = new Skybox{};
-    EcsRegistry registry{renderer, shader, skybox};
+    Scene scene{renderer};
+
+    EcsRegistry& registry = scene.getEcsRegistry();
 
     registry.addSystem(updateRenderSystem);
     registry.addSystem(updateCameraMovementSystem);
 
     auto cube = new GameObject{};
-    cube->addComponent(new MeshComponent{*(new Mesh{"assets/cube.obj"}), shader});
+    cube->addComponent(new MeshComponent{*(new Mesh{"assets/cube.obj"}), *renderer.shader});
     registry.addGameObject(cube);
 
     auto camera = new GameObject{};
@@ -38,6 +37,6 @@ int main()
 
     while (!renderer.isWindowClosed())
     {
-        registry.update();
+        scene.update();
     }
 }
