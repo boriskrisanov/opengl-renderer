@@ -15,7 +15,7 @@ class Mesh
   public:
     const string source;
     vector<Vertex> vertexes;
-    unsigned int vertexCount; // TODO: vertexes can be modified without changing vertexCount
+    size_t vertexCount; // TODO: vertexes can be modified without changing vertexCount
     explicit Mesh(string source);
     explicit Mesh(const vector<Vertex>& vertexes);
   private:
