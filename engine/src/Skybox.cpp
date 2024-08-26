@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 #include <stb_image.h>
 
+using std::string;
+
 Skybox::Skybox()
 {
     // TODO: Allow for user specified texture paths
@@ -21,7 +23,7 @@ Skybox::Skybox()
 
         if (!textureData) [[unlikely]]
         {
-            DEBUG_LOG("Cubemap texture loading failed: " << texturePath);
+            DEBUG_LOG("Cubemap texture loading failed: " + texturePath);
             return;
         }
 

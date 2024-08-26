@@ -1,8 +1,13 @@
 #include <GL/glew.h>
+
 #include "Renderer.hpp"
 #include "utils.hpp"
+#include <stdexcept>
 
-Renderer::Renderer(Vector2<int> windowSize) : windowSize{windowSize}
+using std::vector, std::string;
+
+Renderer::Renderer(Vector2<int> windowSize)
+    : windowSize{windowSize}
 {
     if (!glfwInit())
     {
@@ -28,8 +33,8 @@ Renderer::Renderer(Vector2<int> windowSize) : windowSize{windowSize}
 
     glEnable(GL_DEPTH_TEST);
 
-    DEBUG_LOG("OpenGL version: " << glGetString(GL_VERSION));
-    DEBUG_LOG("OpenGL renderer: " << glGetString(GL_RENDERER));
+    DEBUG_LOG("OpenGL version: " + string{reinterpret_cast<const char*>(glGetString(GL_VERSION))});
+    DEBUG_LOG("OpenGL renderer: " + string{reinterpret_cast<const char*>(glGetString(GL_RENDERER))});
 
     shader = make_unique<Shader>("default", vector<string>{"viewMatrix", "projectionMatrix", "transform"});
     shader->select();

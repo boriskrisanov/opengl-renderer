@@ -6,7 +6,7 @@ class Texture
 {
   public:
     void select() const;
-    Texture(string path);
+    explicit Texture(std::string path);
 
   private:
     unsigned int id;

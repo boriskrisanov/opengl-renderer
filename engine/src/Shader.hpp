@@ -3,21 +3,19 @@
 #include "utils.hpp"
 #include <map>
 
-using std::map;
-
 class Shader
 {
   public:
-    explicit Shader(const string &name, const vector<string> &uniforms = {});
+    explicit Shader(const std::string &name, const std::vector<std::string> &uniforms = {});
     [[nodiscard]] unsigned int getId() const;
-    [[nodiscard]] int getUniformLocation(const string &uniform) const;
+    [[nodiscard]] int getUniformLocation(const std::string &uniform) const;
     void select() const;
     ~Shader();
 
   private:
     unsigned int id;
-    map<string, int> uniformLocations;
-    string name;
+    std::map<std::string, int> uniformLocations;
+    std::string name;
 
-    void createShaderProgram(const vector<unsigned int> &shaders);
+    void createShaderProgram(const std::vector<unsigned int> &shaders);
 };

@@ -2,9 +2,11 @@
 #include "Shader.hpp"
 #include <filesystem>
 
+using std::string, std::vector;
+
 unsigned int loadAndCompileShader(const string& sourcePath)
 {
-    DEBUG_LOG("Loading shader: " << sourcePath);
+    DEBUG_LOG("Loading shader: " + sourcePath);
 
     const int shaderType = sourcePath.ends_with(".vert") ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
 
@@ -26,7 +28,7 @@ unsigned int loadAndCompileShader(const string& sourcePath)
         std::unique_ptr<char[]> errorMessage = std::make_unique<char[]>(errorMessageLength);
 
         glGetShaderInfoLog(shader, errorMessageLength, nullptr, errorMessage.get());
-        DEBUG_LOG("Failed to compile shader " << sourcePath << ": " << errorMessage);
+        DEBUG_LOG("Failed to compile shader " + sourcePath + ": " + string{*errorMessage.get()});
     }
 
     return shader;
@@ -53,7 +55,7 @@ void Shader::createShaderProgram(const vector<unsigned int>& shaders)
         std::unique_ptr<char[]> errorMessage = std::make_unique<char[]>(errorMessageLength);
 
         glGetProgramInfoLog(this->id, errorMessageLength, nullptr, errorMessage.get());
-        DEBUG_LOG("Failed to link shader " << name << ": " << errorMessage);
+        DEBUG_LOG("Failed to link shader " + name + ": " + string{*errorMessage.get()});
         exit(1);
     }
 }
@@ -75,7 +77,7 @@ Shader::Shader(const string& name, const vector<string>& uniforms) : name{name}
 
     if (shaders.empty()) [[unlikely]]
     {
-        DEBUG_LOG("Shader loading failed: cannot find files for " << name);
+        DEBUG_LOG("Shader loading failed: cannot find files for " + name);
         return;
     }
 
@@ -87,7 +89,7 @@ Shader::Shader(const string& name, const vector<string>& uniforms) : name{name}
 
         if (location == -1)
         {
-            DEBUG_LOG("warning: uniform " << uniform << " does not exist on shader " + name);
+            DEBUG_LOG("warning: uniform " + uniform + " does not exist on shader " + name);
             return;
         }
 
@@ -111,6 +113,6 @@ int Shader::getUniformLocation(const string &uniform) const
 
 Shader::~Shader()
 {
-    DEBUG_LOG("Shader " << name << " destroyed");
+    DEBUG_LOG("Shader " + name + " destroyed");
     // TODO: Free opengl resources
 }

@@ -1,10 +1,12 @@
 #include "utils.hpp"
 #include <fstream>
 
+using std::string;
+
 string loadFile(string path)
 {
     // TODO: Error handling
-    DEBUG_LOG("Loading file " << path);
+    DEBUG_LOG("Loading file " + path);
     std::ifstream sourceFile{path};
     std::string currentLine;
     std::string sourceString;

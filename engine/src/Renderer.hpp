@@ -5,6 +5,7 @@
 #include "math.hpp"
 #include "utils.hpp"
 #include <GLFW/glfw3.h>
+#include <memory>
 
 class Renderer
 {
@@ -13,7 +14,7 @@ class Renderer
     ~Renderer();
     [[nodiscard]] bool isWindowClosed() const;
     [[nodiscard]] Vector2<int> getWindowSize() const;
-    unique_ptr<Shader> shader;
+    std::unique_ptr<Shader> shader;
     GLFWwindow *window;
     InputManager input{window};
 

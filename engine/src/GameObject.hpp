@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Component.hpp"
-#include "math.hpp"
 #include "utils.hpp"
+#include "math.hpp"
 
 template <typename T>
 concept IsComponent = std::is_base_of<Component, T>::value;
@@ -53,5 +53,5 @@ class GameObject
     }
 
   private:
-    vector<Component *> components;
+    std::vector<Component *> components;
 };

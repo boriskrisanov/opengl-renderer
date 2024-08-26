@@ -1,22 +1,23 @@
 #pragma once
 
-#include "Skybox.hpp"
-#include "Renderer.hpp"
 #include "EcsRegistry.hpp"
+#include "Renderer.hpp"
+#include "Skybox.hpp"
 #include "utils.hpp"
+#include <memory>
 
 class EcsRegistry;
 
 class Scene
 {
   public:
-    explicit Scene(Renderer& renderer);
+    explicit Scene(Renderer &renderer);
     void update();
-    [[nodiscard]] EcsRegistry& getEcsRegistry() const;
+    [[nodiscard]] EcsRegistry &getEcsRegistry() const;
     [[nodiscard]] Renderer &getRenderer() const;
-    shared_ptr<Skybox> skybox = make_shared<Skybox>();
+    std::shared_ptr<Skybox> skybox = std::make_shared<Skybox>();
 
   private:
-    unique_ptr<EcsRegistry> ecsRegistry = make_unique<EcsRegistry>(*this);
-    Renderer& renderer;
+    std::unique_ptr<EcsRegistry> ecsRegistry = std::make_unique<EcsRegistry>(*this);
+    Renderer &renderer;
 };

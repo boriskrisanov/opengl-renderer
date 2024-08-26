@@ -18,7 +18,7 @@ void EcsRegistry::update()
     }
 }
 
-vector<GameObject *> EcsRegistry::getGameObjects() const
+std::vector<GameObject *> EcsRegistry::getGameObjects() const
 {
     return gameObjects;
 }

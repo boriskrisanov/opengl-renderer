@@ -1,9 +1,13 @@
 #include "Mesh.hpp"
+#include "utils.hpp"
+
+using std::string;
+using std::vector;
 
 Mesh::Mesh(string source)
     : source{source}
 {
-    DEBUG_LOG("Loading OBJ mesh " << source);
+    DEBUG_LOG("Loading OBJ mesh " + source);
 
     const string modelSource = loadFile(source);
 
@@ -45,7 +49,7 @@ Mesh::Mesh(string source)
 
             if (faceVertexDefinitions.size() != 3) [[unlikely]]
             {
-                DEBUG_LOG("OBJ loading failed: mesh " << source << " contains non triangular faces. OBJ file must be exported with triangulation enabled.");
+                DEBUG_LOG("OBJ loading failed: mesh " + source + " contains non triangular faces. OBJ file must be exported with triangulation enabled.");
                 return;
             }
 
@@ -68,7 +72,7 @@ Mesh::Mesh(string source)
     }
 
     this->vertexCount = this->vertexes.size();
-    DEBUG_LOG("Loaded OBJ mesh " << source << ", vertex count: " << this->vertexCount);
+    DEBUG_LOG("Loaded OBJ mesh " + source + ", vertex count: " + std::to_string(this->vertexCount));
 }
 
 Mesh::Mesh(const vector<Vertex> &vertexes)

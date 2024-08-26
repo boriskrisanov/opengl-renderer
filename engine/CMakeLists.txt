@@ -13,7 +13,6 @@ add_library(engine
         src/math.hpp
         src/Shader.cpp
         src/Shader.hpp
-        src/utils.hpp
         src/utils.cpp
         src/GameObject.hpp
         src/Component.hpp
@@ -38,6 +37,8 @@ add_library(engine
         src/Scene.cpp
         src/Scene.hpp
         src/systems/systems.hpp
+        src/logging.cpp
+        src/utils.hpp
 )
 
 target_link_libraries(engine PRIVATE glfw)

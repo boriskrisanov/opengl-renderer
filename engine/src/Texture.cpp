@@ -2,9 +2,9 @@
 #include "Texture.hpp"
 #include <stb_image.h>
 
-Texture::Texture(string path)
+Texture::Texture(std::string path)
 {
-    DEBUG_LOG("Loading texture " << path);
+    DEBUG_LOG("Loading texture " + path);
 
     int width, height, channels;
     unsigned char *textureData = stbi_load(path.c_str(), &width, &height, &channels, 0);

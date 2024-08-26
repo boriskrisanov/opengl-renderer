@@ -11,7 +11,7 @@ MeshComponent::MeshComponent(Mesh &mesh, Shader &shader) : mesh{mesh}, shader{sh
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
     // Convert mesh data to flat array for the vertex buffer
-    vector<double> bufferData;
+    std::vector<double> bufferData;
     bufferData.reserve(mesh.vertexes.size() * 5);
     for (const Vertex &vertex : mesh.vertexes)
     {
