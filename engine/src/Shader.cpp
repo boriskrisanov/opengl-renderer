@@ -28,7 +28,7 @@ unsigned int loadAndCompileShader(const string& sourcePath)
         std::unique_ptr<char[]> errorMessage = std::make_unique<char[]>(errorMessageLength);
 
         glGetShaderInfoLog(shader, errorMessageLength, nullptr, errorMessage.get());
-        DEBUG_LOG("Failed to compile shader " + sourcePath + ": " + string{*errorMessage.get()});
+        DEBUG_LOG("Failed to compile shader " + sourcePath + ": " + string{errorMessage.get()});
     }
 
     return shader;
@@ -55,7 +55,7 @@ void Shader::createShaderProgram(const vector<unsigned int>& shaders)
         std::unique_ptr<char[]> errorMessage = std::make_unique<char[]>(errorMessageLength);
 
         glGetProgramInfoLog(this->id, errorMessageLength, nullptr, errorMessage.get());
-        DEBUG_LOG("Failed to link shader " + name + ": " + string{*errorMessage.get()});
+        DEBUG_LOG("Failed to link shader " + name + ": " + string{errorMessage.get()});
         exit(1);
     }
 }
