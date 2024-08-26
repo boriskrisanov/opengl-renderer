@@ -1,9 +1,9 @@
+#include <GL/glew.h>
 #include "../Shader.hpp"
 #include "../components/CameraComponent.hpp"
 #include "../components/MaterialComponent.hpp"
 #include "../components/MeshComponent.hpp"
 #include "systems.hpp"
-#include <GL/glew.h>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 

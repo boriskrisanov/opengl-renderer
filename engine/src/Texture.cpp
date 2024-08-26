@@ -1,5 +1,5 @@
-#include "Texture.hpp"
 #include <GL/glew.h>
+#include "Texture.hpp"
 #include <stb_image.h>
 
 Texture::Texture(string path)

@@ -18,7 +18,7 @@ void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
         double deltaTime = 1;
 
         // Respond to mouse input
-        Vector2 currentMousePosition = input::getMousePosition(renderer.window);
+        Vector2 currentMousePosition = renderer.input.getMousePosition();
 
         camera->mouseOffset = currentMousePosition - camera->lastMousePosition;
         camera->lastMousePosition = currentMousePosition;
@@ -43,27 +43,27 @@ void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
 
         // Respond to keyboard input
 
-        if (input::isKeyDown(renderer.window, input::Key::W))
+        if (renderer.input.isKeyDown(InputManager::Key::W))
         {
             gameObject->position += camera->speed * camera->front * deltaTime;
         }
-        if (input::isKeyDown(renderer.window, input::Key::S))
+        if (renderer.input.isKeyDown(InputManager::Key::S))
         {
             gameObject->position -= camera->speed * camera->front * deltaTime;
         }
-        if (input::isKeyDown(renderer.window, input::Key::A))
+        if (renderer.input.isKeyDown(InputManager::Key::A))
         {
             gameObject->position -= camera->speed * cross(camera->front, camera->up).normalised() * deltaTime;
         }
-        if (input::isKeyDown(renderer.window, input::Key::D))
+        if (renderer.input.isKeyDown(InputManager::Key::D))
         {
             gameObject->position += camera->speed * cross(camera->front, camera->up).normalised() * deltaTime;
         }
-        if (input::isKeyDown(renderer.window, input::Key::Q))
+        if (renderer.input.isKeyDown(InputManager::Key::Q))
         {
             gameObject->position -= camera->speed * camera->up * deltaTime;
         }
-        if (input::isKeyDown(renderer.window, input::Key::E))
+        if (renderer.input.isKeyDown(InputManager::Key::E))
         {
             gameObject->position += camera->speed * camera->up * deltaTime;
         }

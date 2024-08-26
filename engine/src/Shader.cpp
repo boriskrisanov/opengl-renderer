@@ -1,5 +1,5 @@
-#include "Shader.hpp"
 #include <GL/glew.h>
+#include "Shader.hpp"
 #include <filesystem>
 
 unsigned int loadAndCompileShader(const string& sourcePath)

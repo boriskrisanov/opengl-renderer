@@ -13,7 +13,7 @@ int main()
 {
     Renderer renderer{{1920, 1080}};
 
-//    auto skybox = new Skybox{};
+    renderer.input.setCursorEnabled(false);
 
     Scene scene{renderer};
 
