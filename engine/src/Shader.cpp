@@ -1,10 +1,11 @@
-#include <GL/glew.h>
 #include "Shader.hpp"
+#include <GL/glew.h>
 #include <filesystem>
+#include <glm/ext.hpp>
 
 using std::string, std::vector;
 
-unsigned int loadAndCompileShader(const string& sourcePath)
+unsigned int loadAndCompileShader(const string &sourcePath)
 {
     DEBUG_LOG("Loading shader: " + sourcePath);
 
@@ -34,7 +35,7 @@ unsigned int loadAndCompileShader(const string& sourcePath)
     return shader;
 }
 
-void Shader::createShaderProgram(const vector<unsigned int>& shaders)
+void Shader::createShaderProgram(const vector<unsigned int> &shaders)
 {
     this->id = glCreateProgram();
 
@@ -60,11 +61,12 @@ void Shader::createShaderProgram(const vector<unsigned int>& shaders)
     }
 }
 
-Shader::Shader(const string& name, const vector<string>& uniforms) : name{name}
+Shader::Shader(const string &name, const vector<string> &uniforms)
+    : name{name}
 {
     std::vector<unsigned int> shaders;
 
-    for (const auto& fileName : std::filesystem::directory_iterator("assets/shaders/"))
+    for (const auto &fileName : std::filesystem::directory_iterator("assets/shaders/"))
     {
         const std::string filePath = fileName.path().string();
 
@@ -83,7 +85,7 @@ Shader::Shader(const string& name, const vector<string>& uniforms) : name{name}
 
     createShaderProgram(shaders);
 
-    for (const string& uniform : uniforms)
+    for (const string &uniform : uniforms)
     {
         const int location = glGetUniformLocation(this->id, uniform.c_str());
 
@@ -95,6 +97,12 @@ Shader::Shader(const string& name, const vector<string>& uniforms) : name{name}
 
         uniformLocations[uniform] = location;
     }
+}
+
+Shader::~Shader()
+{
+    DEBUG_LOG("Shader " + name + " destroyed");
+    // TODO: Free opengl resources
 }
 
 unsigned int Shader::getId() const
@@ -111,8 +119,12 @@ int Shader::getUniformLocation(const string &uniform) const
     return uniformLocations.at(uniform);
 }
 
-Shader::~Shader()
+void Shader::setUniform(const string &name, glm::mat4 value) const
 {
-    DEBUG_LOG("Shader " + name + " destroyed");
-    // TODO: Free opengl resources
+    glUniformMatrix4fv(getUniformLocation(name), 1, false, glm::value_ptr(value));
+}
+
+void Shader::setUniform(const string &name, Vector3<double> value) const
+{
+    glUniform3d(getUniformLocation(name), value.x, value.y, value.z);
 }

@@ -38,9 +38,9 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
             mat4 viewMatrix = glm::lookAt((glm::vec3)gameObject->position, (glm::vec3)(gameObject->position + camera->front), (glm::vec3)camera->up);
             //            viewMatrix = glm::translate(viewMatrix, (glm::vec3) gameObject.position);
 
-            glUniformMatrix4fv(renderer.shader->getUniformLocation("transform"), 1, false, glm::value_ptr(glm::mat4{1.0f}));
-            glUniformMatrix4fv(renderer.shader->getUniformLocation("projectionMatrix"), 1, false, glm::value_ptr(camera->projectionMatrix));
-            glUniformMatrix4fv(renderer.shader->getUniformLocation("viewMatrix"), 1, false, glm::value_ptr(viewMatrix));
+            renderer.shader->setUniform("transform", glm::mat4{1.0f});
+            renderer.shader->setUniform("projectionMatrix", camera->projectionMatrix);
+            renderer.shader->setUniform("viewMatrix", viewMatrix);
 
             if (scene.skybox != nullptr)
             {
@@ -48,8 +48,8 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
                 scene.skybox->shader.select();
 
                 const glm::mat4 viewMatrixWithoutTranslation = glm::mat3(viewMatrix);
-                glUniformMatrix4fv(scene.skybox->shader.getUniformLocation("viewMatrix"), 1, false, glm::value_ptr(viewMatrixWithoutTranslation));
-                glUniformMatrix4fv(scene.skybox->shader.getUniformLocation("projectionMatrix"), 1, false, glm::value_ptr(camera->projectionMatrix));
+                scene.skybox->shader.setUniform("viewMatrix", viewMatrixWithoutTranslation);
+                scene.skybox->shader.setUniform("projectionMatrix", camera->projectionMatrix);
 
                 glBindVertexArray(scene.skybox->getVertexArrayId());
                 glBindTexture(GL_TEXTURE_CUBE_MAP, scene.skybox->getCubemapTextureId());
@@ -66,6 +66,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
         {
             // TODO: Don't call shader.select() on every gameObject
             meshComponent->shader.select();
+
             glBindVertexArray(meshComponent->getVertexArray());
 
             if (auto material = gameObject->getComponent<MaterialComponent>())
