@@ -36,7 +36,7 @@ Renderer::Renderer(Vector2<int> windowSize)
     DEBUG_LOG("OpenGL version: " + string{reinterpret_cast<const char*>(glGetString(GL_VERSION))});
     DEBUG_LOG("OpenGL renderer: " + string{reinterpret_cast<const char*>(glGetString(GL_RENDERER))});
 
-    shader = make_unique<Shader>("default", vector<string>{"viewMatrix", "projectionMatrix", "transform"});
+    shader = make_unique<Shader>("default", vector<string>{"viewMatrix", "projectionMatrix", "modelMatrix", "lightPosition"});
     shader->select();
 }
 

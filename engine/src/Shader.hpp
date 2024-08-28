@@ -12,8 +12,8 @@ class Shader
     [[nodiscard]] unsigned int getId() const;
     [[nodiscard]] int getUniformLocation(const std::string &uniform) const;
     void select() const;
-    void setUniform(const std::string &name, glm::mat4 value) const;
-    void setUniform(const std::string &name, Vector3<double> value) const;
+    void setUniform(const std::string &uniform, glm::mat4 value) const;
+    void setUniform(const std::string &uniform, Vector3<float> value) const;
 
   private:
     unsigned int id;

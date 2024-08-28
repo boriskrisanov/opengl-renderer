@@ -119,12 +119,12 @@ int Shader::getUniformLocation(const string &uniform) const
     return uniformLocations.at(uniform);
 }
 
-void Shader::setUniform(const string &name, glm::mat4 value) const
+void Shader::setUniform(const string &uniform, glm::mat4 value) const
 {
-    glUniformMatrix4fv(getUniformLocation(name), 1, false, glm::value_ptr(value));
+    glUniformMatrix4fv(getUniformLocation(uniform), 1, false, glm::value_ptr(value));
 }
 
-void Shader::setUniform(const string &name, Vector3<double> value) const
+void Shader::setUniform(const string &uniform, Vector3<float> value) const
 {
-    glUniform3d(getUniformLocation(name), value.x, value.y, value.z);
+    glUniform3f(getUniformLocation(uniform), value.x, value.y, value.z);
 }

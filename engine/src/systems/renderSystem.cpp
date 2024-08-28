@@ -38,7 +38,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
             mat4 viewMatrix = glm::lookAt((glm::vec3)gameObject->position, (glm::vec3)(gameObject->position + camera->front), (glm::vec3)camera->up);
             //            viewMatrix = glm::translate(viewMatrix, (glm::vec3) gameObject.position);
 
-            renderer.shader->setUniform("transform", glm::mat4{1.0f});
+            renderer.shader->setUniform("modelMatrix", glm::mat4{1.0f});
             renderer.shader->setUniform("projectionMatrix", camera->projectionMatrix);
             renderer.shader->setUniform("viewMatrix", viewMatrix);
 
@@ -66,6 +66,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
         {
             // TODO: Don't call shader.select() on every gameObject
             meshComponent->shader.select();
+            meshComponent->shader.setUniform("lightPosition", Vector3<float>{2.0, 2.0, 2.0});
 
             glBindVertexArray(meshComponent->getVertexArray());
 
