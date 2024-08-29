@@ -4,8 +4,6 @@
 #include <cmath>
 #include <glm/glm.hpp>
 
-using std::array;
-
 const double PI = 3.14159265359;
 
 inline double radians(double degrees)
@@ -77,6 +75,12 @@ class Vector3
         x -= rhs.x;
         y -= rhs.y;
         z -= rhs.z;
+    }
+
+    template<typename NewType>
+    explicit operator Vector3<NewType>() const
+    {
+        return {static_cast<NewType>(x), static_cast<NewType>(y), static_cast<NewType>(z)};
     }
 
     explicit operator glm::vec3() const
@@ -168,12 +172,12 @@ class Matrix
     }
 
     // Returns the i-th row
-    array<T, N> operator[](int i) const
+    std::array<T, N> operator[](int i) const
     {
         return matrix[i];
     }
 
   private:
     // rows[column[]]
-    array<array<T, N>, M> matrix;
+    std::array<std::array<T, N>, M> matrix;
 };

@@ -13,6 +13,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
 {
     const Scene &scene = ecsRegistry.getScene();
     const Renderer &renderer = scene.getRenderer();
+    Vector3<float> cameraPosition;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -29,6 +30,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
                 continue;
             }
             updatedCamera = true;
+            cameraPosition = static_cast<Vector3<float>>(gameObject->position);
             // This is needed because the skybox shader might be selected before this
             renderer.shader->select();
 
@@ -67,6 +69,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
             // TODO: Don't call shader.select() on every gameObject
             meshComponent->shader.select();
             meshComponent->shader.setUniform("lightPosition", Vector3<float>{2.0, 2.0, 2.0});
+            meshComponent->shader.setUniform("cameraPosition", cameraPosition);
 
             glBindVertexArray(meshComponent->getVertexArray());
 

@@ -17,5 +17,8 @@ void main()
   gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
   fragmentWorldSpacePosition = vec3(modelMatrix * position);
   textureCoordinate = _textureCoordinate;
-  normal = _normal;
+
+  // TODO: Do this on the CPU
+  // mat3 * vec3 = vec3
+  normal = mat3(transpose(inverse(modelMatrix))) * _normal;
 }
