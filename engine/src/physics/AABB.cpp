@@ -54,6 +54,11 @@ bool AABB::intersects(Vector3<> rayStart, Vector3<> directionVector) const
         // x = (d - (a1n1 + a2n2 + a3n3)) / (b1n1 + b2n2 + b3n3)
         const double d = dot(p1, normal);
         const double parameter = (d - dot(rayStart, normal)) / dot(directionVector, normal);
+        if (parameter < 0)
+        {
+            // Intersection is behind the starting point
+            continue;
+        }
         const Vector3<> intersectionPoint = rayStart + parameter * directionVector;
         if (intersectionPoint >= min && intersectionPoint <= max)
         {
