@@ -39,6 +39,8 @@ add_library(engine
         src/systems/systems.hpp
         src/logging.cpp
         src/utils.hpp
+        src/physics/AABB.cpp
+        src/physics/AABB.hpp
 )
 
 target_link_libraries(engine PRIVATE glfw)

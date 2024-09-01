@@ -7,6 +7,7 @@
 #include "components/CameraComponent.hpp"
 #include "components/MaterialComponent.hpp"
 #include "components/MeshComponent.hpp"
+#include "physics/AABB.hpp"
 #include "systems/systems.hpp"
 
 int main()
@@ -25,6 +26,17 @@ int main()
     auto cube = new GameObject{};
     cube->addComponent(new MeshComponent{*(new Mesh{"assets/cube.obj"}), *renderer.shader});
     registry.addGameObject(cube);
+
+    std::vector<Vector3<double>> positions;
+
+    for (const auto v : cube->getComponent<MeshComponent>()->mesh.vertexes)
+    {
+        positions.push_back(v.position);
+    }
+
+    AABB collider{positions};
+
+    DEBUG_LOG(collider.intersects({0, 0, -3}, {0, 0, 1}) ? "true" : "false");
 
     auto camera = new GameObject{};
     camera->addComponent(new CameraComponent{renderer.getWindowSize()});

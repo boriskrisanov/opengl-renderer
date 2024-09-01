@@ -8,3 +8,5 @@ find_package(glm CONFIG REQUIRED)
 
 include_directories("${CMAKE_SOURCE_DIR}/engine/src")
 target_link_libraries(editor engine glm::glm)
+
+add_compile_definitions(ENABLE_DEBUG_LOGGING)

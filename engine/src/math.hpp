@@ -77,7 +77,27 @@ class Vector3
         z -= rhs.z;
     }
 
-    template<typename NewType>
+    bool operator>(Vector3<T> rhs) const
+    {
+        return x > rhs.x && y > rhs.y && z > rhs.z;
+    }
+
+    bool operator>=(Vector3<T> rhs) const
+    {
+        return x >= rhs.x && y >= rhs.y && z >= rhs.z;
+    }
+
+    bool operator<(Vector3<T> rhs) const
+    {
+        return x < rhs.x && y < rhs.y && z < rhs.z;
+    }
+
+    bool operator<=(Vector3<T> rhs) const
+    {
+        return x <= rhs.x && y <= rhs.y && z <= rhs.z;
+    }
+
+    template <typename NewType>
     explicit operator Vector3<NewType>() const
     {
         return {static_cast<NewType>(x), static_cast<NewType>(y), static_cast<NewType>(z)};
@@ -104,6 +124,12 @@ template <typename T = double>
 Vector3<T> operator*(const Vector3<T> &vector, T scalar)
 {
     return scalar * vector;
+}
+
+template <typename T = double>
+T dot(Vector3<T> a, Vector3<T> b)
+{
+    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 template <typename T = double>
