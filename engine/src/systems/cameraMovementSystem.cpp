@@ -14,8 +14,7 @@ void updateCameraMovementSystem(const EcsRegistry &ecsRegistry)
         {
             continue;
         }
-        // TODO: Use deltaTime
-        double deltaTime = 1;
+        const double deltaTime = ecsRegistry.getScene().getDeltaTime();
 
         // Respond to mouse input
         Vector2 currentMousePosition = renderer.input.getMousePosition();

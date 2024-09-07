@@ -11,6 +11,8 @@ using glm::mat4;
 
 void updateRenderSystem(const EcsRegistry &ecsRegistry)
 {
+    glfwGetTime();
+
     const Scene &scene = ecsRegistry.getScene();
     const Renderer &renderer = scene.getRenderer();
     Vector3<float> cameraPosition;
@@ -79,7 +81,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
                 material->texture.select();
             }
 
-            glDrawArrays(GL_TRIANGLES, 0, (int)meshComponent->mesh.vertexCount);
+            glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(meshComponent->mesh.vertexCount));
         }
     }
 

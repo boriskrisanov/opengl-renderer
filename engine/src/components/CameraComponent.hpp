@@ -6,7 +6,7 @@
 struct CameraComponent : public Component
 {
     explicit CameraComponent(Vector2<int> windowSize);
-    double speed = 0.5;
+    double speed = 30;
     double fov = 80;
     double pitch = 0;
     double yaw = -90;

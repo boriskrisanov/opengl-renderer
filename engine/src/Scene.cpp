@@ -7,6 +7,8 @@ Scene::Scene(Renderer &renderer)
 
 void Scene::update()
 {
+    deltaTime = glfwGetTime() - lastTime;
+    lastTime = glfwGetTime();
     ecsRegistry->update();
 }
 
@@ -18,4 +20,9 @@ EcsRegistry &Scene::getEcsRegistry() const
 Renderer &Scene::getRenderer() const
 {
     return renderer;
+}
+
+double Scene::getDeltaTime() const
+{
+    return deltaTime;
 }
