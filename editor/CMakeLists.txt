@@ -3,7 +3,9 @@ project(editor VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(editor src/main.cpp)
+add_executable(editor src/main.cpp
+        src/ui.cpp
+        src/ui.hpp)
 find_package(glm CONFIG REQUIRED)
 
 include_directories("${CMAKE_SOURCE_DIR}/engine/src")

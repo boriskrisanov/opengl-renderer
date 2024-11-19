@@ -11,13 +11,11 @@ using glm::mat4;
 
 void updateRenderSystem(const EcsRegistry &ecsRegistry)
 {
-    glfwGetTime();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     const Scene &scene = ecsRegistry.getScene();
     const Renderer &renderer = scene.getRenderer();
     Vector3<float> cameraPosition;
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     bool updatedCamera = false;
     // TODO: Improve camera/skybox rendering
@@ -39,7 +37,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
             // TODO: Use own implementation of matrices
             // TODO: Set model matrix (GameObject transform)
 
-            mat4 viewMatrix = glm::lookAt((glm::vec3)gameObject->position, (glm::vec3)(gameObject->position + camera->front), (glm::vec3)camera->up);
+            mat4 viewMatrix = glm::lookAt(static_cast<glm::vec3>(gameObject->position), static_cast<glm::vec3>(gameObject->position + camera->front), static_cast<glm::vec3>(camera->up));
             //            viewMatrix = glm::translate(viewMatrix, (glm::vec3) gameObject.position);
 
             renderer.shader->setUniform("modelMatrix", glm::mat4{1.0f});
@@ -75,7 +73,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
 
             glBindVertexArray(meshComponent->getVertexArray());
 
-            if (auto material = gameObject->getComponent<MaterialComponent>())
+            if (const auto material = gameObject->getComponent<MaterialComponent>())
             {
                 // TODO: Batch materials for performance?
                 material->texture.select();
@@ -84,7 +82,11 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
             glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(meshComponent->mesh.vertexCount));
         }
     }
+}
 
-    glfwSwapBuffers(renderer.window);
+void updateEndRenderSystem(const EcsRegistry &ecsRegistry)
+{
+    // This is a separate system to allow multiple rendering passes after the initial render, such as UI
+    glfwSwapBuffers(ecsRegistry.getScene().getRenderer().window);
     glfwPollEvents();
 }

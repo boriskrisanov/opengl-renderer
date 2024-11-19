@@ -22,4 +22,3 @@ class Shader
 
     void createShaderProgram(const std::vector<unsigned int> &shaders);
 };
-
