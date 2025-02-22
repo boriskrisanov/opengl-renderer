@@ -59,13 +59,14 @@ Mesh::Mesh(string source)
 
                 // Subtract 1 from each index because OBJ indexes start at 1
                 const long vertexIndex = std::stol(splitDefinition[0]) - 1;
-                const long textureCoordinateIndex = std::stol(splitDefinition[1]) - 1;
+                const long textureCoordinateIndex = splitDefinition[1].empty() ? -1 : std::stol(splitDefinition[1]) - 1;
                 const long normalIndex = std::stol(splitDefinition[2]) - 1;
 
                 vertexes.push_back(Vertex{
                     .position = this->objVertexes[vertexIndex],
                     .normal = this->objNormals[normalIndex],
-                    .textureCoordinate = this->objTextureCoordinates[textureCoordinateIndex],
+                    // TODO: Improve handling of undefined texture coordinates
+                    .textureCoordinate = textureCoordinateIndex == -1 ? Vector2{0.0, 0.0} : this->objTextureCoordinates[textureCoordinateIndex],
                 });
             }
         }

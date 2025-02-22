@@ -11,11 +11,13 @@ out vec3 fragmentWorldSpacePosition;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 modelMatrix;
+uniform vec3 worldSpacePosition;
+
 
 void main()
 {
-  gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
-  fragmentWorldSpacePosition = vec3(modelMatrix * position);
+  gl_Position = projectionMatrix * viewMatrix * modelMatrix * (position + vec4(worldSpacePosition.xyz, 0.0));
+  fragmentWorldSpacePosition = vec3(modelMatrix * (position + vec4(worldSpacePosition.xyz, 0.0)));
   textureCoordinate = _textureCoordinate;
 
   // TODO: Do this on the CPU

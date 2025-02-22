@@ -32,8 +32,19 @@ int main()
     registry.addSystem(updateCameraMovementSystem);
 
     const auto cube = new GameObject{};
+    cube->position = {5, 0, 0,};
     cube->addComponent(new MeshComponent{*(new Mesh{"assets/cube.obj"}), *renderer.shader});
     registry.addGameObject(cube);
+
+    const auto teapot = new GameObject{};
+    teapot->position = {0, 0, 0};
+    teapot->addComponent(new MeshComponent{*(new Mesh{"assets/teapot.obj"}), *renderer.shader});
+    registry.addGameObject(teapot);
+
+    const auto sphere = new GameObject{};
+    sphere->position = {8, 0, 0};
+    sphere->addComponent(new MeshComponent{*(new Mesh{"assets/sphere.obj"}), *renderer.shader});
+    registry.addGameObject(sphere);
 
     std::vector<Vector3<>> positions;
 
@@ -54,6 +65,7 @@ int main()
     const auto defaultTexture = Texture{"assets/textures/uv_grid_256.jpg"};
     const auto materialComponent = new MaterialComponent{defaultTexture};
     cube->addComponent(materialComponent);
+    sphere->addComponent(materialComponent);
 
     while (!renderer.isWindowClosed())
     {

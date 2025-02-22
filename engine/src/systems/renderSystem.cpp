@@ -70,6 +70,7 @@ void updateRenderSystem(const EcsRegistry &ecsRegistry)
             meshComponent->shader.select();
             meshComponent->shader.setUniform("lightPosition", Vector3<float>{2.0, 2.0, 2.0});
             meshComponent->shader.setUniform("cameraPosition", cameraPosition);
+            meshComponent->shader.setUniform("worldSpacePosition", static_cast<Vector3<float>>(gameObject->position));
 
             glBindVertexArray(meshComponent->getVertexArray());
 
